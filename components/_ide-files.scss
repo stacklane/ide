@@ -1,0 +1,14 @@
+ide-files{
+
+  //display: flex;
+  flex-basis: 20%;
+  min-width: 200px;
+
+  //flex-direction: column;
+  position: relative;
+
+  overflow-x: auto;
+  overflow-y: auto;
+  white-space: nowrap;
+
+}

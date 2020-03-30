@@ -1,0 +1,40 @@
+
+@import "/style/reset";
+@import "/style/base";
+
+@import "/style/theme/dark_ui";
+@import "/style/theme/dark_editor";
+
+@import "/components/all";
+@import "/views/all";
+
+/**
+ * Not-yet-defined custom elements
+ */
+//*:not(:defined) {
+//  opacity: .5;
+//  transition: opacity 0.3s ease-in-out;
+//}
+
+.render-fix{
+  transform: translateZ(0); // for safari
+}
+
+.no-scroll{
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+body.is-full{
+  height: 100vh;
+}
+
+
+/*
+code { font-family: $family-monospace; }
+
+@supports (font-variation-settings: normal) {
+  code {font-family:  $family-monospace-vf; }
+}*/
+
+

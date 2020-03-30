@@ -1,0 +1,36 @@
+<!--TEMPLATE mustache-->
+<!DOCTYPE html>
+{{% import {session} from '🔗' }}
+<html class="theme-dark no-scroll" data-session-base-href="/sessions/{{session.id}}">
+<head>
+    <title>{{🎨.name}}</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="/style/style.scss">
+
+    <link rel="icon" type="image/png" href="/fav/16.png" sizes="16x16" />
+    <link rel="icon" type="image/png" href="/fav/32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="/fav/192.png" sizes="192x192" />
+
+    <!-- TODO re-enable
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/firacode@2.0.0/distr/fira_code.css"
+          integrity="sha256-05IuhyPmv4vGKXRg9N8ljXH9PtiquBPG/tEcHVH9TJA="
+          crossorigin="anonymous"
+          data-font-src="https://cdn.jsdelivr.net/npm/firacode@2.0.0/"
+    >-->
+
+    <script src="/components/elements.js"></script>
+
+    <script src="/views/elements.js"></script>
+</head>
+
+<body class="is-full no-scroll">
+
+<ide-root></ide-root>
+
+</body>
+</html>

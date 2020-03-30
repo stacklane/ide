@@ -1,0 +1,39 @@
+// https://github.com/one-dark/jetbrains-one-dark-theme/blob/master/src/main/resources/themes/one_dark.theme.json
+
+.theme-dark {
+  --ui-scroll-width: .75rem;
+  --ui-scroll-thumb: gray;
+  --ui-scroll-background: black;
+
+  --ui-background: #21252b;
+  --ui-background-disabled: var(--ui-background);
+
+  --ui-foreground: #abb2bf;
+
+  --ui-select-background: #323844; // Note alpha value, which is important for other uses
+  --ui-select-background-inactive: #2c313a;
+  --ui-select-foreground: #d7dae0;
+
+  --ui-focus-color: var(--ui-background);
+  --ui-focused-border-color: #568AF2;
+
+  --ui-separator-color: #32363c;
+
+  --ui-border-color: #46494f;
+  --ui-border-color-disabled: #2d3137;
+
+  --ui-error-foreground: #cd3359;
+  --ui-info-foreground: #5c6370;
+
+  // Tabs
+  --ui-tabs-height: 3rem;
+  --ui-tab-background: inherit;
+  --ui-tab-foreground: inherit;
+  --ui-tab-border-bottom: .25rem solid transparent;
+  --ui-tab-hover-background: var(--ui-select-background);
+  --ui-tab-active-background: var(--ui-select-background);
+  --ui-tab-active-foreground: var(--ui-select-foreground);
+  --ui-tab-active-border-bottom: .25rem solid var(--ui-focused-border-color);
+  --ui-tab-active-hover-background: rgba(255,255,255,.1);
+}
+

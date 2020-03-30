@@ -1,0 +1,94 @@
+ide-view-tab{
+  background: var(--ui-tab-background);
+  color: var(--ui-tab-foreground);
+  cursor: pointer;
+  padding: var(--ui-tab-padding);
+  display: flex;
+  align-items: center;
+  padding-left: .75rem;
+  padding-right: .75rem;
+  padding-top: .5rem;
+  padding-bottom: .25rem;
+  border-bottom: var(--ui-tab-border-bottom);
+
+  &:hover{
+    background: var(--ui-tab-hover-background);
+  }
+
+  &[active]{
+    background: var(--ui-tab-active-background);
+    color: var(--ui-tab-active-foreground);
+    border-bottom: var(--ui-tab-active-border-bottom);
+
+    &:hover{
+      background: var(--ui-tab-active-hover-background);
+    }
+  }
+
+  ide-view-tab-closer{
+    @include unselectable;
+
+    $close-hover: var(--ui-select-foreground);
+    $close-color: var(--ui-foreground);
+    $close-size: 1.5rem;
+    $close-width: 1px;
+
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    // background-color: rgba($scheme-invert, 0.2);
+    // border-radius: $radius-rounded;
+    border: none;
+    cursor: pointer;
+    pointer-events: auto;
+    display: inline-block;
+    flex-grow: 0;
+    flex-shrink: 0;
+    font-size: 0;
+    height: $close-size;
+    max-height: $close-size;
+    max-width: $close-size;
+    min-height: $close-size;
+    min-width: $close-size;
+    width: $close-size;
+    outline: none;
+    position: relative;
+    vertical-align: top;
+
+    &::before,
+    &::after {
+      background-color: $close-color;
+      content: "";
+      display: block;
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translateX(-50%) translateY(-50%) rotate(45deg);
+      transform-origin: center center;
+    }
+
+    &::before {
+      height: $close-width;
+      width: 50%;
+    }
+
+    &::after {
+      height: 50%;
+      width: $close-width;
+    }
+
+    &:hover,
+    &:focus {
+      &::before,
+      &::after{
+        background-color: $close-hover;
+      }
+    }
+
+    &:active {
+      &::before,
+      &::after{
+        background-color: $close-hover;
+      }
+    }
+  }
+}

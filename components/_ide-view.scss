@@ -1,0 +1,16 @@
+/**
+ * Container for single ide-view-XYZ, which is where most customization occurs.
+ */
+ide-view{
+  background: var(--editor-background);
+  color: var(--editor-foreground);
+
+  flex-grow: 1;
+
+  display: none;
+  position: relative;
+
+  &[active]{
+    display: flex; // Gives more flexibility for children than 'block'
+  }
+}

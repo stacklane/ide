@@ -1,0 +1,33 @@
+<!--TEMPLATE mustache-->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{🎨.name}}</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="/style/style.scss">
+
+    <link rel="icon" type="image/png" href="/fav/16.png" sizes="16x16" />
+    <link rel="icon" type="image/png" href="/fav/32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="/fav/192.png" sizes="192x192" />
+
+</head>
+<body>
+
+{{#🎨.standalone}}
+
+<form action="create" method="POST">
+    <input type="submit" value="Create Test">
+</form>
+
+{{/🎨.standalone}}
+
+{{^🎨.standalone}}
+  Unavailable
+{{/🎨.standalone}}
+
+</body>
+</html>
