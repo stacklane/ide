@@ -1,24 +1,33 @@
 
-const LookupView = (file)=>{
-    if (file.path === '/🎛.yaml'){
-        return new ManifestView(file);
+const ViewCreate = (path)=>{
+    // Derive everything expected from path alone
+    if (path === '/🎛.yaml'){
+        return new ManifestView(path);
+    } else {
+        return new EditorView(path);
     }
-    return new EditorView(file);
 };
 
-
 class EditorView extends ViewContentBase{
-    constructor(file) {
+    constructor(path) {
         super();
-        this._file = file;
+    }
+
+    receive(response, file){
+        let ct = response.headers.get('Content-Type');
+        if (ct.indexOf('text/plain') !== 0) throw ct;
+
+        let that = this;
+
+        return response.text().then((value)=>{
+            that.querySelector('div').innerText = value;
+            that.querySelector('footer').innerText = file.path;
+        });
     }
 
     connectedCallback(){
         let content = document.createElement('div');
-        content.innerText = this._file.value;
-
         let footer = document.createElement('footer');
-        footer.innerText = this._file.id; // TODO
 
         this.appendChild(content);
         this.appendChild(footer);
@@ -26,13 +35,29 @@ class EditorView extends ViewContentBase{
 }
 
 class ManifestView extends ViewContentBase{
-    constructor(file) {
+    constructor(path) {
         super();
-        this._file = file;
+        this._path = path;
+    }
+
+    receive(response, file, success){
+        let ct = response.headers.get('Content-Type');
+        if (ct.indexOf('text/plain') !== 0) throw ct;
+
+        let that = this;
+
+        return response.text().then((value)=>{
+            that.querySelector('div').innerText = value;
+           // that.querySelector('footer').innerText = file.path;
+        });
     }
 
     connectedCallback(){
-        this.innerHTML = file.value;
+        let content = document.createElement('div');
+        //let footer = document.createElement('footer');
+
+        this.appendChild(content);
+        //this.appendChild(footer);
     }
 }
 

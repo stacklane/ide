@@ -189,12 +189,20 @@ class ViewTab extends IDEComponent{
 window.customElements.define('ide-view-tab', ViewTab);
 window.customElements.define('ide-view-tab-closer', class extends IDEComponent{constructor(){super()}});
 
+function _decodeBase64Unicode(str) {
+    // https://attacomsian.com/blog/javascript-base64-encode-decode
+    return decodeURIComponent(atob(str).split('').map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+}
+
 class View extends IDEComponent { // TODO subclass inner part of view?
     constructor(fileId) {
         super();
         this._fileId = fileId;
     }
 
+    // TODO return promise instead of passing success
     load(success){
         this.loading = true;
 
@@ -202,22 +210,13 @@ class View extends IDEComponent { // TODO subclass inner part of view?
 
         fetch(this.sessionBase + '/api/files/' + this._fileId + '/data')
             .then((response) => {
-                // response.headers.forEach(function(val, key) { console.log(key + ' -> ' + val); });
-                let ct = response.headers.get('Content-Type');
-
-                // TODO X-File-Name
-                let fileName = response.headers.get('X-File-Name');
-
-                if (ct.indexOf('text/plain') === 0){
-                    response.text().then((value)=>{
-                        let file = {id: this._fileId, value: value};
-                        let view = LookupView(file);
-                        that.appendChild(view);
-                        if (success) success();
-                    });
-                } else {
-                    throw 'Unhandled: ' + ct;
-                }
+                let file = JSON.parse(_decodeBase64Unicode(response.headers.get('X-File')));
+                let view = ViewCreate(file.path);
+                if (!view) throw 'Unhandled view';
+                that.appendChild(view);
+                view.receive(response, file).then(()=>{
+                    if (success) success();
+                });
             });
     }
 
@@ -267,7 +266,8 @@ class IDE extends HTMLElement {
         console.log('ide-root connected');
         let template = document.createElement('template');
 
-        // TODO TBD immediately before <main>:  <nav>Toolbar</nav>
+        // TODO TBD immediate sibling before <main>:
+        //     <nav>Toolbar</nav>
 
         template.innerHTML = `  
            <main> 

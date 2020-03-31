@@ -4,11 +4,7 @@ import {clone} from 'form';
 
 if (!standalone) throw 'standalone';
 
-let builder = SourceBuilder.name('Test').temporary();
-
-// TODO this fails.. why
-//if (clone && clone.startsWith('https://'))
-  //  builder = builder.clone(Source.of(clone));
+let builder = SourceBuilder.name('Test').temporary().clone(Source.of(clone));
 
 let source = builder.build();
 
