@@ -2,7 +2,7 @@ import {SourceBuilder, Source} from '🔌';
 import {standalone} from '🎨';
 import {clone} from 'form';
 
-if (!standalone) throw 'standalone';
+if (!standalone) throw '!standalone';
 
 let builder = SourceBuilder.name('Test').temporary().clone(Source.of(clone));
 
