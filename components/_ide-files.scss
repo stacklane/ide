@@ -1,4 +1,9 @@
+ide-file-link{
+  cursor: pointer;
+}
+
 ide-files{
+  @include unselectable; // TODO test touch and aria with and without
 
   //display: flex;
   flex-basis: 20%;
@@ -11,4 +16,85 @@ ide-files{
   overflow-y: auto;
   white-space: nowrap;
 
+  padding-top: .5rem;
+
+  /**
+   * Reset focus outline, since we provide our own .focus class for ARIA.
+   */
+  ide-file-item, ide-file-dir, ide-file-dir span{
+    &:focus{
+      outline: 0;
+    }
+  }
+
+  /**
+   * The individually 'selectable' / focusable controls:
+   */
+  ide-file-item,
+  ide-file-dir > span{
+    display: block;
+    padding: .1rem .1rem .1rem 1rem;
+
+    &:hover{
+      background-color: var(--ui-select-background);
+      color: var(--ui-select-foreground);
+    }
+
+    &.focus{
+      background-color: var(--ui-select-background);
+      color: var(--ui-select-foreground);
+    }
+  }
+
+  // TODO hardcode up to 10 with SCSS
+  //      but wait until decide if want folder icons for final amounts..
+  ide-file-dir{
+    ide-file-item,
+    ide-file-dir > span{
+      padding-left: 2.5rem;
+    }
+
+    ide-file-dir {
+      ide-file-item,
+      ide-file-dir > span {
+        padding-left: 5rem;
+      }
+    }
+  }
+
+  ide-file-dir{
+    // TODO hard code the padding using a SCSS loop
+
+    //> [role='group']{
+    //  padding-left: 2rem;
+    //}
+
+    ide-file-dir-toggle{
+      display: inline-block;
+      width: 1.5rem;
+      font-size: .8rem;
+      position: relative;
+      padding-left: 1px;
+    }
+
+    &[aria-expanded="false"]{
+      ide-file-dir-toggle:before {
+        content: '▶︎';
+      }
+
+      > [role='group'] {
+        display: none;
+      }
+    }
+
+    &[aria-expanded="true"] {
+      ide-file-dir-toggle:before {
+        content: '▼';
+      }
+
+      > [role='group'] {
+        display: block;
+      }
+    }
+  }
 }

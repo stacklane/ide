@@ -4,7 +4,7 @@
     <inspection_tool class="HtmlUnknownTag" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myValues">
         <value>
-          <list size="16">
+          <list size="22">
             <item index="0" class="java.lang.String" itemvalue="nobr" />
             <item index="1" class="java.lang.String" itemvalue="noembed" />
             <item index="2" class="java.lang.String" itemvalue="comment" />
@@ -21,6 +21,12 @@
             <item index="13" class="java.lang.String" itemvalue="ide-view-tab-closer" />
             <item index="14" class="java.lang.String" itemvalue="ide-files" />
             <item index="15" class="java.lang.String" itemvalue="ide-view-editor" />
+            <item index="16" class="java.lang.String" itemvalue="ide-file" />
+            <item index="17" class="java.lang.String" itemvalue="ide-file-dir" />
+            <item index="18" class="java.lang.String" itemvalue="ide-file-item" />
+            <item index="19" class="java.lang.String" itemvalue="ide-file-tree" />
+            <item index="20" class="java.lang.String" itemvalue="file-dir-toggle" />
+            <item index="21" class="java.lang.String" itemvalue="ide-file-dir-toggle" />
           </list>
         </value>
       </option>

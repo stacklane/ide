@@ -78,58 +78,6 @@ class Workspace extends IDEComponent {
 }
 window.customElements.define('ide-workspace', Workspace);
 
-class FileLink extends IDEComponent{
-    constructor(fileId, fileName) {
-        super();
-
-        this.fileId = fileId;
-        this.fileName = fileName;
-    }
-
-    connectedCallback(){
-        this.innerText = this.fileName;
-
-        const that = this;
-        this.addEventListener('click', ()=>that.root.openFile({id: that.fileId, name: that.fileName}));
-    }
-}
-window.customElements.define('ide-file-link', FileLink);
-
-class Files extends IDEComponent {
-    constructor() {
-        super();
-    }
-
-    connectedCallback(){
-        this._render();
-    }
-
-    _add(file){
-        // TODO display as directory structure
-
-        this.appendChild(new FileLink(file.id, file.name));
-    }
-
-    _render(){
-        this.loading = true;
-        let thiz = this;
-
-        fetch(this.sessionBase + '/api/files')
-            .then((response) => {
-                return response.json();
-            })
-            .then((data) => {
-                let json = data.data;
-
-                for(let i = 0; i < json.length; i++) this._add(json[i]);
-
-                thiz.loading = false;
-
-                thiz.classList.add('render-fix' /* safari not repainting */);
-            });
-    }
-}
-window.customElements.define('ide-files', Files);
 
 class ViewTab extends IDEComponent{
     constructor(view, id, display) {
