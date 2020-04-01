@@ -1,7 +1,6 @@
 <!--TEMPLATE mustache-->
 <!DOCTYPE html>
-{{% import {session} from '🔗' }}
-<html class="theme-dark no-scroll" data-session-base-href="/sessions/{{session.id}}">
+<html class="theme-dark no-scroll" lang="en">
 <head>
     <title>{{🎨.name}}</title>
 
@@ -21,12 +20,15 @@
           crossorigin="anonymous"
           data-font-src="https://cdn.jsdelivr.net/npm/firacode@2.0.0/"
     >
+
+    {{% import {session} from '🔗' }}
 </head>
 
 <body class="is-full no-scroll">
 
 {{! Init basic structure for startup styling and 'defer' }}
-<ide-root init>
+<ide-root init data-session-base-href="/sessions/{{session.id}}"
+               data-session-base-api-href="/sessions/{{session.id}}/api">
     <ide-toolbar>
         <ide-toolbar-left>
             <ide-toolbar-item>
@@ -46,16 +48,12 @@
     </main>
 </ide-root>
 
+{{! With 'defer', ordering matters }}
 <script defer src="/components/ide-root.js"></script>
-
 <script defer src="/components/ide-toolbar.js"></script>
-
 <script defer src="/components/ide-files.js"></script>
-
 <script defer src="/components/ide.js"></script>
-
 <script defer src="/views/all.js"></script>
-
 <script defer src="/components/ide-finish.js"></script>
 
 </body>

@@ -6,5 +6,8 @@ ide-tabs{
   overflow: hidden;
   white-space: nowrap;
   background: var(--ui-background);
+
+  flex-shrink:0;
+
 }
 

@@ -9,7 +9,13 @@ const ViewCreate = (path)=>{
 };
 
 /**
- * Superclass for views
+ * Superclass for views.
+ *
+ * All should implement:
+ *
+ * receive(response, file){
+ *    ...
+ * }
  */
 class ViewContentBase extends HTMLElement{
     constructor() {
@@ -34,24 +40,24 @@ class EditorView extends ViewContentBase{
     }
 
     receive(response, file){
-        let ct = response.headers.get('Content-Type');
+        const ct = response.headers.get('Content-Type');
         if (ct.indexOf('text/plain') !== 0) throw ct;
 
-        let that = this;
-
-        return response.text().then((value)=>{
-            that.querySelector('div').innerText = value;
-            that.querySelector('footer').innerText = file.path;
-        });
-    }
-
-    connectedCallback(){
-        let content = document.createElement('div');
-        let footer = document.createElement('footer');
+        const that = this;
+        const content = document.createElement('pre');
+        const footer = document.createElement('footer');
 
         this.appendChild(content);
         this.appendChild(footer);
+
+        return response.text().then((value)=>{
+            content.innerText = value;
+            footer.innerText = file.path;
+        }).catch((e)=>{
+            content.innerText = '' + e;
+        });
     }
+
 }
 window.customElements.define('ide-view-editor', EditorView);
 
@@ -62,7 +68,7 @@ class ManifestView extends ViewContentBase{
         this._path = path;
     }
 
-    receive(response, file, success){
+    receive(response, file){
         let ct = response.headers.get('Content-Type');
         if (ct.indexOf('text/plain') !== 0) throw ct;
 

@@ -16,8 +16,8 @@ class IDERoot extends HTMLElement {
     }
 
     ready(){
-        this._sessionBase = document.documentElement.getAttribute("data-session-base-href");
-        this._sessionApiBase = this._sessionBase + '/api';
+        this._sessionBase = this.getAttribute("data-session-base-href");
+        this._sessionApiBase = this.getAttribute("data-session-base-api-href");
 
         let files = this.querySelector('ide-files');
         files.refresh();

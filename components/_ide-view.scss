@@ -10,6 +10,11 @@ ide-view{
   display: none;
   position: relative;
 
+  flex-direction:column;
+
+  // idea from: https://moduscreate.com/blog/how-to-fix-overflow-issues-in-css-flex-layouts/
+  min-height:0; // strange Chrome fix for scrollable internal content
+
   &[active]{
     display: flex; // Gives more flexibility for children than 'block'
   }

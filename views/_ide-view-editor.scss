@@ -4,15 +4,19 @@ ide-view-editor{
   display: flex;
   flex-direction: column;
 
-  > div:first-child{
+  overflow: hidden; // critical for scrolling the 'pre'
+
+  > pre{
     flex-grow: 1;
-    overflow-x: auto;
-    overflow-y: auto;
-    white-space: pre
+    white-space: pre;
+    -webkit-overflow-scrolling: touch;
+    overflow: auto;
+    word-wrap: normal;
   }
 
   > footer{
     border-top: 1px solid var(--ui-border-color);
+    padding: .25rem;
 
     &:empty{
       display: none;

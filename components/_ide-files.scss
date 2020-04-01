@@ -6,8 +6,14 @@ ide-files{
   @include unselectable; // TODO test touch and aria with and without
 
   //display: flex;
-  flex-basis: 20%;
+
+  //
+  //flex: 1 0 auto; // prevents shrinking versus: flex-basis: 20%;
+  // better:
+  flex-shrink:0;
+
   min-width: 200px;
+
 
   //flex-direction: column;
   position: relative;
@@ -90,7 +96,7 @@ ide-files{
     }
 
     &[aria-expanded="false"]{
-      ide-file-dir-toggle:before {
+      > span > ide-file-dir-toggle:before {
         content: '▶︎';
       }
 
@@ -100,7 +106,7 @@ ide-files{
     }
 
     &[aria-expanded="true"] {
-      ide-file-dir-toggle:before {
+      > span > ide-file-dir-toggle:before {
         content: '▼';
       }
 
