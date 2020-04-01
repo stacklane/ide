@@ -1,4 +1,6 @@
 ide-view-tab{
+  @include unselectable;
+
   background: var(--ui-tab-background);
   color: var(--ui-tab-foreground);
   cursor: pointer;

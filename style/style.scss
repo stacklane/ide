@@ -16,6 +16,8 @@
 //  transition: opacity 0.3s ease-in-out;
 //}
 
+
+
 .render-fix{
   transform: translateZ(0); // for safari
 }
@@ -36,5 +38,7 @@ code { font-family: $family-monospace; }
 @supports (font-variation-settings: normal) {
   code {font-family:  $family-monospace-vf; }
 }*/
+
+
 
 

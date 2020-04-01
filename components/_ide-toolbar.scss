@@ -1,0 +1,39 @@
+ide-toolbar{
+  align-items: center;
+  justify-content: space-between;
+  display: flex;
+
+  > nav {
+    &:empty{
+      display: none;
+    }
+  }
+
+  ide-toolbar-left, ide-toolbar-right{
+    display: flex;
+
+    flex-basis: auto;
+    flex-grow: 0;
+    flex-shrink: 0;
+  }
+
+  .ide-toolbar-left{
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .ide-toolbar-right{
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  ide-toolbar-item{
+    align-items: center;
+    display: flex;
+    flex-basis: auto;
+    flex-grow: 0;
+    flex-shrink: 0;
+    justify-content: center;
+    padding: 1rem;
+  }
+}

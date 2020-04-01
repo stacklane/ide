@@ -8,8 +8,28 @@ const ViewCreate = (path)=>{
     }
 };
 
+/**
+ * Superclass for views
+ */
+class ViewContentBase extends HTMLElement{
+    constructor() {
+        super();
+    }
+}
+
+class ErrorView extends ViewContentBase{
+    constructor(message) {
+        super();
+        let div = document.createElement('div');
+        div.innerText = message;
+        this.appendChild(div);
+    }
+}
+window.customElements.define('ide-view-error', ErrorView);
+
+
 class EditorView extends ViewContentBase{
-    constructor(path) {
+    constructor() {
         super();
     }
 
@@ -33,6 +53,8 @@ class EditorView extends ViewContentBase{
         this.appendChild(footer);
     }
 }
+window.customElements.define('ide-view-editor', EditorView);
+
 
 class ManifestView extends ViewContentBase{
     constructor(path) {
@@ -60,6 +82,5 @@ class ManifestView extends ViewContentBase{
         //this.appendChild(footer);
     }
 }
-
-window.customElements.define('ide-view-editor', EditorView);
 window.customElements.define('ide-view-manifest', ManifestView);
+

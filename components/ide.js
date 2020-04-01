@@ -9,41 +9,14 @@
 // TODO spec: However, note that connectedCallback can be called more than once, so any initialization work
 //     that is truly one-time will need a guard to prevent it from running twice.
 
-class IDEComponent extends HTMLElement{
+
+
+class Tabs extends HTMLElement{
     constructor() {
         super();
     }
-
-    get sessionBase(){
-        return document.documentElement.getAttribute("data-session-base-href")
-    }
-
-    get root(){
-        return this.closest('ide-root');
-    }
-
-    get loading() {
-        return this.hasAttribute('loading');
-    }
-
-    set loading(val) {
-        (val) ? this.setAttribute('loading', '') :
-            this.removeAttribute('loading');
-    }
-
-    get active() {
-        return this.hasAttribute('active');
-    }
-
-    set active(val) {
-        (val) ? this.setAttribute('active', '') :
-            this.removeAttribute('active');
-    }
-
-    remove(){
-        if (this.parentElement) this.parentElement.removeChild(this);
-    }
 }
+window.customElements.define('ide-tabs', Tabs);
 
 class Workspace extends IDEComponent {
     constructor() {
@@ -63,17 +36,17 @@ class Workspace extends IDEComponent {
 
         viewTab.activate();
 
-        viewTab.view.load(()=>{
+        viewTab.view.load().then(()=>{
             viewTab.loading = false;
             viewTab.view.loading = false;
         });
     }
 
     connectedCallback(){
-        this._tabs = document.createElement('ide-tabs');
-        //this._footer = document.createElement('footer');
-        this.appendChild(this._tabs);
-        //this.appendChild(this._footer);
+        //this._tabs = new Tabs();
+        //this.appendChild(this._tabs);
+        // specify this in init HTML instead:
+        this._tabs = this.querySelector('ide-tabs');
     }
 }
 window.customElements.define('ide-workspace', Workspace);
@@ -144,27 +117,35 @@ function _decodeBase64Unicode(str) {
     }).join(''));
 }
 
-class View extends IDEComponent { // TODO subclass inner part of view?
+/**
+ * Container for "ViewContentBase" implementations.
+ */
+class View extends IDEComponent {
     constructor(fileId) {
         super();
         this._fileId = fileId;
     }
 
-    // TODO return promise instead of passing success
-    load(success){
+    load(){
         this.loading = true;
 
         let that = this;
 
-        fetch(this.sessionBase + '/api/files/' + this._fileId + '/data')
+        return fetch(this.sessionBase + '/api/files/' + this._fileId + '/data')
             .then((response) => {
                 let file = JSON.parse(_decodeBase64Unicode(response.headers.get('X-File')));
                 let view = ViewCreate(file.path);
-                if (!view) throw 'Unhandled view';
-                that.appendChild(view);
-                view.receive(response, file).then(()=>{
-                    if (success) success();
-                });
+                if (view) {
+                    that.appendChild(view);
+                    return view.receive(response, file);
+                } else {
+                    that.appendChild(new ErrorView('Unable to view: ' + file.path));
+                    return Promise.resolve();
+                }
+            }).catch((e)=>{
+                that.innerHTML = '';
+                that.appendChild(new ErrorView('Unable to view: ' + e));
+                return Promise.resolve();
             });
     }
 
@@ -174,59 +155,6 @@ class View extends IDEComponent { // TODO subclass inner part of view?
 }
 window.customElements.define('ide-view', View);
 
-class ViewContentBase extends HTMLElement{
-    constructor() {
-        super();
-    }
 
-}
-
-class IDE extends HTMLElement {
-    constructor() {
-        super();
-    }
-
-    get workspace(){
-        return this.querySelector('ide-workspace');
-    }
-
-    openFile(file){
-        let work = this.workspace;
-
-        let id = 'view-' + file.id;
-
-        let existing = work.findViewTab(id);
-
-        if (existing) {
-            existing.activate();
-            return;
-        }
-
-        let view = new View(file.id);
-        let tab = new ViewTab(view, id, file.name);
-
-        work.addViewTab(tab);
-
-        return view;
-    }
-
-    connectedCallback(){
-        console.log('ide-root connected');
-        let template = document.createElement('template');
-
-        // TODO TBD immediate sibling before <main>:
-        //     <nav>Toolbar</nav>
-
-        template.innerHTML = `  
-           <main> 
-             <ide-files></ide-files>
-             <ide-workspace></ide-workspace> 
-           </main>
-        `;
-
-        this.append(template.content.cloneNode(true));
-    }
-}
-window.customElements.define('ide-root', IDE);
 
 

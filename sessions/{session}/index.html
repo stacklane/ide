@@ -15,26 +15,48 @@
     <link rel="icon" type="image/png" href="/fav/32.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="/fav/192.png" sizes="192x192" />
 
-    <!-- TODO re-enable
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/firacode@2.0.0/distr/fira_code.css"
           integrity="sha256-05IuhyPmv4vGKXRg9N8ljXH9PtiquBPG/tEcHVH9TJA="
           crossorigin="anonymous"
           data-font-src="https://cdn.jsdelivr.net/npm/firacode@2.0.0/"
-    >-->
-
-    <script src="/components/ide.js"></script>
-
-    <script src="/components/ide-files-tree.js"></script>
-    <script src="/components/ide-files-tree-item.js"></script>
-    <script src="/components/ide-files.js"></script>
-
-    <script src="/views/elements.js"></script>
+    >
 </head>
 
 <body class="is-full no-scroll">
 
-<ide-root></ide-root>
+{{! Init basic structure for startup styling and 'defer' }}
+<ide-root init>
+    <ide-toolbar>
+        <ide-toolbar-left>
+            <ide-toolbar-item>
+
+            </ide-toolbar-item>
+        </ide-toolbar-left>
+        <ide-toolbar-right>
+
+        </ide-toolbar-right>
+    </ide-toolbar>
+    <main>
+        <ide-files></ide-files>
+        <ide-workspace>
+            <ide-tabs></ide-tabs>
+            <div class="ide-init-indicator"><div></div><div></div><div></div><div></div></div>
+        </ide-workspace>
+    </main>
+</ide-root>
+
+<script defer src="/components/ide-root.js"></script>
+
+<script defer src="/components/ide-toolbar.js"></script>
+
+<script defer src="/components/ide-files.js"></script>
+
+<script defer src="/components/ide.js"></script>
+
+<script defer src="/views/all.js"></script>
+
+<script defer src="/components/ide-finish.js"></script>
 
 </body>
 </html>

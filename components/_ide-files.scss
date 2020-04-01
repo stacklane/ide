@@ -25,6 +25,8 @@ ide-files{
     &:focus{
       outline: 0;
     }
+
+    cursor: pointer;  // disable edit caret in some case
   }
 
   /**
@@ -49,26 +51,36 @@ ide-files{
   // TODO hardcode up to 10 with SCSS
   //      but wait until decide if want folder icons for final amounts..
   ide-file-dir{
-    ide-file-item,
-    ide-file-dir > span{
-      padding-left: 2.5rem;
-    }
-
     ide-file-dir {
       ide-file-item,
       ide-file-dir > span {
-        padding-left: 5rem;
+        padding-left: 2.5rem;
+      }
+
+      ide-file-dir {
+        ide-file-item,
+        ide-file-dir > span {
+          padding-left: 5rem;
+        }
+
+        ide-file-dir {
+          ide-file-item,
+          ide-file-dir > span {
+            padding-left: 7.5rem;
+          }
+
+          ide-file-dir {
+            ide-file-item,
+            ide-file-dir > span {
+              padding-left: 10rem;
+            }
+          }
+        }
       }
     }
   }
 
   ide-file-dir{
-    // TODO hard code the padding using a SCSS loop
-
-    //> [role='group']{
-    //  padding-left: 2rem;
-    //}
-
     ide-file-dir-toggle{
       display: inline-block;
       width: 1.5rem;
