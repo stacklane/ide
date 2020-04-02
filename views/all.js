@@ -57,7 +57,6 @@ class EditorView extends ViewContentBase{
             content.innerText = '' + e;
         });
     }
-
 }
 window.customElements.define('ide-view-editor', EditorView);
 
@@ -66,6 +65,8 @@ class ManifestView extends ViewContentBase{
     constructor(path) {
         super();
         this._path = path;
+        let content = document.createElement('div');
+        this.appendChild(content);
     }
 
     receive(response, file){
@@ -78,14 +79,6 @@ class ManifestView extends ViewContentBase{
             that.querySelector('div').innerText = value;
            // that.querySelector('footer').innerText = file.path;
         });
-    }
-
-    connectedCallback(){
-        let content = document.createElement('div');
-        //let footer = document.createElement('footer');
-
-        this.appendChild(content);
-        //this.appendChild(footer);
     }
 }
 window.customElements.define('ide-view-manifest', ManifestView);

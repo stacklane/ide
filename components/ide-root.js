@@ -15,6 +15,10 @@ class IDERoot extends HTMLElement {
         return this._sessionApiBase;
     }
 
+    focusedPath(path){
+        console.log('Focused: ' + path);
+    }
+
     ready(){
         this._sessionBase = this.getAttribute("data-session-base-href");
         this._sessionApiBase = this.getAttribute("data-session-base-api-href");
@@ -37,16 +41,12 @@ class IDERoot extends HTMLElement {
             return;
         }
 
-        let view = new View(file.id);
+        let view = new View(file.id, file.path);
         let tab = new ViewTab(view, id, file.name);
 
         work.addViewTab(tab);
 
         return view;
-    }
-
-    connectedCallback(){
-        // Leave setup to hardcoded structure, for better deferred handling.
     }
 }
 window.customElements.define('ide-root', IDERoot);

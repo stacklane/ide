@@ -8,9 +8,7 @@ class FileLink extends IDEComponent{
 
         this.fileId = fileId;
         this.fileName = fileName;
-    }
 
-    connectedCallback(){
         this.innerText = this.fileName;
 
         const that = this;
@@ -25,7 +23,7 @@ class Files extends IDEComponent {
     constructor() {
         super();
         this.setAttribute('role', 'tree');
-        this._root = new FileDir(null, null);
+        this._root = new FileDir("", "/", false);
         this.appendChild(this._root);
     }
 
@@ -41,7 +39,7 @@ class Files extends IDEComponent {
             .then((data) => {
                 const json = data.data;
 
-                for(let i = 0; i < json.length; i++) this.add(json[i]);
+                for(let i = 0; i < json.length; i++) this.addFileObject(json[i]);
 
                 new TreeLinks(thiz).init();
 
@@ -51,7 +49,7 @@ class Files extends IDEComponent {
             });
     }
 
-    add(file){
+    addFileObject(file){
         const parts = file.dir.split('/');
 
         let lastDir = this._root;
@@ -62,10 +60,7 @@ class Files extends IDEComponent {
             lastDir = lastDir.addDir(parts[i]);
         }
 
-        let fileItem = new FileItem(file.id, file.name);
-        lastDir.addItem(fileItem);
-
-        return fileItem;
+        lastDir.addItem(file.id, file.name);
     }
 }
 
@@ -73,16 +68,8 @@ class FileDirToggle extends HTMLElement{
     constructor(fileDir) {
         super();
         this._fileDir = fileDir;
-    }
-
-    connectedCallback(){
         const that = this;
         this.addEventListener('click', function(event){
-            //?
-            // only process click events that directly happened on this treeitem
-            //if (event.target !== this.domNode && event.target !== this.domNode.firstElementChild) {
-            //    return;
-            //}
             that._fileDir.toggle();
             event.stopPropagation();
             event.preventDefault();
@@ -91,20 +78,21 @@ class FileDirToggle extends HTMLElement{
 }
 
 class FileDir extends IDEComponent{
-    constructor(label, expandable) {
+    constructor(name, path, expandable) {
         super();
-        this._label = label;
+        this._name = name;
         this._expandable = expandable; // aka user-expandable
+        this._path = path;
 
         this.setAttribute('role', 'treeitem');
 
         this.expanded = !this._expandable; // expanded now, if not user-expandable
 
-        if (this._label){
+        if (this._name){
             let labelElement = document.createElement('span');
             if (this._expandable) labelElement.appendChild(new FileDirToggle(this));
             let ll = document.createElement('span');
-            ll.innerText = this._label;
+            ll.innerText = this._name;
             labelElement.appendChild(ll);
             this.appendChild(labelElement);
         }
@@ -113,6 +101,17 @@ class FileDir extends IDEComponent{
         d.setAttribute('role', 'group');
         this._group = d;
         this.appendChild(d);
+
+        if (this._expandable) {
+            const that = this;
+            const toggleEvent = function (e) {
+                that.toggle();
+                e.stopPropagation();
+                e.preventDefault();
+            };
+
+            this.addEventListener(FILE_NODE_CLICK_EVENT, toggleEvent);
+        }
     }
 
     /**
@@ -121,23 +120,87 @@ class FileDir extends IDEComponent{
     addDir(name){
         const group = this._group;
 
+        // 1) Check if FileDir with same name already exists:
         for (let i = 0; i < group.children.length; i++){
             let c = group.children.item(i);
             if (c instanceof FileDir && c.name === name) return c;
         }
 
-        let newDir = new FileDir(name, true);
+        // 2) Find where it should go relative to existing children:
+        //const beforeNode = this._findBeforeNode(newDir);
+        //group.insertBefore(newDir, beforeNode);
+
+        const newDir = new FileDir(name, this._path + name + '/', true);
+
         group.appendChild(newDir);
+
+        this._sort();
+
         return newDir;
     }
 
-    addItem(fileItem){
-        if (!(fileItem instanceof FileItem)) throw '!FileItem';
+    _sort(){
+        const group = this._group;
+        Array.from(group.children)
+            .filter((el)=>(el instanceof FileItem || el instanceof FileDir))
+            .sort((a, b) => a.compareTo(b))
+            .forEach(el => group.appendChild(el));
+    }
+
+    /**
+     * For #insertBefore -- node where the new FileDir or FileItem should be placed before, or null.
+
+    _findBeforeNode(newDirOrItem){
+        const group = this._group;
+
+        let insertBefore = null; // OK to be null, same as insertBefore
+
+        for (let i = 0; i < group.children.length; i++){
+            const next = group.children.item(i);
+            const cmp = newDirOrItem.compareTo(next);
+
+            console.log(newDirOrItem + ' compareTo ' + next + ' == ' + cmp);
+
+            if (cmp < 0){
+                break;
+            } else {
+                insertBefore = next;
+            }
+        }
+
+        return before;
+    }*/
+
+    toString(){
+        return 'FileDir[' + this._path + ']';
+    }
+
+    compareTo(fileOrDir){
+        if (fileOrDir instanceof FileItem){
+            return -1;
+        } else if (fileOrDir instanceof FileDir){
+            return this.path.localeCompare(fileOrDir.path);
+        } else {
+            return -1;
+        }
+    }
+
+    addItem(fileId, fileName){
+        const fileItem = new FileItem(fileId, fileName, this._path + fileName);
+
+        //const before = this._findBeforeNode(fileItem);
+        //this._group.insertBefore(fileItem, before);
+
         this._group.appendChild(fileItem);
+        this._sort();
+    }
+
+    get path(){
+        return this._path;
     }
 
     get name(){
-        return this._label;
+        return this._name;
     }
 
     toggle(){
@@ -151,30 +214,39 @@ class FileDir extends IDEComponent{
     set expanded(val){
         this.setAttribute('aria-expanded', (val === true || val === 'true') ? 'true' : 'false');
     }
+}
 
-    connectedCallback(){
-        if (this._expandable) {
+class FileItem extends IDEComponent{
+    constructor(fileId, fileName, filePath) {
+        super();
+        this._fileId = fileId;
+        this._fileName = fileName;
+        this._path = filePath;
+
+        this.innerText = this._fileName;
+        this.setAttribute('role', 'treeitem');
+
+        {
             const that = this;
-
-            const toggleEvent = function (e) {
-                that.toggle();
+            const handleOpen = function (e) {
+                that.open();
                 e.stopPropagation();
                 e.preventDefault();
             };
 
-            this.addEventListener(FILE_NODE_CLICK_EVENT, toggleEvent);
+            this.addEventListener(FILE_NODE_CLICK_EVENT, handleOpen);
+            this.addEventListener('keydown', function (e) {
+                if (e.code === 'Enter') handleOpen(e);
+            });
         }
     }
-}
 
-class FileItem extends IDEComponent{
-    constructor(fileId, fileName) {
-        super();
-        this._fileId = fileId;
-        this._fileName = fileName;
+    toString(){
+        return 'FileItem[' + this._path + ']';
+    }
 
-        this.innerText = this._fileName;
-        this.setAttribute('role', 'treeitem');
+    get path(){
+        return this._path;
     }
 
     get name(){
@@ -186,19 +258,16 @@ class FileItem extends IDEComponent{
         that.root.openFile({id: that._fileId, name: that._fileName});
     }
 
-    connectedCallback(){
-        const that = this;
-        const handleOpen = function(e){
-            that.open();
-            e.stopPropagation();
-            e.preventDefault();
-        };
-
-        this.addEventListener(FILE_NODE_CLICK_EVENT, handleOpen);
-        this.addEventListener( 'keydown', function(e){
-            if (e.code === 'Enter') handleOpen(e);
-        });
+    compareTo(fileOrDir){
+        if (fileOrDir instanceof FileItem){
+            return this.path.localeCompare(fileOrDir.path);
+        } else if (fileOrDir instanceof FileDir){
+            return 1;
+        } else {
+            return 1;
+        }
     }
+
 }
 
 //////

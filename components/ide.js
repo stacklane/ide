@@ -6,10 +6,6 @@
 // https://medium.com/dev-channel/the-case-for-custom-elements-part-1-65d807b4b439
 // https://medium.com/dev-channel/the-case-for-custom-elements-part-2-2efe42ce9133
 
-// TODO spec: However, note that connectedCallback can be called more than once, so any initialization work
-//     that is truly one-time will need a guard to prevent it from running twice.
-
-
 
 class Tabs extends HTMLElement{
     constructor() {
@@ -43,21 +39,40 @@ class Workspace extends IDEComponent {
     }
 
     connectedCallback(){
-        //this._tabs = new Tabs();
-        //this.appendChild(this._tabs);
-        // specify this in init HTML instead:
-        this._tabs = this.querySelector('ide-tabs');
+        this._tabs = this.querySelector('ide-toolbar > ide-toolbar-left');
+        if (!this._tabs) throw '!workspace.tabs';
     }
 }
 window.customElements.define('ide-workspace', Workspace);
 
 
+class ViewTabCloser extends HTMLElement {
+    constructor(){super()}
+}
+window.customElements.define('ide-view-tab-closer', ViewTabCloser);
+
 class ViewTab extends IDEComponent{
     constructor(view, id, display) {
         super();
+
+        this.setAttribute('role', 'tab');
         this.setAttribute('data-id', id);
+
         this._view = view;
         this._display = display;
+
+        const displaySpan = document.createElement('span');
+        displaySpan.innerText = this._display + ' ';
+        this.append(displaySpan);
+
+        const that = this;
+
+        const close = new ViewTabCloser();
+        close.addEventListener('click', ()=>that.close());
+
+        this.addEventListener('click', ()=>that.activate());
+
+        this.append(close);
     }
 
     get view() {
@@ -80,35 +95,22 @@ class ViewTab extends IDEComponent{
     }
 
     close(){
-        let nextSelection = this.active ? this.previousElementSibling : null;
+        // If active, then auto-select to left (preferred), or right (as fallback), or nothing:
+        const nextSelection = this.active ?
+            (this.previousElementSibling ?
+                this.previousElementSibling : this.nextElementSibling)
+            : null;
 
         this.deactivate();
         this.view.remove();
         this.remove();
 
-        if (nextSelection != null && nextSelection instanceof ViewTab){
+        if (nextSelection != null && nextSelection instanceof ViewTab) {
             nextSelection.activate();
         }
     }
-
-    connectedCallback(){
-        this.setAttribute('role', 'tab');
-        let display = document.createElement('span');
-        display.innerText = this._display + ' ';
-
-        let that = this;
-
-        let close = document.createElement('ide-view-tab-closer');
-        close.addEventListener('click', ()=>that.close());
-
-        this.addEventListener('click', ()=>that.activate());
-
-        this.append(display);
-        this.append(close);
-    }
 }
 window.customElements.define('ide-view-tab', ViewTab);
-window.customElements.define('ide-view-tab-closer', class extends IDEComponent{constructor(){super()}});
 
 function _decodeBase64Unicode(str) {
     // https://attacomsian.com/blog/javascript-base64-encode-decode
@@ -121,9 +123,10 @@ function _decodeBase64Unicode(str) {
  * Container for "ViewContentBase" implementations.
  */
 class View extends IDEComponent {
-    constructor(fileId) {
+    constructor(fileId, filePath) {
         super();
         this._fileId = fileId;
+        this._filePath = filePath;
     }
 
     load(){
@@ -149,9 +152,6 @@ class View extends IDEComponent {
             });
     }
 
-    connectedCallback(){
-
-    }
 }
 window.customElements.define('ide-view', View);
 

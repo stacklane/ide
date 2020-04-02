@@ -30,19 +30,16 @@
 <ide-root init data-session-base-href="/sessions/{{session.id}}"
                data-session-base-api-href="/sessions/{{session.id}}/api">
     <ide-toolbar>
-        <ide-toolbar-left>
-            <ide-toolbar-item>
-
-            </ide-toolbar-item>
-        </ide-toolbar-left>
-        <ide-toolbar-right>
-
-        </ide-toolbar-right>
+        <ide-toolbar-left></ide-toolbar-left>
+        <ide-toolbar-right></ide-toolbar-right>
     </ide-toolbar>
     <main>
         <ide-files></ide-files>
         <ide-workspace>
-            <ide-tabs></ide-tabs>
+            <ide-toolbar>
+                <ide-toolbar-left></ide-toolbar-left>
+                <ide-toolbar-right></ide-toolbar-right>
+            </ide-toolbar>
             <div class="ide-init-indicator"><div></div><div></div><div></div><div></div></div>
         </ide-workspace>
     </main>
