@@ -43,7 +43,7 @@ ide-files{
     display: block;
     padding: .1rem .1rem .1rem 1rem;
 
-    &:hover{
+    &.hover{
       background-color: var(--ui-select-background);
       color: var(--ui-select-foreground);
     }
