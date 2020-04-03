@@ -2,17 +2,8 @@ ide-view-editor{
   flex-grow: 1;
 
   display: flex;
+
   flex-direction: column;
-
-  overflow: hidden; // critical for scrolling the 'pre'
-
-  > pre{
-    flex-grow: 1;
-    white-space: pre;
-    -webkit-overflow-scrolling: touch;
-    overflow: auto;
-    word-wrap: normal;
-  }
 
   > footer{
     border-top: 1px solid var(--ui-border-color);
@@ -22,5 +13,4 @@ ide-view-editor{
       display: none;
     }
   }
-
 }

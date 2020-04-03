@@ -1,0 +1,95 @@
+$text-code-edit-gutter-width: 0rem; // TODO
+$text-code-edit-guide-columns: 100ch; /* ch == width of '0', which works well as a "column" concept for monospace */
+$text-code-edit-padding: 5px;
+
+$text-code-edit-font-size: 13px;
+$text-code-edit-line-height: 15.6px; // ~ 1.2 of 13px , note this number must be used in auto-height calculations
+
+text-code-edit{
+  display: flex;
+
+  flex-direction: row;
+
+  flex-grow: 1;
+
+  background: var(--editor-background);
+  color: var(--editor-foreground);
+
+  position:relative;
+
+  // nope, breaks scrolling: z-index: 1;
+
+  overflow: auto;
+
+  > .text-code-edit-gutter{
+    flex-basis: $text-code-edit-gutter-width;
+    flex-shrink: 0;
+    border-right: 1px solid var(--ui-border-color);
+    font-size: $text-code-edit-font-size;
+    line-height: $text-code-edit-line-height;
+
+    z-index: 2;
+  }
+
+  /**
+   * Redundant CSS, but shows where this should be to cover all sizing cases.
+   */
+  > .text-code-edit-guide,
+  > .text-code-edit-area > .text-code-edit-guide{
+    position: absolute;
+    border-right: 1px solid var(--ui-border-color);
+    left: $text-code-edit-guide-columns;
+    bottom: 0;
+    top: 0;
+    width: 1px;
+    // not really needed if 1px wide: z-index: 1;
+  }
+
+  > .text-code-edit-area{
+    position: relative;
+    height: 100%; // mainly for .text-code-edit-guide
+
+    textarea,
+    pre {
+      margin: 0;
+      outline: 0;
+      border: 0;
+
+      padding: $text-code-edit-padding;
+      background: transparent;
+      white-space: pre;
+
+      //font-family: 'Fira Code', monospace;
+      //@supports (font-variation-settings: normal) {
+        // Fira Code VF
+        font-family: 'Hack', monospace;
+      //}
+
+      font-size: $text-code-edit-font-size;
+      line-height: $text-code-edit-line-height;
+
+      color: inherit;
+    }
+
+    pre{
+      display: block;
+      visibility: hidden; /* Hide the text; just using it for sizing */
+    }
+
+    textarea {
+      // not needed if guide is 1px wide: z-index: 2;
+
+      box-sizing: border-box;
+
+      width: 100%;
+
+      overflow: hidden;
+
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      resize:none;
+    }
+  }
+}

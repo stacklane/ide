@@ -1,6 +1,6 @@
 <!--TEMPLATE mustache-->
 <!DOCTYPE html>
-<html class="theme-dark no-scroll" lang="en">
+<html class="theme-dark is-full" lang="en">
 <head>
     <title>{{🎨.name}}</title>
 
@@ -14,17 +14,21 @@
     <link rel="icon" type="image/png" href="/fav/32.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="/fav/192.png" sizes="192x192" />
 
+    {{!
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/firacode@2.0.0/distr/fira_code.css"
           integrity="sha256-05IuhyPmv4vGKXRg9N8ljXH9PtiquBPG/tEcHVH9TJA="
           crossorigin="anonymous"
           data-font-src="https://cdn.jsdelivr.net/npm/firacode@2.0.0/"
-    >
+    >}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack-subset.css"
+          integrity="sha256-4zFMlAMYc7jMvg5XQq6KKUh6LWfQW1Ioc41hMjdy+NQ=" crossorigin="anonymous"
+          data-font-src="https://cdn.jsdelivr.net/npm/hack-font@3.3.0/">
 
     {{% import {session} from '🔗' }}
 </head>
 
-<body class="is-full no-scroll">
+<body>
 
 {{! Init basic structure for startup styling and 'defer' }}
 <ide-root init data-session-base-href="/sessions/{{session.id}}"
@@ -50,8 +54,10 @@
 <script defer src="/components/ide-toolbar.js"></script>
 <script defer src="/components/ide-files.js"></script>
 <script defer src="/components/ide.js"></script>
-<script defer src="/views/all.js"></script>
+<script defer src="/views/text-code-edit.js"></script>
+<script defer src="/views/views.js"></script>
 <script defer src="/components/ide-finish.js"></script>
+
 
 </body>
 </html>

@@ -17,27 +17,40 @@
 //}
 
 
-
 .render-fix{
   transform: translateZ(0); // for safari
 }
 
-.no-scroll{
+
+/**
+ * UGH:
+ * https://medium.com/p/46e78d54af0d/responses/show
+ * https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+ */
+html.is-full{
+  // This doesn't work in iOS:
+  //body {
+  //   height: 100vh;
+  //}
+
+  // From one of the medium comments, and related to this recommendation:
+  // https://bugs.chromium.org/p/chromium/issues/detail?id=844848#c4
+  height: 100%;
+
   overflow-x: hidden;
   overflow-y: hidden;
+
+  body {
+    height: 100%;
+    overflow-x: hidden;
+
+    overflow-y: hidden;
+
+    > ide-root{
+      height: 100%;
+    }
+  }
 }
-
-body.is-full{
-  height: 100vh;
-}
-
-
-/*
-code { font-family: $family-monospace; }
-
-@supports (font-variation-settings: normal) {
-  code {font-family:  $family-monospace-vf; }
-}*/
 
 
 

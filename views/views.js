@@ -43,18 +43,17 @@ class EditorView extends ViewContentBase{
         const ct = response.headers.get('Content-Type');
         if (ct.indexOf('text/plain') !== 0) throw ct;
 
-        const that = this;
-        const content = document.createElement('pre');
+        const content = new TextCodeEdit();
         const footer = document.createElement('footer');
 
         this.appendChild(content);
         this.appendChild(footer);
 
         return response.text().then((value)=>{
-            content.innerText = value;
+            content.value = value;
             footer.innerText = file.path;
         }).catch((e)=>{
-            content.innerText = '' + e;
+            footer.innerText = '' + e;
         });
     }
 }
