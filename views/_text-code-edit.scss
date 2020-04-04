@@ -1,9 +1,19 @@
 $text-code-edit-gutter-width: 0rem; // TODO
-$text-code-edit-guide-columns: 100ch; /* ch == width of '0', which works well as a "column" concept for monospace */
+$text-code-edit-guide-columns: 120ch; /* ch == width of '0', which works well as a "column" concept for monospace */
 $text-code-edit-padding: 5px;
 
 $text-code-edit-font-size: 13px;
 $text-code-edit-line-height: 15.6px; // ~ 1.2 of 13px , note this number must be used in auto-height calculations
+
+html.theme-dark{
+  /**
+   * To cover a variety of sizing cases in Safari and Chrome, this must be on both areas:
+   */
+  .text-code-edit-area, .text-code-edit-area textarea{
+    background: url(/views/text-code-edit-guide-dark.svg) repeat-y $text-code-edit-guide-columns 0 !important;
+  }
+}
+
 
 text-code-edit{
   display: flex;
@@ -17,8 +27,6 @@ text-code-edit{
 
   position:relative;
 
-  // nope, breaks scrolling: z-index: 1;
-
   overflow: auto;
 
   > .text-code-edit-gutter{
@@ -31,23 +39,15 @@ text-code-edit{
     z-index: 2;
   }
 
-  /**
-   * Redundant CSS, but shows where this should be to cover all sizing cases.
-   */
-  > .text-code-edit-guide,
-  > .text-code-edit-area > .text-code-edit-guide{
-    position: absolute;
-    border-right: 1px solid var(--ui-border-color);
-    left: $text-code-edit-guide-columns;
-    bottom: 0;
-    top: 0;
-    width: 1px;
-    // not really needed if 1px wide: z-index: 1;
-  }
-
   > .text-code-edit-area{
     position: relative;
-    height: 100%; // mainly for .text-code-edit-guide
+    flex-grow: 1;
+    min-height: max-content; // for the guide
+
+    font-family: 'Hack', monospace;
+    font-size: $text-code-edit-font-size;
+    line-height: $text-code-edit-line-height;
+    font-weight: 500;
 
     textarea,
     pre {
@@ -59,37 +59,30 @@ text-code-edit{
       background: transparent;
       white-space: pre;
 
-      //font-family: 'Fira Code', monospace;
-      //@supports (font-variation-settings: normal) {
-        // Fira Code VF
-        font-family: 'Hack', monospace;
-      //}
-
-      font-size: $text-code-edit-font-size;
-      line-height: $text-code-edit-line-height;
-
       color: inherit;
+      font-family: inherit;
+      font-size: inherit;
+      line-height: inherit;
+      font-weight: inherit;
     }
 
     pre{
       display: block;
       visibility: hidden; /* Hide the text; just using it for sizing */
+
+      position: absolute;
+      top: 0;
+      left: 0;
     }
 
     textarea {
-      // not needed if guide is 1px wide: z-index: 2;
-
       box-sizing: border-box;
 
       width: 100%;
 
       overflow: hidden;
 
-      position: absolute;
-      top: 0;
-      left: 0;
-
-      resize:none;
+      resize: none;
     }
   }
 }

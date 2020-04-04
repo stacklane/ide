@@ -17,7 +17,7 @@
 */
 
 const TAB_SPACES = '    '; // 4 -- For consistency, this should be same as tab-size in CSS.
-const LINE_HEIGHT_PX = 15; // doesn't work for very long docs 15.6; // must be used in CSS as well
+const LINE_HEIGHT_PX = Math.floor(15.6 /* value from line-height in CSS */);
 
 /**
  * Simple <textarea> based code editor.
@@ -34,17 +34,11 @@ class TextCodeEdit extends HTMLElement{
     constructor() {
         super();
 
-        /**
-         * Note that .text-code-edit-guide must be in two locations to cover all cases.
-         */
-        //this.innerHTML = '<div class="text-code-edit-guide"></div>';
-
         const expandingArea = document.createElement('div');
         expandingArea.classList.add('text-code-edit-area');
-       //     <div class="text-code-edit-guide"></div>
         expandingArea.innerHTML = `
-            <pre><span></span><br></pre>
             <textarea spellcheck="false" autocapitalize="none" autocomplete="off"></textarea>
+            <pre><span></span><br></pre>
         `;
         this.appendChild(expandingArea);
 
@@ -68,7 +62,8 @@ class TextCodeEdit extends HTMLElement{
 
     _refreshSize(){
         this._preSpan.textContent = this._area.value;
-        this._area.rows = Math.ceil(this._pre.scrollHeight / LINE_HEIGHT_PX) + 1;
+        let extra = 0;
+        this._area.rows = Math.ceil(this._pre.scrollHeight / LINE_HEIGHT_PX) + extra;
     }
 
     /**

@@ -5,6 +5,10 @@ ide-view-editor{
 
   flex-direction: column;
 
+  //height: 100%; // chrome bug... https://support.google.com/chrome/thread/3101009?hl=en
+  // also fixed by :
+  overflow: hidden;
+
   > footer{
     border-top: 1px solid var(--ui-border-color);
     padding: .25rem;
