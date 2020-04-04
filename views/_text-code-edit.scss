@@ -1,42 +1,65 @@
-$text-code-edit-gutter-width: 0rem; // TODO
+$text-code-edit-gutter-width: 3em;
 $text-code-edit-guide-columns: 120ch; /* ch == width of '0', which works well as a "column" concept for monospace */
 $text-code-edit-padding: 5px;
 
 $text-code-edit-font-size: 13px;
 $text-code-edit-line-height: 15.6px; // ~ 1.2 of 13px , note this number must be used in auto-height calculations
 
-html.theme-dark{
-  /**
-   * To cover a variety of sizing cases in Safari and Chrome, this must be on both areas:
-   */
-  .text-code-edit-area, .text-code-edit-area textarea{
-    background: url(/views/text-code-edit-guide-dark.svg) repeat-y $text-code-edit-guide-columns 0 !important;
-  }
-}
-
-
 text-code-edit{
+  background-color: var(--editor-background);
+
+  // This is for the gutter border:
+  background: var(--ui-border-color-image) repeat-y $text-code-edit-gutter-width 0 !important;
+
   display: flex;
 
   flex-direction: row;
 
   flex-grow: 1;
 
-  background: var(--editor-background);
   color: var(--editor-foreground);
 
   position:relative;
 
   overflow: auto;
+  overscroll-behavior: none;
+
+  font-family: 'Hack', monospace;
+  font-size: $text-code-edit-font-size;
+  line-height: $text-code-edit-line-height;
+  font-weight: 500;
+
+  textarea,
+  pre,
+  .text-code-edit-gutter{
+    margin: 0;
+    outline: 0;
+    border: 0;
+
+    padding: $text-code-edit-padding;
+    background: transparent;
+    white-space: pre;
+
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    font-weight: inherit;
+  }
 
   > .text-code-edit-gutter{
+    background: var(--editor-background);
+    position:sticky;
+    left: 0;
+
+    color: var(--editor-line-num);
+
+    z-index: 100;
+
     flex-basis: $text-code-edit-gutter-width;
     flex-shrink: 0;
-    border-right: 1px solid var(--ui-border-color);
-    font-size: $text-code-edit-font-size;
-    line-height: $text-code-edit-line-height;
 
-    z-index: 2;
+    height: fit-content;
   }
 
   > .text-code-edit-area{
@@ -44,38 +67,13 @@ text-code-edit{
     flex-grow: 1;
     min-height: max-content; // for the guide
 
-    font-family: 'Hack', monospace;
-    font-size: $text-code-edit-font-size;
-    line-height: $text-code-edit-line-height;
-    font-weight: 500;
-
-    textarea,
-    pre {
-      margin: 0;
-      outline: 0;
-      border: 0;
-
-      padding: $text-code-edit-padding;
-      background: transparent;
-      white-space: pre;
-
-      color: inherit;
-      font-family: inherit;
-      font-size: inherit;
-      line-height: inherit;
-      font-weight: inherit;
-    }
-
     pre{
       display: block;
       visibility: hidden; /* Hide the text; just using it for sizing */
-
-      position: absolute;
-      top: 0;
-      left: 0;
     }
 
     textarea {
+      caret-color: var(--editor-caret-color);
       box-sizing: border-box;
 
       width: 100%;
@@ -83,6 +81,19 @@ text-code-edit{
       overflow: hidden;
 
       resize: none;
+
+      position: absolute;
+      top: 0;
+      left: 0;
     }
+  }
+
+  /**
+   * The guide line.
+   *
+   * To cover a variety of sizing cases in Safari and Chrome, this must be on both areas.
+   */
+  .text-code-edit-area, .text-code-edit-area textarea{
+    background: var(--ui-border-color-image) repeat-y $text-code-edit-guide-columns 0 !important;
   }
 }

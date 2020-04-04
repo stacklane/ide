@@ -34,11 +34,18 @@ class TextCodeEdit extends HTMLElement{
     constructor() {
         super();
 
+        const gutter = document.createElement('div');
+        gutter.classList.add('text-code-edit-gutter');
+        this.appendChild(gutter);
+        this._gutter = gutter;
+
         const expandingArea = document.createElement('div');
         expandingArea.classList.add('text-code-edit-area');
+
+        // Note pre must come before the textarea for proper width handling
         expandingArea.innerHTML = `
-            <textarea spellcheck="false" autocapitalize="none" autocomplete="off"></textarea>
             <pre><span></span><br></pre>
+            <textarea spellcheck="false" autocapitalize="none" autocomplete="off"></textarea>
         `;
         this.appendChild(expandingArea);
 
@@ -49,6 +56,10 @@ class TextCodeEdit extends HTMLElement{
         const that = this;
         this._area.addEventListener('input', function( event ) { that._refreshSize();});
         this._area.addEventListener('keydown', function( event ) { that._keyHandler(event);});
+
+        // Safari does not yet support overflow-scroll:none, so:
+        // but this does not work:
+        //this.addEventListener('touchmove',function(event){ event.preventDefault(); });
     }
 
     get value(){
@@ -62,8 +73,13 @@ class TextCodeEdit extends HTMLElement{
 
     _refreshSize(){
         this._preSpan.textContent = this._area.value;
-        let extra = 0;
-        this._area.rows = Math.ceil(this._pre.scrollHeight / LINE_HEIGHT_PX) + extra;
+        const extra = 0;
+        const rows = Math.ceil(this._pre.scrollHeight / LINE_HEIGHT_PX) + extra;
+        const targetLength = (rows + '').length + 1;
+        this._area.rows = rows;
+        let lineNums = '';
+        for (let i = 1; i <= rows; i++) lineNums += (i + '\n').padStart(targetLength);
+        this._gutter.innerText = lineNums;
     }
 
     /**
