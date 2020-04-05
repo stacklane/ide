@@ -1,7 +1,7 @@
+$toolbar-item-spacing: .5rem;
+
 ide-toolbar{
   flex-shrink:0;
-
- // -webkit-overflow-scrolling: touch;
 
   align-items: center;
   justify-content: space-between;
@@ -35,22 +35,54 @@ ide-toolbar{
     justify-content: flex-end;
   }
 
-  /**
-   * Each item in a toolbar should be a direct child.
-   */
-  * {
-    flex-grow: 0;
-    flex-shrink: 0;
-    flex-basis: auto;
-  }
-
-  /*
-  ide-toolbar-item{
+  ide-toolbar-item, ide-toolbar-path{
     align-items: center;
     display: flex;
     flex-basis: auto;
     flex-grow: 0;
     flex-shrink: 0;
     justify-content: center;
-  }*/
+    padding: $toolbar-item-spacing;
+  }
+
+  ide-toolbar-path{
+    ide-toolbar-path-item{
+      font-size: .8rem;
+      padding: $toolbar-item-spacing;
+
+      &:before {
+        content: "";
+        display: inline-block;
+        border-right: 1px solid var(--ui-border-color);
+        border-top: 1px solid var(--ui-border-color);
+        transform: rotate(45deg);
+        width: .5rem;
+        height: .5rem;
+        margin-right: $toolbar-item-spacing;
+        margin-left: #{($toolbar-item-spacing*1.2) * -1}
+      }
+    }
+  }
+
+  ide-toolbar-item{
+    &.is-logo{
+      svg{
+        height: 1.5rem;
+        width: 1.5rem;
+      }
+    }
+
+    &.is-app-icon{
+      svg{
+        height: 1rem;
+        width: 1rem;
+      }
+    }
+
+    &.is-app-name{
+
+    }
+
+
+  }
 }

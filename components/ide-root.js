@@ -16,8 +16,24 @@ class IDERoot extends HTMLElement {
     }
 
     showPath(item /* FileItem | FileDir | View */){
-        console.log('showPath: ' + item);
+        const path = item.path;
+        if (!path) return null;
 
+        const parts = path.split('/');
+
+        const existingPath = this.querySelector('ide-toolbar-path');
+
+        const newPath = document.createElement('ide-toolbar-path');
+
+        for (let i = 0; i < parts.length; i++){
+            const val = parts[i];
+            if (val.length === 0) continue; // skip both leading and trailing slash (dir)
+            const item = document.createElement('ide-toolbar-path-item');
+            item.innerText = val;
+            newPath.appendChild(item);
+        }
+
+        existingPath.replaceWith(newPath);
     }
 
     ready(){

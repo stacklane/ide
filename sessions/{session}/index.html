@@ -33,6 +33,7 @@
     }}
 
     {{% import {session} from '🔗' }}
+    {{% svg /images/ as image }}
 </head>
 
 <body>
@@ -41,8 +42,16 @@
 <ide-root init data-session-base-href="/sessions/{{session.id}}"
                data-session-base-api-href="/sessions/{{session.id}}/api">
     <ide-toolbar>
-        <ide-toolbar-left></ide-toolbar-left>
-        <ide-toolbar-right></ide-toolbar-right>
+        <ide-toolbar-left>
+            <ide-toolbar-item class="is-logo">
+                {{>image-logo}}
+            </ide-toolbar-item>
+            <ide-toolbar-item class="is-app-name">Project</ide-toolbar-item>
+            <ide-toolbar-path></ide-toolbar-path>
+        </ide-toolbar-left>
+        <ide-toolbar-right>
+
+        </ide-toolbar-right>
     </ide-toolbar>
     <main>
         <ide-files></ide-files>
