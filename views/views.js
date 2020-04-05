@@ -21,6 +21,10 @@ class ViewContentBase extends HTMLElement{
     constructor() {
         super();
     }
+
+    showFocus(){
+
+    }
 }
 
 class ErrorView extends ViewContentBase{
@@ -39,12 +43,19 @@ class EditorView extends ViewContentBase{
         super();
     }
 
+    showFocus(){
+        super.showFocus();
+        if (this._content) this._content.showFocus();
+    }
+
     receive(response, file){
         const ct = response.headers.get('Content-Type');
         if (ct.indexOf('text/plain') !== 0) throw ct;
 
         const content = new TextCodeEdit();
         const footer = document.createElement('footer');
+
+        this._content = content;
 
         this.appendChild(content);
         this.appendChild(footer);

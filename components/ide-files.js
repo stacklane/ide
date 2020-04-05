@@ -20,16 +20,17 @@ const isPrintableCharacter = (str)=>{
 };
 
 class FileLink extends IDEComponent{
-    constructor(fileId, fileName) {
+    constructor(fileId, fileName, filePath) {
         super();
 
         this.fileId = fileId;
         this.fileName = fileName;
+        this._path = filePath;
 
         this.innerText = this.fileName;
 
         const that = this;
-        this.addEventListener('click', ()=>that.root.openFile({id: that.fileId, name: that.fileName}));
+        this.addEventListener('click', ()=>that.root.openFile({id: that.fileId, name: that.fileName, path: that._path}));
     }
 }
 
@@ -116,11 +117,16 @@ class FileDir extends IDEComponent{
 
         this.expanded = !this._expandable; // expanded now, if not user-expandable
 
+        const that = this;
+
         if (this._name){
             const labelControl = document.createElement('span');
             if (this.isExpandable()) {
                 labelControl.appendChild(new FileDirToggle(this));
-                this.addEventListener('focus', ()=>labelControl.classList.add('focus'));
+                this.addEventListener('focus', ()=>{
+                    labelControl.classList.add('focus');
+                    that.root.showPath(that);
+                });
                 this.addEventListener('blur', ()=>labelControl.classList.remove('focus'));
                 labelControl.addEventListener('mouseover', MOUSE_OVER);
                 labelControl.addEventListener('mouseout', MOUSE_OUT);
@@ -137,8 +143,6 @@ class FileDir extends IDEComponent{
         this.appendChild(groupDiv);
 
         if (this.isExpandable()) {
-            const that = this;
-
             const toggleEvent = function (e) {
                 that.toggle();
                 e.stopPropagation();
@@ -179,7 +183,7 @@ class FileDir extends IDEComponent{
     }
 
     toString(){
-        return 'FileDir[' + this._path + ']';
+        return 'FileDir[' + this.path + ']';
     }
 
     compareTo(fileOrDir){
@@ -263,15 +267,20 @@ class FileItem extends IDEComponent{
                 if (e.code === 'Enter') handleOpen(e);
             });
 
-            this.addEventListener('focus', ()=>that.classList.add('focus'));
+            this.addEventListener('focus', ()=>that.showFocus());
             this.addEventListener('blur', ()=>that.classList.remove('focus'));
             this.addEventListener('mouseover',  MOUSE_OVER);
             this.addEventListener('mouseout', MOUSE_OUT);
         }
     }
 
+    showFocus(){
+        this.classList.add('focus');
+        this.root.showPath(this);
+    }
+
     toString(){
-        return 'FileItem[' + this._path + ']';
+        return 'FileItem[' + this.path + ']';
     }
 
     isExpanded(){
@@ -292,7 +301,7 @@ class FileItem extends IDEComponent{
 
     open(){
         const that = this;
-        that.root.openFile({id: that._fileId, name: that._fileName});
+        that.root.openFile({id: that._fileId, name: that._fileName, path: that._path});
     }
 
     compareTo(fileOrDir){

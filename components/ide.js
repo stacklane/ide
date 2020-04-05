@@ -79,19 +79,24 @@ class ViewTab extends IDEComponent{
         return this._view;
     }
 
+    toString(){
+        return 'ViewTab[' + this.view.path + ']';
+    }
+
     activate(){
         if (this.parentElement)
             this.parentElement.querySelectorAll('ide-view-tab').forEach(e=>e.deactivate());
 
         this.active = true;
         this.setAttribute('aria-selected', 'true');
-        this.view.active = true;
+
+        this.view.activate();
     }
 
     deactivate(){
         this.active = false;
         this.setAttribute('aria-selected', 'false');
-        this.view.active = false;
+        this.view.deactivate();
     }
 
     close(){
@@ -125,8 +130,32 @@ function _decodeBase64Unicode(str) {
 class View extends IDEComponent {
     constructor(fileId, filePath) {
         super();
+        if (!fileId) throw '!fileId';
+        if (!filePath) throw '!filePath';
+
         this._fileId = fileId;
         this._filePath = filePath;
+
+        const that = this;
+        this.addEventListener('focus', ()=>that.activate);
+    }
+
+    toString(){
+        return 'View[' + this.path + ']';
+    }
+
+    activate(){
+        this.active = true;
+        this.root.showPath(this);
+        if (this._view) this._view.showFocus();
+    }
+
+    deactivate(){
+        this.active = false;
+    }
+
+    get path(){
+        return this._filePath;
     }
 
     load(){
@@ -136,18 +165,23 @@ class View extends IDEComponent {
 
         return fetch(this.sessionBase + '/api/files/' + this._fileId + '/data')
             .then((response) => {
-                let file = JSON.parse(_decodeBase64Unicode(response.headers.get('X-File')));
-                let view = ViewCreate(file.path);
+                const file = JSON.parse(_decodeBase64Unicode(response.headers.get('X-File')));
+                const view = ViewCreate(file.path);
                 if (view) {
                     that.appendChild(view);
+                    this._view = view;
                     return view.receive(response, file);
                 } else {
-                    that.appendChild(new ErrorView('Unable to view: ' + file.path));
+                    const error = new ErrorView('Unable to view: ' + file.path);
+                    that.appendChild(error);
+                    this._view = error;
                     return Promise.resolve();
                 }
             }).catch((e)=>{
                 that.innerHTML = '';
-                that.appendChild(new ErrorView('Unable to view: ' + e));
+                const view = new ErrorView('Unable to view: ' + e);
+                that.appendChild(view);
+                this._view = view;
                 return Promise.resolve();
             });
     }

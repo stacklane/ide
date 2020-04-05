@@ -15,8 +15,9 @@ class IDERoot extends HTMLElement {
         return this._sessionApiBase;
     }
 
-    focusedPath(path){
-        console.log('Focused: ' + path);
+    showPath(item /* FileItem | FileDir | View */){
+        console.log('showPath: ' + item);
+
     }
 
     ready(){
