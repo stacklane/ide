@@ -118,6 +118,8 @@ class TextCodeEdit extends HTMLElement{
     /**
      * #execCommand is non-standard but necessary to retain undo history
      *
+     * #setRangeText on the other hand does not impact undo history
+     *
      * https://stackoverflow.com/questions/44471699/how-to-make-undo-work-in-an-html-textarea-after-setting-the-value
      * https://stackoverflow.com/questions/44471699/how-to-make-undo-work-in-an-html-textarea-after-setting-the-value
      * https://stackoverflow.com/questions/13597007/how-can-i-undo-the-programmatic-insertion-of-text-into-a-textarea
@@ -141,7 +143,7 @@ class TextCodeEdit extends HTMLElement{
                 const lookEnd = currentSelectionStart;
 
                 for (let i = lookStart; i < lookEnd; i++){
-                    let char = area.value.charCodeAt(i);
+                    const char = area.value.charCodeAt(i);
                     if (char !== 32) return; // exit handler
                 }
 
@@ -152,31 +154,47 @@ class TextCodeEdit extends HTMLElement{
 
         } else if (event.key === "Tab"){
 
-            /**
-             * WARNING: A known issue is that use of setRangeText does not impact undo/redo history.
-             */
-
             event.preventDefault();
 
             // TODO outdent/indent should support multiple line selection, not just current line
+            //      also review WebStorm behavior -- should we "fix up" or normalize the indentation across multiple lines?
 
             const prevNewLine = area.value.lastIndexOf('\n', currentSelectionStart - 1);
+            const firstCharAfterNewLine = prevNewLine + 1;
 
             if (event.shiftKey) {
 
-                // Outdent
+                /**
+                 * Outdent
+                 */
 
-                // TODO outdent, find beginning of line.. only outdent when reached, but don't delete a new line.
-                //    CAN use setRangeText to replace a value with ''
+                let lastSpace = -1;
+
+                for (let i = firstCharAfterNewLine; i <= currentSelectionStart; i++){
+                    const char = area.value.charCodeAt(i);
+                    if (char === 32) {
+                        lastSpace = i;
+                    } else {
+                        break;
+                    }
+                }
+
+                if ((lastSpace - firstCharAfterNewLine) + 1 >= this._tabSize) {
+                    area.setSelectionRange(lastSpace - this._tabSize + 1, lastSpace + 1);
+                    document.execCommand("insertText", false, '');
+                    // retain current selection, by moving it backwards:
+                    area.setSelectionRange(currentSelectionStart - this._tabSize, currentSelectionEnd - this._tabSize);
+                }
 
             } else {
 
-                // Indent
+                /**
+                 * Indent
+                 */
 
-                // TODO it would be better to setSelectionRange at end of current indent before inserting (instead of always at beginning of line)
-                area.setSelectionRange(prevNewLine + 1, prevNewLine + 1);
+                area.setSelectionRange(firstCharAfterNewLine, firstCharAfterNewLine);
                 document.execCommand("insertText", false, this._tabString);
-                area.setSelectionRange(currentSelectionStart + this._tabSize, currentSelectionStart + this._tabSize);
+                area.setSelectionRange(currentSelectionStart + this._tabSize, currentSelectionEnd + this._tabSize);
 
             }
 
