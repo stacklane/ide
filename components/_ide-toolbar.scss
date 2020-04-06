@@ -13,7 +13,7 @@ ide-toolbar{
 
   overflow:hidden;
 
-  ide-toolbar-left, ide-toolbar-right{
+  ide-toolbar-left, ide-toolbar-right, ide-toolbar-path{
     display: flex;
 
     flex-basis: auto;
@@ -35,7 +35,8 @@ ide-toolbar{
     justify-content: flex-end;
   }
 
-  ide-toolbar-item, ide-toolbar-path{
+  ide-toolbar-item,
+  ide-toolbar-path-item{
     align-items: center;
     display: flex;
     flex-basis: auto;
@@ -45,21 +46,27 @@ ide-toolbar{
     padding: $toolbar-item-spacing;
   }
 
-  ide-toolbar-path{
-    ide-toolbar-path-item{
-      font-size: .8rem;
-      padding: $toolbar-item-spacing;
+  ide-toolbar-path-item{
+    font-size: .8rem;
+    background: var(--ui-background);
+    padding-left: #{$toolbar-item-spacing / 2};
 
-      &:before {
-        content: "";
-        display: inline-block;
-        border-right: 1px solid var(--ui-border-color);
-        border-top: 1px solid var(--ui-border-color);
-        transform: rotate(45deg);
-        width: .5rem;
-        height: .5rem;
-        margin-right: $toolbar-item-spacing;
-        margin-left: #{($toolbar-item-spacing*1.2) * -1}
+    &:before {
+      content: "";
+      display: inline-block;
+      border-right: 1px solid var(--ui-border-color);
+      border-top: 1px solid var(--ui-border-color);
+      transform: rotate(45deg);
+      width: .5rem;
+      height: .5rem;
+      margin-right: $toolbar-item-spacing;
+    }
+
+    &.has-click-action {
+      cursor: pointer;
+
+      &:hover {
+        background: var(--ui-tab-hover-background);
       }
     }
   }

@@ -10,12 +10,13 @@
  * https://codepen.io/vsync/pen/frudD
  */
 
-const TAB_SPACES = '    '; // 4 -- For consistency, this should be same as tab-size in CSS
 const LINE_HEIGHT_PX = Math.floor(15.6 /* value from line-height in CSS */);
 
 class TextCodeEdit extends HTMLElement{
-    constructor() {
+    constructor(language) {
         super();
+
+        this.classList.add('lang-' + language);
 
         const gutter = document.createElement('div');
         gutter.classList.add('text-code-edit-gutter');
@@ -44,6 +45,8 @@ class TextCodeEdit extends HTMLElement{
         this._area.addEventListener('keyup', function(event){ that._refreshLineNum()});
         this._area.addEventListener('mouseup', function(event){ that._refreshLineNum()});
         // needs work: this._area.addEventListener('focus', function(event){ that._refreshLineNum()});
+
+        this._setTabSize();
     }
 
     showFocus(){
@@ -138,7 +141,7 @@ class TextCodeEdit extends HTMLElement{
             const currentSelectionStart = area.selectionStart;
             const currentSelectionEnd = area.selectionEnd;
 
-            let prevNewLine = area.value.lastIndexOf('\n', currentSelectionStart - 1);
+            const prevNewLine = area.value.lastIndexOf('\n', currentSelectionStart - 1);
 
             if (event.shiftKey) {
                 // Outdent
@@ -148,7 +151,15 @@ class TextCodeEdit extends HTMLElement{
 
             } else {
                 // Indent
-                area.setRangeText(TAB_SPACES, prevNewLine + 1, prevNewLine + 1);
+                area.setRangeText(this._tabString, prevNewLine + 1, prevNewLine + 1);
+
+                // Handling the cursor situated at the beginning of a line, which for some reason behaves
+                // unexpectedly after #setRangeText
+                if (currentSelectionStart === currentSelectionEnd && currentSelectionEnd === prevNewLine + 1){
+                    const newPosition = currentSelectionEnd + this._tabSize;
+
+                    area.setSelectionRange(newPosition, newPosition);
+                }
             }
 
         } else if (event.key === "Enter") {
@@ -180,6 +191,20 @@ class TextCodeEdit extends HTMLElement{
             document.execCommand("insertText", false, '\n' + indent);
 
         }
+    }
+
+    /**
+     * Highly reliant on the CSS targeting specific languages.
+     */
+    _setTabSize(){
+        this._tabSize = window.getComputedStyle(this._area).getPropertyValue('tab-size');
+        if (!this._tabSize || this._tabSize < 2 || this._tabSize > 4) this._tabSize = 4;
+        this._tabSize = Number(this._tabSize);
+        this._tabString = ''.padStart(this._tabSize, ' ');
+    }
+
+    connectedCallback(){
+        this._setTabSize();
     }
 
 }

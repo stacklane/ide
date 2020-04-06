@@ -6,6 +6,21 @@ $text-code-edit-font-size: 13px;
 $text-code-edit-font-weight: $weight-normal; // 'Hack' doesn't seem to have anything takes effect until 550
 $text-code-edit-line-height: 15.6px; // ~ 1.2 of 13px , note this number must be used in auto-height calculations
 
+/**
+ * tab-size (also read by style.tabSize in JS)
+ */
+text-code-edit {
+  textarea, pre {
+    tab-size: 4;
+  }
+
+  &.lang-scss{
+    textarea, pre {
+      tab-size: 2;
+    }
+  }
+}
+
 text-code-edit{
   background-color: var(--editor-background);
 

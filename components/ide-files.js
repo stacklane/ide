@@ -2,6 +2,15 @@
 const TOUCH_DEVICE = 'ontouchstart' in document.documentElement;
 const FILE_NODE_CLICK_EVENT = TOUCH_DEVICE ? 'touchstart' : 'dblclick';
 
+const MOUSE_OVER = function(e){
+    e.currentTarget.classList.add('hover');
+    e.stopPropagation();
+};
+const MOUSE_OUT = function(e){
+    e.currentTarget.classList.remove('hover');
+    e.stopPropagation();
+};
+
 const KEY_CODE = Object.freeze({
     RETURN: 13,
     SPACE: 32,
@@ -41,7 +50,7 @@ class Files extends IDEComponent {
     constructor() {
         super();
         this.setAttribute('role', 'tree');
-        this._root = new FileDir("", "/", false);
+        this._root = new FileDir("/", false);
         this.appendChild(this._root);
     }
 
@@ -57,7 +66,7 @@ class Files extends IDEComponent {
             .then((data) => {
                 const json = data.data;
 
-                for(let i = 0; i < json.length; i++) this.addFileObject(json[i]);
+                for (let i = 0; i < json.length; i++) this._addFileObject(json[i]);
 
                 new TreeLinks(thiz).init();
 
@@ -67,18 +76,18 @@ class Files extends IDEComponent {
             });
     }
 
-    addFileObject(file){
-        const parts = file.dir.split('/');
+    _addFileObject(fileObject){
+        const file = new FileInfo(fileObject);
+
+        const dirParts = file.dirParts;
 
         let lastDir = this._root;
 
-        for (let i = 1 /* skip first slash */;
-             i < parts.length - 1 /* skip last slash */;
-             i++){
-            lastDir = lastDir.addDir(parts[i]);
+        for (let i = 0; i < dirParts.length; i++){
+            lastDir = lastDir.addDir(dirParts[i]);
         }
 
-        lastDir.addItem(file.id, file.name);
+        lastDir.addItem(file);
     }
 }
 
@@ -95,22 +104,24 @@ class FileDirToggle extends HTMLElement{
     }
 }
 
-const MOUSE_OVER = function(e){
-    e.currentTarget.classList.add('hover');
-    e.stopPropagation();
-};
-const MOUSE_OUT = function(e){
-    e.currentTarget.classList.remove('hover');
-    e.stopPropagation();
-};
-
-
 class FileDir extends IDEComponent{
-    constructor(name, path, expandable) {
+    constructor(dirInfo, expandable) {
         super();
-        this._name = name;
+
+        if (dirInfo === '/'){
+            this._info = null;
+            this._name = '';
+            this._path = '/';
+        } else if (dirInfo instanceof FileInfo){
+            if (!dirInfo.isDir) throw dirInfo;
+            this._info = dirInfo;
+            this._name = dirInfo.name;
+            this._path = dirInfo.path;
+        } else {
+            throw dirInfo + '';
+        }
+
         this._expandable = expandable; // AKA "user expandable"
-        this._path = path;
 
         this.setAttribute('aria-expanded', 'false');
         this.setAttribute('role', 'treeitem');
@@ -125,7 +136,7 @@ class FileDir extends IDEComponent{
                 labelControl.appendChild(new FileDirToggle(this));
                 this.addEventListener('focus', ()=>{
                     labelControl.classList.add('focus');
-                    that.root.showPath(that);
+                    that.root.showPath(that._info);
                 });
                 this.addEventListener('blur', ()=>labelControl.classList.remove('focus'));
                 labelControl.addEventListener('mouseover', MOUSE_OVER);
@@ -166,7 +177,10 @@ class FileDir extends IDEComponent{
         const existing = this.childDirs.find((dir)=>dir.name === name);
         if (existing) return existing;
 
-        const newDir = new FileDir(name, this._path + name + '/', true);
+        const newDirInfo = new FileInfo(this._path + name + '/');
+
+        const newDir = new FileDir(newDirInfo, true);
+
         group.appendChild(newDir);
 
         this._sort();
@@ -183,7 +197,7 @@ class FileDir extends IDEComponent{
     }
 
     toString(){
-        return 'FileDir[' + this.path + ']';
+        return 'FileDir[' + this._path + ']';
     }
 
     compareTo(fileOrDir){
@@ -196,8 +210,8 @@ class FileDir extends IDEComponent{
         }
     }
 
-    addItem(fileId, fileName){
-        const fileItem = new FileItem(fileId, fileName, this._path + fileName);
+    addItem(fileInfo){
+        const fileItem = new FileItem(fileInfo);
         this._group.appendChild(fileItem);
         this._sort();
     }
@@ -208,6 +222,10 @@ class FileDir extends IDEComponent{
 
     isExpandable(){
         return this._expandable;
+    }
+
+    get dirInfo(){
+        return this._info;
     }
 
     get path(){
@@ -245,13 +263,12 @@ class FileDir extends IDEComponent{
 }
 
 class FileItem extends IDEComponent{
-    constructor(fileId, fileName, filePath) {
+    constructor(fileInfo) {
         super();
-        this._fileId = fileId;
-        this._fileName = fileName;
-        this._path = filePath;
 
-        this.innerText = this._fileName;
+        this._file = fileInfo;
+
+        this.innerText = this._file.name;
         this.setAttribute('role', 'treeitem');
 
         {
@@ -276,7 +293,7 @@ class FileItem extends IDEComponent{
 
     showFocus(){
         this.classList.add('focus');
-        this.root.showPath(this);
+        this.root.showPath(this._file);
     }
 
     toString(){
@@ -291,17 +308,20 @@ class FileItem extends IDEComponent{
         return false; // because leaf node
     }
 
+    get fileInfo(){
+        return this._file;
+    }
+
     get path(){
-        return this._path;
+        return this._file._path;
     }
 
     get name(){
-        return this._fileName;
+        return this._file._name;
     }
 
     open(){
-        const that = this;
-        that.root.openFile({id: that._fileId, name: that._fileName, path: that._path});
+        this.root.openFile(this._file);
     }
 
     compareTo(fileOrDir){

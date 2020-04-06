@@ -41,6 +41,8 @@ window.customElements.define('ide-view-error', ErrorView);
 class EditorView extends ViewContentBase{
     constructor() {
         super();
+        //const that = this;
+        //this.addEventListener('focus', ()=>that.showFocus());
     }
 
     showFocus(){
@@ -52,7 +54,8 @@ class EditorView extends ViewContentBase{
         const ct = response.headers.get('Content-Type');
         if (ct.indexOf('text/plain') !== 0) throw ct;
 
-        const content = new TextCodeEdit();
+        const lang = file.extension;
+        const content = new TextCodeEdit(lang);
         const footer = document.createElement('footer');
 
         this._content = content;
