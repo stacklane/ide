@@ -105,6 +105,19 @@ class IDERoot extends HTMLElement {
         return this._sessionApiBase;
     }
 
+    _loadAppMeta(){
+        const that = this;
+        return fetch(this.sessionApiBase + '/')
+            .then((response) => response.json())
+            .then((json) =>that.updateAppName(json.name));
+    }
+
+    updateAppName(name){
+        const element = this.querySelector('ide-toolbar-item.is-app-name');
+        if (!name) name = 'Project';
+        element.innerText = name;
+    }
+
     showPath(fileInfo){
         if (!(fileInfo instanceof FileInfo)) throw '!FileInfo:' + file;
 
@@ -130,6 +143,8 @@ class IDERoot extends HTMLElement {
         files.refresh();
 
         this.removeAttribute('init');
+
+        this._loadAppMeta();
     }
 
     openFile(fileInfo){

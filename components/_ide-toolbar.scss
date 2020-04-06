@@ -72,11 +72,14 @@ ide-toolbar{
   }
 
   ide-toolbar-item{
-    &.is-logo{
-      svg{
-        height: 1.5rem;
-        width: 1.5rem;
-      }
+    &.is-logo:before{
+      content: ' ';
+      height: 1.5rem;
+      width: 1.5rem;
+      background-size: 1.5rem 1.5rem;
+      background-image: var(--ui-logo);
+      background-position: center;
+      background-repeat: no-repeat;
     }
 
     &.is-app-icon{

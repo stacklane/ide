@@ -116,19 +116,41 @@ class TextCodeEdit extends HTMLElement{
     }
 
     /**
+     * #execCommand is non-standard but necessary to retain undo history
+     *
      * https://stackoverflow.com/questions/44471699/how-to-make-undo-work-in-an-html-textarea-after-setting-the-value
      * https://stackoverflow.com/questions/44471699/how-to-make-undo-work-in-an-html-textarea-after-setting-the-value
      * https://stackoverflow.com/questions/13597007/how-can-i-undo-the-programmatic-insertion-of-text-into-a-textarea
-     *
-     * TODO #execCommand is non-standard -- to replace, we'd need something to handle undo history.
-     *      something about a text event here:
-     *      https://stackoverflow.com/q/19814465
      */
     _keyDownHandler(event){
         const area = this._area;
         const cursor = area.selectionStart;
 
-        if (event.key === "Tab"){
+        const currentSelectionStart = area.selectionStart;
+        const currentSelectionEnd = area.selectionEnd;
+
+        if (event.key === "Backspace"){
+
+            /**
+             * Backspace-as-outdent
+             *
+             * If deleting a space, and there are "tab size" more spaces ahead of it, then delete those too.
+             */
+            if (currentSelectionStart === currentSelectionEnd && currentSelectionStart > this._tabSize){
+                const lookStart = currentSelectionStart - this._tabSize;
+                const lookEnd = currentSelectionStart;
+
+                for (let i = lookStart; i < lookEnd; i++){
+                    let char = area.value.charCodeAt(i);
+                    if (char !== 32) return; // exit handler
+                }
+
+                event.preventDefault();
+                area.setSelectionRange(lookStart, lookEnd);
+                document.execCommand("insertText", false, '');
+            }
+
+        } else if (event.key === "Tab"){
 
             /**
              * WARNING: A known issue is that use of setRangeText does not impact undo/redo history.
@@ -138,40 +160,38 @@ class TextCodeEdit extends HTMLElement{
 
             // TODO outdent/indent should support multiple line selection, not just current line
 
-            const currentSelectionStart = area.selectionStart;
-            const currentSelectionEnd = area.selectionEnd;
-
             const prevNewLine = area.value.lastIndexOf('\n', currentSelectionStart - 1);
 
             if (event.shiftKey) {
+
                 // Outdent
 
                 // TODO outdent, find beginning of line.. only outdent when reached, but don't delete a new line.
                 //    CAN use setRangeText to replace a value with ''
 
             } else {
+
                 // Indent
-                area.setRangeText(this._tabString, prevNewLine + 1, prevNewLine + 1);
 
-                // Handling the cursor situated at the beginning of a line, which for some reason behaves
-                // unexpectedly after #setRangeText
-                if (currentSelectionStart === currentSelectionEnd && currentSelectionEnd === prevNewLine + 1){
-                    const newPosition = currentSelectionEnd + this._tabSize;
+                // TODO it would be better to setSelectionRange at end of current indent before inserting (instead of always at beginning of line)
+                area.setSelectionRange(prevNewLine + 1, prevNewLine + 1);
+                document.execCommand("insertText", false, this._tabString);
+                area.setSelectionRange(currentSelectionStart + this._tabSize, currentSelectionStart + this._tabSize);
 
-                    area.setSelectionRange(newPosition, newPosition);
-                }
             }
 
         } else if (event.key === "Enter") {
 
-            event.preventDefault();
-
             /**
              * Retain indentation of current line, whether tabs or spaces.
              */
+
+            event.preventDefault();
+
             let indent = '';
+
             if (this._retainIdentation) {
-                const here = area.selectionStart;
+                const here = currentSelectionStart;
                 const prevNewLine = area.value.lastIndexOf('\n', here - 1);
                 if (prevNewLine > -1 && prevNewLine < here) {
                     for (let i = prevNewLine + 1; i < here; i++) {

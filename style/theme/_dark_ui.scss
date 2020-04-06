@@ -1,6 +1,8 @@
 // https://github.com/one-dark/jetbrains-one-dark-theme/blob/master/src/main/resources/themes/one_dark.theme.json
 
 .theme-dark {
+  --ui-logo: url(/style/theme/dark-logo.svg);
+
   --ui-scroll-width: .75rem;
   --ui-scroll-thumb: gray;
   --ui-scroll-background: black;
@@ -36,5 +38,7 @@
   --ui-tab-active-foreground: var(--ui-select-foreground);
   --ui-tab-active-border-bottom: .25rem solid var(--ui-focused-border-color);
   --ui-tab-active-hover-background: rgba(255,255,255,.1);
+
+
 }
 
