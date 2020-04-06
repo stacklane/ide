@@ -16,6 +16,8 @@
   --ui-select-background-inactive: #2c313a;
   --ui-select-foreground: #d7dae0;
 
+  --ui-popup-shadow-color: rgba(0,0,0,.3);
+
   --ui-focus-color: var(--ui-background);
   --ui-focused-border-color: #568AF2;
 
@@ -38,7 +40,5 @@
   --ui-tab-active-foreground: var(--ui-select-foreground);
   --ui-tab-active-border-bottom: .25rem solid var(--ui-focused-border-color);
   --ui-tab-active-hover-background: rgba(255,255,255,.1);
-
-
 }
 

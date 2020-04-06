@@ -50,8 +50,21 @@ class Files extends IDEComponent {
     constructor() {
         super();
         this.setAttribute('role', 'tree');
-        this._root = new FileDir("/", false);
-        this.appendChild(this._root);
+        this._rootDir = new FileDir("/", false);
+        this.appendChild(this._rootDir);
+    }
+
+    get rootDir(){
+        return this._rootDir;
+    }
+
+    /**
+     * @param path
+     * @returns FileDir | FileItem
+     */
+    findPath(path){
+        if (!path) throw '!path';
+        return this.querySelector('[data-file-path="' + path + '"]');
     }
 
     refresh(){
@@ -72,6 +85,8 @@ class Files extends IDEComponent {
 
                 thiz.loading = false;
 
+                thiz.root.showPath(new FileInfo('/'));
+
                 thiz.classList.add('render-fix' /* safari not repainting */);
             });
     }
@@ -81,7 +96,7 @@ class Files extends IDEComponent {
 
         const dirParts = file.dirParts;
 
-        let lastDir = this._root;
+        let lastDir = this._rootDir;
 
         for (let i = 0; i < dirParts.length; i++){
             lastDir = lastDir.addDir(dirParts[i]);
@@ -109,7 +124,7 @@ class FileDir extends IDEComponent{
         super();
 
         if (dirInfo === '/'){
-            this._info = null;
+            this._info = new FileInfo('/');
             this._name = '';
             this._path = '/';
         } else if (dirInfo instanceof FileInfo){
@@ -125,6 +140,7 @@ class FileDir extends IDEComponent{
 
         this.setAttribute('aria-expanded', 'false');
         this.setAttribute('role', 'treeitem');
+        this.setAttribute('data-file-path', this._path);
 
         this.expanded = !this._expandable; // expanded now, if not user-expandable
 
@@ -162,6 +178,10 @@ class FileDir extends IDEComponent{
 
             this.addEventListener(FILE_NODE_CLICK_EVENT, toggleEvent);
         }
+    }
+
+    get childInfo(){
+        return Array.from(this._group.children).filter(c=>c instanceof FileDir || c instanceof FileItem).map(c=>c.info);
     }
 
     get childDirs(){
@@ -224,7 +244,7 @@ class FileDir extends IDEComponent{
         return this._expandable;
     }
 
-    get dirInfo(){
+    get info(){
         return this._info;
     }
 
@@ -270,6 +290,7 @@ class FileItem extends IDEComponent{
 
         this.innerText = this._file.name;
         this.setAttribute('role', 'treeitem');
+        this.setAttribute('data-file-path', fileInfo.path);
 
         {
             const that = this;
@@ -308,7 +329,7 @@ class FileItem extends IDEComponent{
         return false; // because leaf node
     }
 
-    get fileInfo(){
+    get info(){
         return this._file;
     }
 

@@ -11,7 +11,8 @@ ide-toolbar{
 
   white-space: nowrap;
 
-  overflow:hidden;
+ // bad for popup menus:
+  // overflow:hidden;
 
   ide-toolbar-left, ide-toolbar-right, ide-toolbar-path{
     display: flex;
@@ -37,6 +38,8 @@ ide-toolbar{
 
   ide-toolbar-item,
   ide-toolbar-path-item{
+    @include unselectable;
+
     align-items: center;
     display: flex;
     flex-basis: auto;
@@ -47,11 +50,15 @@ ide-toolbar{
   }
 
   ide-toolbar-path-item{
+    outline: 0;
     font-size: .8rem;
     background: var(--ui-background);
-    padding-left: #{$toolbar-item-spacing / 2};
 
-    &:before {
+    &.is-app-name{
+      font-size: .9rem; // slightly bigger than ide-toolbar-path-item
+    }
+
+    &:not(:first-child):before {
       content: "";
       display: inline-block;
       border-right: 1px solid var(--ui-border-color);
@@ -60,13 +67,54 @@ ide-toolbar{
       width: .5rem;
       height: .5rem;
       margin-right: $toolbar-item-spacing;
+      padding-left: #{$toolbar-item-spacing / 2};
     }
 
-    &.has-click-action {
+    &.has-action {
       cursor: pointer;
+      position: relative;
+
+      .action{
+        display: block;
+        position: absolute;
+        background: var(--ui-background);
+        z-index: 9999;
+        left: 0;
+        top: 100%; // bottom of parent
+        min-width: 100%; // at least as wide as parent
+        box-shadow: $ui-popup-shadow;
+        transition-property: opacity,transform;
+        transition-duration: 86ms;
+        pointer-events:none;
+        opacity:0;
+        transform: translateY(-5px);
+
+        > div{
+          cursor: pointer;
+          padding: $toolbar-item-spacing #{$toolbar-item-spacing * 2};
+
+          &:hover{
+            background: var(--ui-tab-hover-background);
+          }
+
+          &.action-delete:after{
+            content: 'Delete';
+          }
+        }
+      }
 
       &:hover {
         background: var(--ui-tab-hover-background);
+      }
+
+      &:focus{
+        background: var(--ui-tab-hover-background);
+
+        .action{
+          pointer-events: auto;
+          opacity: 1;
+          transform: translateY(0)
+        }
       }
     }
   }
@@ -88,11 +136,6 @@ ide-toolbar{
         width: 1rem;
       }
     }
-
-    &.is-app-name{
-
-    }
-
 
   }
 }

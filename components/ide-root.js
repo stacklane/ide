@@ -11,11 +11,11 @@ class FileInfo extends Object{
             this._extension = file.extension;
             this._path = file.path;
             this._name = file.name;
-            this._isFolder = false;
+            this._isDir = false;
         } else if (typeof file === 'string'){
             this._id = null;
             this._path = file;
-            this._isFolder = file.endsWith('/');
+            this._isDir = file.endsWith('/');
         } else {
             throw file + '';
         }
@@ -23,10 +23,11 @@ class FileInfo extends Object{
         const p = this._path.split('/');
 
         if (this.isDir){
-            this._parts = p.slice(1, p.length - 1); // skip the root slash and ending slash;
+            this._parts = p.slice(1, p.length - 1); // skip the root slash and ending slash
             this._name = this._parts[this._parts.length - 1];
         } else {
-            this._parts = p.slice(1); // skip the root
+            this._parts = p.slice(1); // skip the root slash
+            if (!this._name) this._name = this._parts[this._parts.length - 1];
         }
 
         this._displayParts = this._parts;
@@ -38,11 +39,11 @@ class FileInfo extends Object{
     }
 
     get isDir(){
-        return this._isFolder;
+        return this._isDir;
     }
 
     get isFile(){
-        return !this._isFolder;
+        return !this._isDir;
     }
 
     get extension(){
@@ -67,6 +68,20 @@ class FileInfo extends Object{
         } else {
             return this.parts.slice(0, this.parts.length - 1);
         }
+    }
+
+    get partsInfo(){
+        if (this._partsInfo) return this._partsInfo;
+        const out = [];
+        const parts = this.parts;
+        let dirPath = '/';
+        for (let i = 0; i < parts.length - 1 /* skip last part, which is THIS object */; i++){
+            dirPath += parts[i] + '/';
+            out.push(new FileInfo(dirPath));
+        }
+        out.push(this);
+        this._partsInfo = out;
+        return out;
     }
 
     get parts(){
@@ -112,39 +127,81 @@ class IDERoot extends HTMLElement {
             .then((json) =>that.updateAppName(json.name));
     }
 
-    updateAppName(name){
-        const element = this.querySelector('ide-toolbar-item.is-app-name');
+    async updateAppName(name){
         if (!name) name = 'Project';
-        element.innerText = name;
+        this._appName = name;
+        this.showPath(this._files.rootDir.info);
     }
 
-    showPath(fileInfo){
-        if (!(fileInfo instanceof FileInfo)) throw '!FileInfo:' + file;
+    async _createToolbarPathAction(fileInfo, pathItem){
+        const action = document.createElement('div');
+        action.classList.add('action');
+
+        if (fileInfo.isDir){
+            const fileDir = this._files.findPath(fileInfo.path);
+            if (fileDir && fileDir instanceof FileDir){
+                const childInfo = fileDir.childInfo;
+                for (let i = 0; i < childInfo.length; i++) {
+                    const childItem = document.createElement('div');
+                    childItem.innerText = childInfo[i].display;
+                    action.appendChild(childItem);
+                }
+                pathItem.appendChild(action);
+            }
+        } else {
+            const childItem = document.createElement('div');
+            childItem.classList.add('action-delete');
+            pathItem.appendChild(childItem);
+        }
+    }
+
+    async showPath(fileInfo){
+        if (!(fileInfo instanceof FileInfo)) throw '!FileInfo:' + fileInfo;
 
         const existingPath = this.querySelector('ide-toolbar-path');
 
         const newPath = document.createElement('ide-toolbar-path');
-        newPath.setAttribute('data-path', fileInfo.path);
+        //newPath.setAttribute('data-file-path', fileInfo.path);
+
+        {
+            const rootItem = document.createElement('ide-toolbar-path-item');
+            rootItem.classList.add('has-action', 'is-app-name');
+            rootItem.setAttribute('tabindex', '0'); // zero is recommended value, to use document order
+            rootItem.innerText = this._appName;
+            newPath.appendChild(rootItem);
+
+            this._createToolbarPathAction(this._files.rootDir.info, rootItem);
+        }
+
+        const partsInfo = fileInfo.partsInfo;
 
         for (let i = 0; i < fileInfo.displayParts.length; i++){
             const item = document.createElement('ide-toolbar-path-item');
+            item.classList.add('has-action');
+            item.setAttribute('tabindex', '0'); // zero is recommended value, to use document order
             item.innerText = fileInfo.displayParts[i];
+
+            this._createToolbarPathAction(partsInfo[i], item);
+
             newPath.appendChild(item);
         }
 
         existingPath.replaceWith(newPath);
     }
 
+    get _files(){
+        return this.querySelector('ide-files');
+    }
+
     ready(){
         this._sessionBase = this.getAttribute("data-session-base-href");
         this._sessionApiBase = this.getAttribute("data-session-base-api-href");
 
-        let files = this.querySelector('ide-files');
-        files.refresh();
+        this._files.refresh();
+        this._loadAppMeta();
 
         this.removeAttribute('init');
 
-        this._loadAppMeta();
     }
 
     openFile(fileInfo){
