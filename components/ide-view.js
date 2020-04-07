@@ -119,11 +119,11 @@ class View extends IDEComponent {
             .then((response) => {
                 const file = JSON.parse(_decodeBase64Unicode(response.headers.get('X-File')));
                 const fileInfo = new FileInfo(file);
-                const view = ViewCreate(file.path);
+                const view = ViewCreate(fileInfo);
                 if (view) {
                     that.appendChild(view);
                     this._view = view;
-                    return view.receive(response, fileInfo);
+                    return view.receive(response);
                 } else {
                     const error = new ErrorView('Unable to view: ' + file.path);
                     that.appendChild(error);

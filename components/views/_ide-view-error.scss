@@ -1,8 +1,13 @@
 ide-view-error{
   flex-grow: 1;
 
-  > div{
-    margin: auto;
-  }
+  display:flex;
 
+  align-items: center;
+  justify-content: center;
+
+  > div{
+
+
+  }
 }

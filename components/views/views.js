@@ -1,33 +1,17 @@
-
-const ViewCreate = (path)=>{
-    // Derive everything expected from path alone
-    if (path === '/🎛.yaml'){
-        return new ManifestView(path);
+/**
+ * @param fileInfo
+ * @return {ViewContentBase}
+ * @constructor
+ */
+const ViewCreate = (fileInfo)=>{
+    if (fileInfo.isManifest){
+        return new ManifestView(fileInfo);
     } else {
-        return new EditorView(path);
+        return new EditorView(fileInfo);
     }
 };
 
-/**
- * Superclass for views.
- *
- * All should implement:
- *
- * receive(response, file){
- *    ...
- * }
- */
-class ViewContentBase extends HTMLElement{
-    constructor() {
-        super();
-    }
-
-    showFocus(){
-
-    }
-}
-
-class ErrorView extends ViewContentBase{
+class ErrorView extends HTMLElement {
     constructor(message) {
         super();
         let div = document.createElement('div');
@@ -38,11 +22,31 @@ class ErrorView extends ViewContentBase{
 window.customElements.define('ide-view-error', ErrorView);
 
 
-class EditorView extends ViewContentBase{
-    constructor() {
+/**
+ * Superclass for FileInfo-based views.
+ */
+class ViewContentBase extends HTMLElement{
+    constructor(fileInfo) {
         super();
-        //const that = this;
-        //this.addEventListener('focus', ()=>that.showFocus());
+        this._fileInfo = fileInfo;
+    }
+
+    get fileInfo(){
+        return this._fileInfo;
+    }
+
+    showFocus(){
+
+    }
+
+    receive(response){
+        return Promise.reject(new Error('not implemented: #receive'));
+    }
+}
+
+class EditorView extends ViewContentBase{
+    constructor(fileInfo) {
+        super(fileInfo);
     }
 
     showFocus(){
@@ -50,11 +54,14 @@ class EditorView extends ViewContentBase{
         if (this._content) this._content.showFocus();
     }
 
-    receive(response, file){
+    /**
+     * @param response {Response}
+     */
+    receive(response){
         const ct = response.headers.get('Content-Type');
         if (ct.indexOf('text/plain') !== 0) throw ct;
 
-        const lang = file.extension;
+        const lang = this.fileInfo.extension;
         const content = new TextCodeEdit(lang);
         const footer = document.createElement('footer');
 
@@ -65,9 +72,8 @@ class EditorView extends ViewContentBase{
 
         return response.text().then((value)=>{
             content.value = value;
-            footer.innerText = file.path;
-        }).catch((e)=>{
-            footer.innerText = '' + e;
+            footer.innerText = this.fileInfo.path;
+            return true;
         });
     }
 }
@@ -75,14 +81,13 @@ window.customElements.define('ide-view-editor', EditorView);
 
 
 class ManifestView extends ViewContentBase{
-    constructor(path) {
-        super();
-        this._path = path;
-        let content = document.createElement('div');
+    constructor(fileInfo) {
+        super(fileInfo);
+        const content = document.createElement('div');
         this.appendChild(content);
     }
 
-    receive(response, file){
+    receive(response){
         let ct = response.headers.get('Content-Type');
         if (ct.indexOf('text/plain') !== 0) throw ct;
 
@@ -91,6 +96,7 @@ class ManifestView extends ViewContentBase{
         return response.text().then((value)=>{
             that.querySelector('div').innerText = value;
            // that.querySelector('footer').innerText = file.path;
+            return true;
         });
     }
 }
