@@ -1,6 +1,6 @@
 <!--TEMPLATE mustache-->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="theme-dark">
 <head>
     <title>{{🎨.name}}</title>
 
@@ -14,26 +14,47 @@
     <link rel="icon" type="image/png" href="/fav/32.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="/fav/192.png" sizes="192x192" />
 
+    <style type="text/css">
+        html {
+            background: var(--ui-background);
+            color: var(--ui-foreground);
+        }
+        body{
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
 </head>
 <body>
 
 {{#🎨.standalone}}
 
-<form action="create" method="POST">
-    <input type="submit" value="Blank">
-</form>
+<h4>New Test Source</h4>
+
+<div>
+    <form action="create" method="POST">
+        <input type="submit" value="Create Blank">
+    </form>
+</div>
 
 <br>
+<br>
 
-<form action="clone" method="POST">
-    <input type="hidden" name="clone" value="https://github.com/stacklane-blueprints/tasks.git">
-    <input type="submit" value="Example: Tasks">
-</form>
+<h4>Examples</h4>
+
+<div>
+    <form action="clone" method="POST">
+        <input type="hidden" name="clone" value="https://github.com/stacklane-blueprints/tasks.git">
+        <input type="submit" value="Tasks">
+    </form>
+</div>
 
 {{/🎨.standalone}}
 
 {{^🎨.standalone}}
-  Unavailable
+    <h4>Unavailable</h4>
 {{/🎨.standalone}}
 
 </body>
