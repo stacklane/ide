@@ -91,3 +91,14 @@ ide-root{
 
 }
 
+ide-notification{
+  &.is-pending:before{
+    content: '⏳ ';
+  }
+  &.is-fulfilled:before{
+    content: '✅ ';
+  }
+  &.is-rejected:before{
+    content: '⚠️ ';
+  }
+}

@@ -47,7 +47,14 @@
             <ide-toolbar-path></ide-toolbar-path>
         </ide-toolbar-left>
         <ide-toolbar-right>
-
+            <ide-toolbar-item class="is-run" disabled></ide-toolbar-item>
+            <ide-toolbar-item class="is-credentials" disabled></ide-toolbar-item>
+            <ide-toolbar-item tabindex="0" class="has-action is-notifications">
+                <div class="icon"><span class="is-default">{{>image-notifications}}</span></div>
+                <div class="icon"><span class="is-active">{{>image-notifications-alert}}</span></div>
+                <div class="icon"><span class="is-alert">{{>image-notifications-alert}}</span></div>
+                <div class="action"></div>
+            </ide-toolbar-item>
         </ide-toolbar-right>
     </ide-toolbar>
     <main>
@@ -64,15 +71,13 @@
 
 {{! With 'defer', ordering matters }}
 <script defer src="/components/ide-root.js"></script>
-<script defer src="/components/ide-toolbar.js"></script>
 <script defer src="/components/ide-files.js"></script>
-<script defer src="/components/ide.js"></script>
 <script defer src="/components/ide-view.js"></script>
 
 <script defer src="/views/text-code-edit.js"></script>
 <script defer src="/views/views.js"></script>
-<script defer src="/components/ide-finish.js"></script>
 
+<script defer src="/components/ide-finish.js"></script>
 
 </body>
 </html>

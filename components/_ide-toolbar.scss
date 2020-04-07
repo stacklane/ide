@@ -1,9 +1,17 @@
 $toolbar-item-spacing: .5rem;
 
+.icon{
+  display:flex;
+  svg{
+    height:1rem;
+    width:1rem;
+  }
+}
+
 ide-toolbar{
   flex-shrink:0;
 
-  align-items: center;
+  align-items: stretch;// center;
   justify-content: space-between;
   display: flex;
 
@@ -26,19 +34,22 @@ ide-toolbar{
     }
   }
 
-  .ide-toolbar-left{
-    align-items: center;
+  ide-toolbar-left{
+    align-items: stretch; //center;
     justify-content: flex-start;
   }
 
-  .ide-toolbar-right{
-    align-items: center;
+  ide-toolbar-right{
+    align-items: stretch; //center;
     justify-content: flex-end;
+    margin-right: $toolbar-item-spacing;
   }
 
   ide-toolbar-item,
   ide-toolbar-path-item{
     @include unselectable;
+
+    background: var(--ui-background);
 
     align-items: center;
     display: flex;
@@ -47,27 +58,13 @@ ide-toolbar{
     flex-shrink: 0;
     justify-content: center;
     padding: $toolbar-item-spacing;
-  }
 
-  ide-toolbar-path-item{
-    outline: 0;
-    font-size: .8rem;
-    background: var(--ui-background);
+    outline:0;
 
-    &.is-app-name{
-      font-size: .9rem; // slightly bigger than ide-toolbar-path-item
-    }
-
-    &:not(:first-child):before {
-      content: "";
-      display: inline-block;
-      border-right: 1px solid var(--ui-border-color);
-      border-top: 1px solid var(--ui-border-color);
-      transform: rotate(45deg);
-      width: .5rem;
-      height: .5rem;
-      margin-right: $toolbar-item-spacing;
-      padding-left: #{$toolbar-item-spacing / 2};
+    &[disabled]{
+      cursor: not-allowed !important;
+      opacity: .5 !important;
+      pointer-events: none !important;
     }
 
     &.has-action {
@@ -75,7 +72,9 @@ ide-toolbar{
       position: relative;
 
       .action{
-        display: block;
+        font-size: .8rem; // specify here as well, so that it's consistent for other item title sizes
+        display: flex;
+        flex-direction: row; // for each 'ul'
         position: absolute;
         background: var(--ui-background);
         z-index: 9999;
@@ -89,16 +88,32 @@ ide-toolbar{
         opacity:0;
         transform: translateY(-5px);
 
-        > div{
-          cursor: pointer;
-          padding: $toolbar-item-spacing #{$toolbar-item-spacing * 2};
+        /**
+         * A series of ul's may be placed within an .action
+         */
+        > ul{
+          flex-grow: 1;
 
-          &:hover{
-            background: var(--ui-tab-hover-background);
+          > li{
+            cursor: pointer;
+            padding: #{$toolbar-item-spacing / 2} #{$toolbar-item-spacing * 2};
+
+            &:hover{
+              background: var(--ui-tab-hover-background);
+            }
+
+            &.is-action-add:before{
+              content: '+ ';
+              font-weight: $weight-max;
+            }
+            &.is-action-delete:before{
+              content: '× ';
+              font-weight: $weight-max;
+            }
           }
 
-          &.action-delete:after{
-            content: 'Delete';
+          + ul{
+            border-left: 1px solid var(--ui-border-color);
           }
         }
       }
@@ -113,10 +128,15 @@ ide-toolbar{
         .action{
           pointer-events: auto;
           opacity: 1;
-          transform: translateY(0)
+          transform: translateY(0);
         }
       }
     }
+  }
+
+  ide-toolbar-right ide-toolbar-item.has-action .action{
+    right: 0;
+    left: unset;
   }
 
   ide-toolbar-item{
@@ -130,6 +150,15 @@ ide-toolbar{
       background-repeat: no-repeat;
     }
 
+    &.is-run:before{
+      content: '▶︎';
+      color: var(--ui-color-green);
+    }
+
+    &.is-credentials:before{
+     // utf 8 seq error: content: '[KEY]';
+    }
+
     &.is-app-icon{
       svg{
         height: 1rem;
@@ -137,5 +166,62 @@ ide-toolbar{
       }
     }
 
+    &.is-notifications{
+      svg{
+        width: 1.25rem;
+        height: 1.25rem;
+      }
+      path.is-main{
+        fill: var(--ui-foreground);
+      }
+      .is-default{
+        display:flex;
+      }
+      .is-alert{
+        display:none;
+      }
+      .is-active{
+        display:none;
+      }
+      .action:empty:before{
+        content: 'No Notifications';
+        padding: $toolbar-item-spacing;
+      }
+      .action{
+        display: flex;
+        flex-flow: column-reverse;
+        max-height: 10rem;
+
+        > ide-notification{
+          padding: $toolbar-item-spacing;
+        }
+      }
+    }
   }
+
+  ide-toolbar-path-item{
+    font-size: .8rem;
+
+    &.is-app-name{
+      font-size: .9rem; // slightly bigger than ide-toolbar-path-item
+    }
+
+    &.is-action-add:after{
+      content: '+';
+      font-weight: $weight-max;
+    }
+
+    &:not(:first-child):before { // we could exclude for is-action-add too, however it doesn't look as good
+      content: "";
+      display: inline-block;
+      border-right: 1px solid var(--ui-border-color);
+      border-top: 1px solid var(--ui-border-color);
+      transform: rotate(45deg);
+      width: .5rem;
+      height: .5rem;
+      margin-right: $toolbar-item-spacing;
+      padding-left: #{$toolbar-item-spacing / 2};
+    }
+  }
+
 }

@@ -1,6 +1,4 @@
-// https://joshtronic.com/2015/04/19/handling-click-and-touch-events-on-the-same-element/
-const TOUCH_DEVICE = 'ontouchstart' in document.documentElement;
-const FILE_NODE_CLICK_EVENT = TOUCH_DEVICE ? 'touchstart' : 'dblclick';
+'use strict';
 
 const MOUSE_OVER = function(e){
     e.currentTarget.classList.add('hover');
@@ -43,6 +41,7 @@ class FileLink extends IDEComponent{
     }
 }
 
+
 /**
  * https://www.w3.org/TR/2017/NOTE-wai-aria-practices-1.1-20171214/examples/treeview/treeview-2/treeview-2a.html
  */
@@ -58,12 +57,43 @@ class Files extends IDEComponent {
         return this._rootDir;
     }
 
+    deleteFile(fileInfo){
+        if (fileInfo.isDir || !fileInfo.isDeletable) {
+            alert("Not deletable: " + fileInfo.path);
+            return;
+        }
+
+        if (confirm('Delete "' + fileInfo.name + '"?')){
+            const action = fetch(
+                this.sessionApiBase + '/files/' + fileInfo.id + '/v/' + fileInfo.version,
+                {method: 'DELETE'}
+                ).then((response) => {
+                    if (response.ok){
+                        const element = this.findPath(fileInfo);
+
+                        if (element) element.remove();
+
+                        this.root.closeFile(fileInfo);
+
+                        return true;
+                    } else {
+                        throw 'Deleted failed: ' + response.statusText;
+                    }
+                });
+
+            this.root.notifications.deleteFile(fileInfo, action);
+
+            return action;
+        }
+    }
+
     /**
-     * @param path
-     * @returns FileDir | FileItem
+     * @param FileInfo | string path
+     * @returns FileDir | FileItem | null
      */
     findPath(path){
         if (!path) throw '!path';
+        if (path instanceof FileInfo) path = path.path;
         return this.querySelector('[data-file-path="' + path + '"]');
     }
 
@@ -72,7 +102,7 @@ class Files extends IDEComponent {
 
         this.loading = true;
 
-        return fetch(this.sessionBase + '/api/files')
+        return fetch(this.sessionApiBase + '/files')
             .then((response) => {
                 return response.json();
             })

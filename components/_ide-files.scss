@@ -54,31 +54,38 @@ ide-files{
     }
   }
 
-  // TODO hardcode up to 10 with SCSS
-  //      but wait until decide if want folder icons for final amounts..
+  $indentation-multiple: 1.4;
+
   ide-file-dir{
     ide-file-dir {
       ide-file-item,
       ide-file-dir > span {
-        padding-left: 2.5rem;
+        padding-left: #{1rem + $indentation-multiple * 1};
       }
 
       ide-file-dir {
         ide-file-item,
         ide-file-dir > span {
-          padding-left: 5rem;
+          padding-left: #{1rem + $indentation-multiple * 2};
         }
 
         ide-file-dir {
           ide-file-item,
           ide-file-dir > span {
-            padding-left: 7.5rem;
+            padding-left: #{1rem + $indentation-multiple * 3};
           }
 
           ide-file-dir {
             ide-file-item,
             ide-file-dir > span {
-              padding-left: 10rem;
+              padding-left: #{1rem + $indentation-multiple * 4};
+            }
+
+            ide-file-dir {
+              ide-file-item,
+              ide-file-dir > span {
+                padding-left: #{1rem + $indentation-multiple * 5};
+              }
             }
           }
         }
