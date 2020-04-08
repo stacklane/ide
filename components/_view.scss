@@ -27,10 +27,12 @@ ide-view-tab{
   padding: var(--ui-tab-padding);
   display: flex;
   align-items: center;
+
   padding-left: .75rem;
-  padding-right: .75rem;
-  padding-top: .5rem;
+  padding-right: .5rem;
+  padding-top: .25rem;
   padding-bottom: .25rem;
+
  // border-bottom: var(--ui-tab-border-bottom);
   font-size: var(--ui-tab-font-size);
 

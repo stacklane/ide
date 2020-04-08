@@ -1,12 +1,6 @@
-$toolbar-item-spacing: .5rem;
+@import '/🎨';
 
-.icon{
-  display:flex;
-  svg{
-    height:1rem;
-    width:1rem;
-  }
-}
+$toolbar-item-spacing: .5rem;
 
 ide-toolbar{
   flex-shrink:0;
@@ -102,7 +96,8 @@ ide-toolbar{
             padding: #{$toolbar-item-spacing / 2} #{$toolbar-item-spacing * 2};
 
             &:hover{
-              background: var(--ui-menu-hover); //var(--ui-tab-hover-background);
+              background: var(--ui-menu-hover-background);
+              color: var(--ui-menu-hover-label);
             }
 
             &.is-action-add:before{
@@ -153,15 +148,6 @@ ide-toolbar{
       background-repeat: no-repeat;
     }
 
-    &.is-run:before{
-      content: '▶︎';
-      color: var(--ui-green);
-    }
-
-    &.is-credentials:before{
-     // utf 8 seq error: content: '[KEY]';
-    }
-
     &.is-app-icon{
       svg{
         height: 1rem;
@@ -170,24 +156,8 @@ ide-toolbar{
     }
 
     &.is-notifications{
-      svg{
-        width: 1.25rem;
-        height: 1.25rem;
-      }
-      path.is-main{
-        fill: var(--ui-foreground);
-      }
-      .is-default{
-        display:flex;
-      }
-      .is-alert{
-        display:none;
-      }
-      .is-active{
-        display:none;
-      }
       .action:empty:before{
-        content: 'No Notifications';
+        content: $no-notifications;
         padding: $toolbar-item-spacing;
       }
       .action{

@@ -1,6 +1,6 @@
 <!--TEMPLATE mustache-->
 <!DOCTYPE html>
-<html class="theme-osc-dark is-full" lang="en">
+<html class="is-full" lang="en">
 <head>
     <title>{{🎨.name}}</title>
 
@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="/style/style.scss">
+    <link rel="stylesheet" href="/style/ui.scss">
 
     <link rel="icon" type="image/png" href="/fav/16.png" sizes="16x16" />
     <link rel="icon" type="image/png" href="/fav/32.png" sizes="32x32" />
@@ -47,12 +47,10 @@
             <ide-toolbar-path></ide-toolbar-path>
         </ide-toolbar-left>
         <ide-toolbar-right>
-            <ide-toolbar-item class="is-run" disabled></ide-toolbar-item>
+            <ide-toolbar-item class="is-run" disabled><div class="icon is-green">{{>image-play-circle-outline}}</div></ide-toolbar-item>
             {{!<ide-toolbar-item class="is-credentials" disabled></ide-toolbar-item>}}
             <ide-toolbar-item tabindex="0" class="has-action is-notifications">
-                <div class="icon"><span class="is-default">{{>image-notifications}}</span></div>
-                <div class="icon"><span class="is-active">{{>image-notifications-alert}}</span></div>
-                <div class="icon"><span class="is-alert">{{>image-notifications-alert}}</span></div>
+                <div class="icon">{{>image-notifications}}</div>
                 <div class="action"></div>
             </ide-toolbar-item>
         </ide-toolbar-right>

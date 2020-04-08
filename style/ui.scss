@@ -3,7 +3,8 @@
 @import "/style/reset";
 @import "/style/base";
 
-@import "/style/theme/osc-dark";
+@import "/style/theme/base";
+@import "/style/theme/derived";
 
 @import "/components/all";
 @import "/components/view/all";
@@ -17,6 +18,22 @@
 //  transition: opacity 0.3s ease-in-out;
 //}
 
+.icon{
+  display:flex;
+
+  > svg{
+    height: 1.5rem;
+    width: 1.5rem;
+    fill: var(--ui-label);
+  }
+  &.is-green > svg {
+    fill: var(--ui-green);
+  }
+  &.is-small{
+    height: 1rem;
+    width: 1rem;
+  }
+}
 
 .render-fix{
   transform: translateZ(0); // for safari

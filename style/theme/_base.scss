@@ -1,0 +1,90 @@
+
+/**
+ * Primary and general settings.
+ */
+
+html{
+
+  // Text labels that contain primary content:
+  --ui-label: rgba(255, 255, 255, 0.85);
+  // Secondary content:
+  --ui-secondary-label: rgba(255, 255, 255, 0.55);
+  // Tertiary content:
+  --ui-tertiary-label: rgba(255, 255, 255, 0.25);
+  // Quaternary content:
+  --ui-quaternary-label: rgba(255, 255, 255, 0.10);
+
+  // Placeholder text in controls or text views
+  --ui-placeholder-text: rgba(255, 255, 255, 0.25);
+
+  // Main background:
+  --ui-background: rgba(30, 30, 30, 1.00);
+  // Content layered on top of main background:
+  --ui-secondary-background: rgba(50, 50, 50, 1.00);
+  --ui-secondary-background-shadow: rgba(0, 0, 0,.3);
+  // Content layered on top of secondary background:
+  --ui-tertiary-background: rgba(70, 70, 70, 1.00);
+
+  // Thin border or divider lines
+  --ui-separator: rgba(255, 255, 255, 0.10);
+  --ui-separator-image: url(/style/theme/dark-separator.svg); // same color but as an image
+
+  // Fill color for thin and small shapes:
+  --ui-fill: rgba(120, 120, 128, 0.36);
+  // Fill color for medium-size shapes:
+  --ui-secondary-fill: rgba(120, 120, 128, 0.32);
+  // Fill color for large shapes:
+  --ui-tertiary-fill: rgba(118, 118, 128, 0.24);
+  // Fill color for large areas with complex content:
+  --ui-quaternary-fill: rgba(118, 118, 128, 0.18);
+
+  // Colors
+  --ui-link: rgba(9, 132, 255, 1.00);
+  --ui-link-invert: white;
+  --ui-green: rgba(50, 215, 75, 1.00);
+  --ui-red: rgba(255, 69, 58, 1.00);
+  --ui-blue: rgba(10, 132, 255, 1.00);
+  --ui-yellow: rgba(255, 214, 10, 1.00);
+
+  // Misc
+  /**
+   * Don't use the hand for general UI actions. Reserve it for actual HTTP links.
+   *
+   * - Apple’s Human Interface Guidelines: the hand cursor should be used when “the content is a URL link”.
+   * - W3C User Interface guidelines: "The cursor is a pointer that indicates a link”.
+   * - Microsoft: Displaying the hand pointer on hover is the definitive indication of a link.
+   *              To avoid confusion, it is imperative not to use the hand pointer for other purposes.
+   */
+  --ui-action-pointer: default;
+  --ui-speed: 50ms;
+}
+
+html.light{
+  --ui-label: rgba(0, 0, 0, 0.85);
+  --ui-secondary-label: rgba(0, 0, 0, 0.50);
+  --ui-tertiary-label: rgba(0, 0, 0, 0.25);
+  --ui-quaternary-label: rgba(0, 0, 0, 0.10);
+
+  --ui-placeholder-text: rgba(0, 0, 0, 0.25);
+
+  --ui-background: rgba(255, 255, 255, 1.00);
+  --ui-secondary-background: rgba(236, 236, 236, 1.00);
+  --ui-secondary-background-shadow: rgba(100, 100, 100, .3);
+  --ui-tertiary-background: rgba(213, 213, 213, 1.00);
+
+  --ui-separator: rgba(0, 0, 0, 0.10);
+  --ui-separator-image: url(/style/theme/light-separator.svg); // same color but as an image
+
+  --ui-fill: rgba(120, 120, 128, 0.20);
+  --ui-secondary-fill: rgba(120, 120, 128, 0.16);
+  --ui-tertiary-fill: rgba(118, 118, 128, 0.12);
+  --ui-quaternary-fill: rgba(116, 116, 128, 0.08);
+
+  // Colors
+  --ui-link: rgba(0, 122, 255, 1.00);
+  --ui-link-invert: white;
+  --ui-green: rgba(40, 205, 65, 1.00);
+  --ui-red: rgba(255, 59, 48, 1.00);
+  --ui-blue: rgba(0, 122, 255, 1.00);
+  --ui-yellow: rgba(255, 204, 0, 1.00);
+}
