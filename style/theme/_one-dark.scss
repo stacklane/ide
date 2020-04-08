@@ -1,6 +1,7 @@
-// https://github.com/one-dark/jetbrains-one-dark-theme/blob/master/src/main/resources/themes/one_dark.theme.json
 
-.theme-dark {
+
+// https://github.com/one-dark/jetbrains-one-dark-theme/blob/master/src/main/resources/themes/one_dark.theme.json
+.theme-one-dark {
   --ui-logo: url(/style/theme/dark-logo.svg);
 
   --ui-scroll-width: .75rem;
@@ -8,12 +9,12 @@
   --ui-scroll-background: black;
 
   --ui-background: #21252b;
-  --ui-background-disabled: var(--ui-background);
+  //--ui-background-disabled: var(--ui-background);
 
   --ui-foreground: #abb2bf;
 
   --ui-select-background: #323844;
-  --ui-select-background-inactive: #2c313a;
+ // --ui-select-background-inactive: #2c313a;
   --ui-select-foreground: #d7dae0;
 
   --ui-popup-shadow-color: rgba(0,0,0,.3);
@@ -24,7 +25,7 @@
   --ui-separator-color: #32363c;
 
   --ui-border-color: #46494f;
-  --ui-border-color-image: url(/style/theme/border-color.svg);
+  --ui-border-color-image: url(/style/theme/one-dark-separator.svg);
   --ui-border-color-disabled: #2d3137;
 
   --ui-error-foreground: #cd3359;
@@ -43,5 +44,22 @@
   --ui-tab-active-foreground: var(--ui-select-foreground);
   --ui-tab-active-border-bottom: .25rem solid var(--ui-focused-border-color);
   --ui-tab-active-hover-background: rgba(255,255,255,.1);
+
+  // Editor
+  --editor-background: #282c34;
+  --editor-foreground: var(--ui-foreground);
+  --editor-line-num: #50596a;
+  --editor-caret-color: var(--ui-focused-border-color);
+
 }
 
+// https://github.com/one-dark/jetbrains-one-dark-theme/blob/master/scripts/config/theme.yaml
+
+.theme-dark{
+
+  --editor-background: #282c34;
+  --editor-foreground: var(--ui-foreground);
+  --editor-line-num: #50596a;
+  --editor-caret-color: var(--ui-focused-border-color);
+
+}

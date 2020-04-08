@@ -15,7 +15,7 @@ ide-toolbar{
   justify-content: space-between;
   display: flex;
 
-  background: var(--ui-background);
+  background: var(--ui-toolbar-background);
 
   white-space: nowrap;
 
@@ -49,7 +49,7 @@ ide-toolbar{
   ide-toolbar-path-item{
     @include unselectable;
 
-    background: var(--ui-background);
+    background: var(--ui-toolbar-background);
 
     align-items: center;
     display: flex;
@@ -68,7 +68,7 @@ ide-toolbar{
     }
 
     &.has-action {
-      cursor: pointer;
+      cursor: var(--ui-action-pointer);
       position: relative;
 
       .action{
@@ -76,14 +76,15 @@ ide-toolbar{
         display: flex;
         flex-direction: row; // for each 'ul'
         position: absolute;
-        background: var(--ui-background);
+        background: var(--ui-menu-background);
+        color: var(--ui-menu-label);
         z-index: 9999;
         left: 0;
         top: 100%; // bottom of parent
         min-width: 100%; // at least as wide as parent
-        box-shadow: $ui-popup-shadow;
+        box-shadow: 0 8px 8px var(--ui-menu-shadow), 0 0 0 1px var(--ui-menu-shadow);
         transition-property: opacity,transform;
-        transition-duration: 86ms;
+        transition-duration: var(--ui-menu-speed);
         pointer-events:none;
         opacity:0;
         transform: translateY(-5px);
@@ -95,11 +96,11 @@ ide-toolbar{
           flex-grow: 1;
 
           > li{
-            cursor: pointer;
+            cursor: var(--ui-action-pointer);
             padding: #{$toolbar-item-spacing / 2} #{$toolbar-item-spacing * 2};
 
             &:hover{
-              background: var(--ui-tab-hover-background);
+              background: var(--ui-menu-hover); //var(--ui-tab-hover-background);
             }
 
             &.is-action-add:before{
@@ -119,11 +120,11 @@ ide-toolbar{
       }
 
       &:hover {
-        background: var(--ui-tab-hover-background);
+        background: var(--ui-toolbar-hover);
       }
 
       &:focus{
-        background: var(--ui-tab-hover-background);
+        background: var(--ui-toolbar-focus);
 
         .action{
           pointer-events: auto;
@@ -152,7 +153,7 @@ ide-toolbar{
 
     &.is-run:before{
       content: '▶︎';
-      color: var(--ui-color-green);
+      color: var(--ui-green);
     }
 
     &.is-credentials:before{
@@ -214,8 +215,8 @@ ide-toolbar{
     &:not(:first-child):before { // we could exclude for is-action-add too, however it doesn't look as good
       content: "";
       display: inline-block;
-      border-right: 1px solid var(--ui-border-color);
-      border-top: 1px solid var(--ui-border-color);
+      border-right: 1px solid var(--ui-separator);
+      border-top: 1px solid var(--ui-separator);
       transform: rotate(45deg);
       width: .5rem;
       height: .5rem;

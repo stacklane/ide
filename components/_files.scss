@@ -1,5 +1,5 @@
 ide-file-link{
-  cursor: pointer;
+  cursor: var(--ui-action-pointer);
 }
 
 ide-files{
@@ -32,7 +32,7 @@ ide-files{
       outline: 0;
     }
 
-    cursor: pointer;  // disable edit caret in some case
+    cursor: var(--ui-action-pointer);
   }
 
   /**

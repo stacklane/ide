@@ -23,7 +23,7 @@ ide-view-tab{
 
   background: var(--ui-tab-background);
   color: var(--ui-tab-foreground);
-  cursor: pointer;
+  cursor: var(--ui-action-pointer);
   padding: var(--ui-tab-padding);
   display: flex;
   align-items: center;
@@ -61,7 +61,7 @@ ide-view-tab{
     // background-color: rgba($scheme-invert, 0.2);
     // border-radius: $radius-rounded;
     border: none;
-    cursor: pointer;
+    cursor: var(--ui-action-pointer);
     pointer-events: auto;
     display: inline-block;
     flex-grow: 0;

@@ -114,7 +114,7 @@ text-code-edit{
    *
    * To cover a variety of sizing cases in Safari and Chrome, this must be on both areas.
    */
-  .text-code-edit-area, .text-code-edit-area textarea{
+  .text-code-edit-area /*, .text-code-edit-area textarea*/{
     background: var(--ui-border-color-image) repeat-y $text-code-edit-guide-columns 0 !important;
   }
 }

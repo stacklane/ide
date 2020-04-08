@@ -62,17 +62,19 @@ class TextCodeEdit extends HTMLElement{
         this._refreshSize();
     }
 
-    get currentLineNumber(){
-        const ta = this._area;
+    get _currentLineAndColumn(){
         try {
-            return ta.value.substr(0, ta.selectionStart).split("\n").length;
+            const ta = this._area;
+            const lines = ta.value.substr(0, ta.selectionStart).split("\n");
+            const column = lines[lines.length-1].length;
+            return [lines.length, column];
         } catch (t){
-            return -1;
+            return [-1, -1];
         }
     }
 
     _refreshLineNum(){
-        const lineNum = this.currentLineNumber;
+        const [lineNum, colNum] = this._currentLineAndColumn;
         const lineNumElement = this.querySelector('div[data-line-num="' + lineNum + '"]');
 
         let remove = false;

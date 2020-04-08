@@ -32,7 +32,6 @@ $body-font-size: 1em !default;
 $body-weight: $weight-normal !default;
 $body-line-height: 1.5 !default;
 
-$ui-popup-shadow: 0 8px 8px var(--ui-popup-shadow-color), 0 0 0 1px var(--ui-popup-shadow-color);
 
 @mixin unselectable {
   -webkit-touch-callout: none;

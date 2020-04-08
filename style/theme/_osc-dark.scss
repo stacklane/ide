@@ -1,0 +1,118 @@
+/**
+ * Primary and general settings.
+ */
+.theme-osc-dark{
+
+  // Text labels that contain primary content:
+  --ui-label: rgba(255, 255, 255, 0.85);
+  // Secondary content:
+  --ui-secondary-label: rgba(255, 255, 255, 0.55);
+  // Tertiary content:
+  --ui-tertiary-label: rgba(255, 255, 255, 0.25);
+  // Quaternary content:
+  --ui-quaternary-label: rgba(255, 255, 255, 0.10);
+
+  // Placeholder text in controls or text views
+  --ui-placeholder-text: rgba(255, 255, 255, 0.25);
+
+  // Main background:
+  --ui-background: rgba(30, 30, 30, 1.00);
+  // Content layered on top of main background:
+  --ui-secondary-background: rgba(50, 50, 50, 1.00);
+  // Content layered on top of secondary background:
+  --ui-tertiary-background: rgba(70, 70, 70, 1.00);
+
+  // Thin border or divider lines
+  --ui-separator: rgba(255, 255, 255, 0.10);
+  --ui-separator-image: url(/style/theme/osc-dark-separator.svg); // same color but as an image
+
+  // Fill color for thin and small shapes:
+  --ui-fill: rgba(120, 120, 128, 0.36);
+  // Fill color for medium-size shapes:
+  --ui-secondary-fill: rgba(120, 120, 128, 0.32);
+  // Fill color for large shapes:
+  --ui-tertiary-fill: rgba(118, 118, 128, 0.24);
+  // Fill color for large areas with complex content:
+  --ui-quaternary-fill: rgba(118, 118, 128, 0.18);
+
+  /**
+   * Don't use the hand for general UI actions. Reserve it for actual HTTP links.
+   *
+   * - Apple’s Human Interface Guidelines states that the hand cursor should be used when “the content is a URL link”.
+   * - W3C User Interface guidelines says the same thing again with “The cursor is a pointer that indicates a link”.
+   * - Microsoft: Displaying the hand pointer on hover is the definitive indication of a link.
+   *         To avoid confusion, it is imperative not to use the hand pointer for other purposes. Text and graphics links use a hand […] pointer […] because of their weak affordance. While links may have other visual clues to indicate that they are links (such as underlines and special placement), displaying the hand pointer on hover is the definitive indication of a link.
+   */
+  --ui-action-pointer: default;
+
+  --ui-speed: 50ms;
+
+  // Colors
+  --ui-link: rgba(9, 132, 255, 1.00);
+  --ui-green: rgba(50, 215, 75, 1.00);
+  --ui-red: rgba(255, 69, 58, 1.00);
+  --ui-blue: rgba(10, 132, 255, 1.00);
+  --ui-yellow: rgba(255, 214, 10, 1.00);
+}
+
+/**
+ * Derived and case specific settings.
+ */
+.theme-osc-dark{
+  --ui-logo: url(/style/theme/dark-logo.svg);
+
+  --ui-scroll-width: .5rem;
+  --ui-scroll-thumb: var(--ui-fill);
+  --ui-scroll-background: inherit;//var(--ui-secondary-background);
+
+  --ui-foreground: var(--ui-label);
+
+  // @deprecated, use separator
+  --ui-border-color: var(--ui-separator);
+  // @deprecated, use separator
+  --ui-border-color-image: var(--ui-separator-image);
+
+  // @deprecated
+  --ui-select-background: var(--ui-secondary-background);
+  // @deprecated
+  --ui-select-foreground: var(--ui-label);
+
+
+  // Toolbar
+  --ui-toolbar-background: var(--ui-background);
+  --ui-toolbar-label: var(--ui-label);
+  --ui-toolbar-hover: var(--ui-secondary-background);
+  --ui-toolbar-focus: var(--ui-tertiary-background);
+
+  // Menu
+  --ui-menu-background: var(--ui-secondary-background);
+  --ui-menu-label: var(--ui-label);
+  --ui-menu-hover: var(--ui-link);
+  --ui-menu-shadow: rgba(0,0,0,.3);
+  --ui-menu-speed: var(--ui-speed);
+
+  // Editor
+  --editor-background: var(--ui-secondary-background);
+  --editor-foreground: var(--ui-foreground);
+  --editor-line-num: var(--ui-tertiary-label);
+  --editor-caret-color: var(--ui-blue);
+
+  // Tabs
+  --ui-tabs-height: 3rem;
+  --ui-tab-background: var(--ui-background);
+  --ui-tab-foreground: var(--ui-secondary-label);
+  --ui-tab-border-bottom: 0rem solid transparent;
+  --ui-tab-hover-background: none; //var(--ui-select-background);
+  --ui-tab-active-background: var(--ui-select-background);
+  --ui-tab-active-foreground: var(--ui-select-foreground);
+  --ui-tab-active-border-bottom: 0rem solid transparent;
+  --ui-tab-active-hover-background: var(--ui-select-background);
+
+  // TODO vars
+  ide-view-tab{
+    padding-left: .75rem !important;
+    padding-right: .5rem !important;
+    padding-top: .25rem !important;
+    padding-bottom: .25rem !important;
+  }
+}
