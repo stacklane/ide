@@ -24,6 +24,9 @@ ide-files{
 
   padding-top: .5rem;
 
+  font-size: var(--ui-files-font-size);
+  background: var(--ui-files-background);
+
   /**
    * Reset focus outline, since we provide our own .focus class for ARIA.
    */
@@ -44,13 +47,13 @@ ide-files{
     padding: .1rem .1rem .1rem 1rem;
 
     &.hover{
-      background-color: var(--ui-select-background);
-      color: var(--ui-select-foreground);
+      background-color: var(--ui-files-select-background);
+      color: var(--ui-files-select-label);
     }
 
     &.focus{
-      background-color: var(--ui-select-background);
-      color: var(--ui-select-foreground);
+      background-color: var(--ui-files-select-background);
+      color: var(--ui-files-select-label);
     }
   }
 

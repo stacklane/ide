@@ -39,7 +39,7 @@
 <body>
 
 {{! Init basic structure for startup styling and 'defer' }}
-<ide-root init data-session-base-href="/sessions/{{session.id}}"
+<ide-root class="ide-stack-column" init data-session-base-href="/sessions/{{session.id}}"
                data-session-base-api-href="/sessions/{{session.id}}/api">
     <ide-toolbar>
         <ide-toolbar-left>
@@ -57,9 +57,9 @@
             </ide-toolbar-item>
         </ide-toolbar-right>
     </ide-toolbar>
-    <main>
+    <main class="ide-stack-row">
         <ide-files></ide-files>
-        <ide-workspace>
+        <ide-workspace class="ide-stack-column">
             <ide-toolbar>
                 <ide-toolbar-left></ide-toolbar-left>
                 <ide-toolbar-right></ide-toolbar-right>

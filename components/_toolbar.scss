@@ -17,6 +17,8 @@ ide-toolbar{
 
   background: var(--ui-toolbar-background);
 
+ // border-bottom: 1px solid var(--ui-toolbar-border-bottom);
+
   white-space: nowrap;
 
  // bad for popup menus:
@@ -49,7 +51,7 @@ ide-toolbar{
   ide-toolbar-path-item{
     @include unselectable;
 
-    background: var(--ui-toolbar-background);
+    background: transparent; //var(--ui-toolbar-background);
 
     align-items: center;
     display: flex;

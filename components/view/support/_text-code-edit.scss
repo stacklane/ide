@@ -22,7 +22,7 @@ text-code-edit {
 }
 
 text-code-edit{
-  background-color: var(--editor-background);
+  //background-color: var(--editor-background);
 
   // This is for the gutter border:
   background: var(--ui-border-color-image) repeat-y $text-code-edit-gutter-width 0 !important;
@@ -33,7 +33,7 @@ text-code-edit{
 
   flex-grow: 1;
 
-  color: var(--editor-foreground);
+  //color: var(--editor-foreground);
 
   position:relative;
 
@@ -64,11 +64,11 @@ text-code-edit{
   }
 
   > .text-code-edit-gutter{
-    background: var(--editor-background);
+    background: var(--ui-workspace-gutter);
     position:sticky;
     left: 0;
 
-    color: var(--editor-line-num);
+    color: var(--ui-workspace-line-num);
 
     z-index: 100;
 
@@ -94,7 +94,7 @@ text-code-edit{
     }
 
     textarea {
-      caret-color: var(--editor-caret-color);
+      caret-color: var(--ui-workspace-caret-color);
       box-sizing: border-box;
 
       width: 100%;

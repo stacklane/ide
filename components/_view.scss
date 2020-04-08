@@ -1,7 +1,7 @@
 
 ide-view{
-  background: var(--editor-background);
-  color: var(--editor-foreground);
+  //background: var(--editor-background);
+  //color: var(--editor-foreground);
 
   flex-grow: 1;
 
@@ -31,8 +31,15 @@ ide-view-tab{
   padding-right: .75rem;
   padding-top: .5rem;
   padding-bottom: .25rem;
-  border-bottom: var(--ui-tab-border-bottom);
-  font-size: .9rem;
+ // border-bottom: var(--ui-tab-border-bottom);
+  font-size: var(--ui-tab-font-size);
+
+  &:not([active]) + ide-view-tab:not(:first-child):not([active]){
+    border-left: 1px solid var(--ui-tab-separator);
+  }
+  &:last-child:not([active]){
+    border-right: 1px solid var(--ui-tab-separator);
+  }
 
   &:hover{
     background: var(--ui-tab-hover-background);
@@ -41,10 +48,16 @@ ide-view-tab{
   &[active]{
     background: var(--ui-tab-active-background);
     color: var(--ui-tab-active-foreground);
-    border-bottom: var(--ui-tab-active-border-bottom);
+    //border-bottom: var(--ui-tab-active-border-bottom);
 
     &:hover{
       background: var(--ui-tab-active-hover-background);
+    }
+
+    border-right: 1px solid var(--ui-tab-separator);
+
+    &:not(:first-child){
+      border-left: 1px solid var(--ui-tab-separator);
     }
   }
 

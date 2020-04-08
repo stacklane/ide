@@ -1,3 +1,4 @@
+
 /**
  * Primary and general settings.
  */
@@ -38,10 +39,10 @@
   /**
    * Don't use the hand for general UI actions. Reserve it for actual HTTP links.
    *
-   * - Apple’s Human Interface Guidelines states that the hand cursor should be used when “the content is a URL link”.
-   * - W3C User Interface guidelines says the same thing again with “The cursor is a pointer that indicates a link”.
+   * - Apple’s Human Interface Guidelines: the hand cursor should be used when “the content is a URL link”.
+   * - W3C User Interface guidelines: "The cursor is a pointer that indicates a link”.
    * - Microsoft: Displaying the hand pointer on hover is the definitive indication of a link.
-   *         To avoid confusion, it is imperative not to use the hand pointer for other purposes. Text and graphics links use a hand […] pointer […] because of their weak affordance. While links may have other visual clues to indicate that they are links (such as underlines and special placement), displaying the hand pointer on hover is the definitive indication of a link.
+   *              To avoid confusion, it is imperative not to use the hand pointer for other purposes.
    */
   --ui-action-pointer: default;
 
@@ -77,11 +78,16 @@
   // @deprecated
   --ui-select-foreground: var(--ui-label);
 
+  // Files
+  --ui-files-font-size: .9rem;
+  --ui-files-background: var(--ui-secondary-background);
+  --ui-files-select-background: var(--ui-tertiary-background);
+  --ui-files-select-label: var(--ui-label);
 
   // Toolbar
-  --ui-toolbar-background: var(--ui-background);
+  --ui-toolbar-background: var(--ui-secondary-background);
   --ui-toolbar-label: var(--ui-label);
-  --ui-toolbar-hover: var(--ui-secondary-background);
+  --ui-toolbar-hover: var(--ui-tertiary-background);
   --ui-toolbar-focus: var(--ui-tertiary-background);
 
   // Menu
@@ -91,22 +97,25 @@
   --ui-menu-shadow: rgba(0,0,0,.3);
   --ui-menu-speed: var(--ui-speed);
 
-  // Editor
-  --editor-background: var(--ui-secondary-background);
-  --editor-foreground: var(--ui-foreground);
-  --editor-line-num: var(--ui-tertiary-label);
-  --editor-caret-color: var(--ui-blue);
+  // Workspace
+  --ui-workspace-background: var(--ui-background);
+  --ui-workspace-label: var(--ui-label);
+  --ui-workspace-line-num: var(--ui-tertiary-label);
+  --ui-workspace-gutter: var(--ui-background);
+  --ui-workspace-caret-color: var(--ui-blue);
 
   // Tabs
-  --ui-tabs-height: 3rem;
   --ui-tab-background: var(--ui-background);
   --ui-tab-foreground: var(--ui-secondary-label);
-  --ui-tab-border-bottom: 0rem solid transparent;
+  //--ui-tab-border-bottom: 0rem solid transparent;
   --ui-tab-hover-background: none; //var(--ui-select-background);
   --ui-tab-active-background: var(--ui-select-background);
   --ui-tab-active-foreground: var(--ui-select-foreground);
   --ui-tab-active-border-bottom: 0rem solid transparent;
   --ui-tab-active-hover-background: var(--ui-select-background);
+  --ui-tab-separator: var(--ui-separator);
+  --ui-tab-font-size: .8rem;
+
 
   // TODO vars
   ide-view-tab{

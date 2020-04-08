@@ -362,7 +362,7 @@ class IDERoot extends HTMLElement {
      */
     openFile(fileInfo){
         const work = this.workspace;
-        const id = 'view-' + fileInfo.id;
+        const id = fileInfo.id; // This must match what occurs in ViewTab
         const existing = work.findViewTab(id);
 
         if (existing) {

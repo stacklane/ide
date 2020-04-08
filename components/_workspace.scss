@@ -1,18 +1,15 @@
 ide-workspace{
-  //display: block;
   display: flex;
   flex-direction: column;
   position: relative;
   flex-grow: 1;
   overflow: hidden;
 
-  //&.is-active{
-  //  display: block;
-  //}
+  background: var(--ui-workspace-background);
+  color: var(--ui-workspace-label);
 
-  background: var(--editor-background);
-
-  > ide-view{
-    border-top: 1px solid var(--ui-border-color);
+  > ide-toolbar{
+    background: var(--ui-workspace-background);
   }
+
 }
