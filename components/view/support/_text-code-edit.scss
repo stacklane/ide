@@ -22,18 +22,13 @@ text-code-edit {
 }
 
 text-code-edit{
-  //background-color: var(--editor-background);
-
-  // This is for the gutter border:
-  background: var(--ui-border-color-image) repeat-y $text-code-edit-gutter-width 0 !important;
+  background: var(--ui-border-color-image) repeat-y $text-code-edit-gutter-width 0,
+              var(--ui-border-color-image) repeat-y $text-code-edit-guide-columns 0 !important;
 
   display: flex;
 
   flex-direction: row;
-
   flex-grow: 1;
-
-  //color: var(--editor-foreground);
 
   position:relative;
 
@@ -109,12 +104,4 @@ text-code-edit{
     }
   }
 
-  /**
-   * The guide line.
-   *
-   * To cover a variety of sizing cases in Safari and Chrome, this must be on both areas.
-   */
-  .text-code-edit-area /*, .text-code-edit-area textarea*/{
-    background: var(--ui-border-color-image) repeat-y $text-code-edit-guide-columns 0 !important;
-  }
 }
