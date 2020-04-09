@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="/style/ui.scss">
+    <link rel="stylesheet" href="/style.scss">
 
     <link rel="icon" type="image/png" href="/fav/16.png" sizes="16x16" />
     <link rel="icon" type="image/png" href="/fav/32.png" sizes="32x32" />
@@ -68,14 +68,21 @@
 </ide-root>
 
 {{! With 'defer', ordering matters }}
-<script defer src="/components/root.js"></script>
-<script defer src="/components/files.js"></script>
-<script defer src="/components/view.js"></script>
+<script defer src="/ui/components/icon.js"></script>
+<script defer src="/ui/components/modal.js"></script>
+<script defer src="/ui/components/dialog.js"></script>
 
-<script defer src="/components/view/support/text-code-edit.js"></script>
-<script defer src="/components/view/views.js"></script>
+<script defer src="/ide/root.js"></script>
+<script defer src="/ide/files.js"></script>
+<script defer src="/ide/view.js"></script>
 
-<script defer src="/components/finish.js"></script>
+<script defer src="/ide/view/support/text-code-edit.js"></script>
+<script defer src="/ide/view/views.js"></script>
+
+<script defer src="/ide/create/base.js"></script>
+<script defer src="/ide/create/supplier.js"></script>
+
+<script defer src="/ide/finish.js"></script>
 
 </body>
 </html>

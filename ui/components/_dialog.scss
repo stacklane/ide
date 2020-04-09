@@ -1,0 +1,76 @@
+:root {
+  --ui-dialog-shadow: var(--ui-secondary-background-shadow);
+
+  --ui-dialog-title-horizontal-padding: .75rem;
+  --ui-dialog-title-vertical-padding: .5rem;
+
+  /**
+   * This must be used by internal components of the dialog as needed.
+   */
+  --ui-dialog-content-padding: 1rem;
+}
+
+ui-modal ui-dialog{
+  box-shadow: 0 0.5em 1em -0.125em var(--ui-dialog-shadow), 0 0px 0 1px var(--ui-dialog-shadow);
+  border-radius: $radius;
+  border: 1px solid var(--ui-separator);
+}
+
+ui-dialog{
+  background: var(--ui-secondary-background);
+  color: var(--ui-label);
+
+  display: flex;
+  flex-direction: column;
+
+  .ui-dialog-content{
+    // Leave fully unstyled for wider implementations
+
+    /**
+     * The following are utilities for common dialog implementations.
+     */
+
+    // TODO this probably doesn't belong here... too specific
+    .ui-dialog-list{
+      display:flex;
+      flex-direction:row;
+
+      //border-bottom-left-radius: $radius;
+
+      > ul{
+        background: var(--ui-background);
+
+        li{
+          padding: var(--ui-dialog-title-vertical-padding) var(--ui-dialog-title-horizontal-padding);
+        }
+      }
+      > div{
+        border-left: 1px solid var(--ui-separator);
+        padding: var(--ui-dialog-content-padding);
+      }
+    }
+  }
+
+  .ui-dialog-title{
+    padding: var(--ui-dialog-title-vertical-padding) var(--ui-dialog-title-horizontal-padding);
+
+    position: relative;
+    display:flex;
+    flex-direction:row;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid var(--ui-separator);
+
+    .ui-dialog-close{
+      @include delete(12px /* must use px */, var(--ui-red), 1px, var(--ui-red));
+
+      position: absolute;
+      left: var(--ui-dialog-title-horizontal-padding);
+    }
+
+    h2{
+      color: var(--ui-secondary-label);
+    }
+  }
+}
+

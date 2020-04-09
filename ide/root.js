@@ -204,7 +204,7 @@ class IDERoot extends HTMLElement {
     }
 
     _addAction(fileInfoContext){
-        alert('add to: ' + fileInfoContext.path);
+        CreateDialog(fileInfoContext).modal();
     }
 
     _createAddAction(fileInfo){

@@ -119,7 +119,7 @@ class View extends IDEComponent {
             .then((response) => {
                 const file = JSON.parse(_decodeBase64Unicode(response.headers.get('X-File')));
                 const fileInfo = new FileInfo(file);
-                const view = ViewCreate(fileInfo);
+                const view = LookupView(fileInfo);
                 if (view) {
                     that.appendChild(view);
                     this._view = view;

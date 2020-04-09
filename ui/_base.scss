@@ -1,4 +1,4 @@
-@import "/style/vars";
+@import "/ui/vars";
 
 html{
   font-size: $body-size;
@@ -31,7 +31,7 @@ textarea {
 
 code,
 pre {
-  -moz-osx-font-smoothing: auto;
+  //-moz-osx-font-smoothing: auto;
   //-webkit-font-smoothing: auto;
  // font-family: $code-family;
 }

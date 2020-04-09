@@ -21,13 +21,13 @@ html{
   --ui-background: rgba(30, 30, 30, 1.00);
   // Content layered on top of main background:
   --ui-secondary-background: rgba(50, 50, 50, 1.00);
-  --ui-secondary-background-shadow: rgba(0, 0, 0,.3);
+  --ui-secondary-background-shadow: rgba(0, 0, 0, .3);
   // Content layered on top of secondary background:
   --ui-tertiary-background: rgba(70, 70, 70, 1.00);
 
   // Thin border or divider lines
   --ui-separator: rgba(255, 255, 255, 0.10);
-  --ui-separator-image: url(/style/theme/dark-separator.svg); // same color but as an image
+  --ui-separator-image: url(/ui/theme/dark-separator.svg); // same color but as an image
 
   // Fill color for thin and small shapes:
   --ui-fill: rgba(120, 120, 128, 0.36);
@@ -73,7 +73,7 @@ html.light{
   --ui-tertiary-background: rgba(213, 213, 213, 1.00);
 
   --ui-separator: rgba(0, 0, 0, 0.10);
-  --ui-separator-image: url(/style/theme/light-separator.svg); // same color but as an image
+  --ui-separator-image: url(/ui/theme/light-separator.svg); // same color but as an image
 
   --ui-fill: rgba(120, 120, 128, 0.20);
   --ui-secondary-fill: rgba(120, 120, 128, 0.16);

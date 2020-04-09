@@ -2,7 +2,7 @@
  * Derived and case specific settings.
  */
 html{
-  --ui-logo: url(/style/theme/dark-logo.svg);
+  --ui-logo: url(/ui/theme/dark-logo.svg);
 
   --ui-scroll-width: .5rem;
   --ui-scroll-thumb: var(--ui-fill);
@@ -60,5 +60,5 @@ html{
 }
 
 html.light{
-  --ui-logo: url(/style/theme/light-logo.svg);
+  --ui-logo: url(/ui/theme/light-logo.svg);
 }

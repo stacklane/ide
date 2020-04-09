@@ -3,7 +3,7 @@
  * @return {ViewContentBase}
  * @constructor
  */
-const ViewCreate = (fileInfo)=>{
+const LookupView = (fileInfo)=>{
     if (fileInfo.isManifest){
         return new ManifestView(fileInfo);
     } else {

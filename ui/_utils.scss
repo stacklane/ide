@@ -1,0 +1,97 @@
+
+@mixin overflow-touch {
+  -webkit-overflow-scrolling: touch;
+}
+
+@mixin unselectable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+%unselectable {
+  @include unselectable;
+}
+
+@mixin delete($size, $background, $x-width, $x-color) {
+  @extend %unselectable;
+
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background-color: $background;
+  border: none;
+  border-radius: $radius-rounded;
+  cursor: var(--ui-action-pointer);
+  pointer-events: auto;
+  display: inline-block;
+  flex-grow: 0;
+  flex-shrink: 0;
+  font-size: 0;
+  height: $size;
+  max-height: $size;
+  max-width: $size;
+  min-height: $size;
+  min-width: $size;
+  outline: none;
+  position: relative;
+  vertical-align: top;
+  width: $size;
+
+  &::before,
+  &::after {
+    background-color: $x-color;
+    content: "";
+    display: block;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%) rotate(45deg);
+    transform-origin: center center;
+  }
+
+  &::before {
+    height: $x-width;
+    width: 70%;
+  }
+
+  &::after {
+    height: 70%;
+    width: $x-width;
+  }
+
+  &:hover,
+  &:focus {
+    &::before,
+    &::after{
+      filter: brightness(.5);
+    }
+  }
+
+  &:active {
+    filter: brightness(1.75);
+    &::before,
+    &::after{
+      filter: brightness(.25);
+    }
+  }
+}
+
+@mixin overlay($offset: 0) {
+  bottom: $offset;
+  left: $offset;
+  position: absolute;
+  right: $offset;
+  top: $offset;
+}
+
+%overlay {
+  @include overlay;
+}
+
+@mixin tablet {
+  @media screen and (min-width: $tablet), print {
+    @content;
+  }
+}
