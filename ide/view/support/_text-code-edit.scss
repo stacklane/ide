@@ -65,7 +65,7 @@ text-code-edit{
 
     color: var(--ui-workspace-line-num);
 
-    z-index: 100;
+    z-index: 10;
 
     flex-basis: $text-code-edit-gutter-width;
     flex-shrink: 0;

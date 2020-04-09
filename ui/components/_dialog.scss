@@ -17,7 +17,7 @@ ui-modal ui-dialog{
 }
 
 ui-dialog{
-  background: var(--ui-secondary-background);
+  background: var(--ui-tertiary-background);
   color: var(--ui-label);
 
   display: flex;
@@ -38,7 +38,7 @@ ui-dialog{
       //border-bottom-left-radius: $radius;
 
       > ul{
-        background: var(--ui-background);
+        background: var(--ui-secondary-background);
 
         li{
           padding: var(--ui-dialog-title-vertical-padding) var(--ui-dialog-title-horizontal-padding);
@@ -70,6 +70,8 @@ ui-dialog{
 
     h2{
       color: var(--ui-secondary-label);
+      font-weight: $weight-medium;
+      font-size: .85rem;
     }
   }
 }
