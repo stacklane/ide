@@ -15,7 +15,7 @@
   @include unselectable;
 }
 
-@mixin delete($size, $background, $x-width, $x-color) {
+@mixin delete($size /* must be px */, $background, $x-width, $x-color) {
   @extend %unselectable;
 
   -moz-appearance: none;

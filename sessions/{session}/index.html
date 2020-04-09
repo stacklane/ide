@@ -34,6 +34,7 @@
 
     {{% import {session} from '🔗' }}
     {{% svg /images/ as image }}
+    {{% partial /ui/components/all as components }}
 </head>
 
 <body>
@@ -68,9 +69,7 @@
 </ide-root>
 
 {{! With 'defer', ordering matters }}
-<script defer src="/ui/components/icon.js"></script>
-<script defer src="/ui/components/modal.js"></script>
-<script defer src="/ui/components/dialog.js"></script>
+{{>components}}
 
 <script defer src="/ide/root.js"></script>
 <script defer src="/ide/files.js"></script>

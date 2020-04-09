@@ -11,17 +11,6 @@ const LookupView = (fileInfo)=>{
     }
 };
 
-class ErrorView extends HTMLElement {
-    constructor(message) {
-        super();
-        let div = document.createElement('div');
-        div.innerText = message;
-        this.appendChild(div);
-    }
-}
-window.customElements.define('ide-view-error', ErrorView);
-
-
 /**
  * Superclass for FileInfo-based views.
  */

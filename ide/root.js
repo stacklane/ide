@@ -352,7 +352,7 @@ class IDERoot extends HTMLElement {
     }
 
     closeFile(fileInfo){
-        const existing = this.workspace.findViewTab(fileInfo.id);
+        const existing = this.workspace.findFileViewTab(fileInfo);
 
         if (existing) existing.close();
     }
@@ -362,8 +362,7 @@ class IDERoot extends HTMLElement {
      */
     openFile(fileInfo){
         const work = this.workspace;
-        const id = fileInfo.id; // This must match what occurs in ViewTab
-        const existing = work.findViewTab(id);
+        const existing = work.findFileViewTab(fileInfo);
 
         if (existing) {
             existing.activate();
@@ -371,11 +370,8 @@ class IDERoot extends HTMLElement {
         }
 
         const view = new View(fileInfo);
-        const tab = new ViewTab(view, fileInfo);
 
-        work.addViewTab(tab);
-
-        //return view;
+        work.addViewTab(view.createTab());
     }
 }
 window.customElements.define('ide-root', IDERoot);
@@ -420,10 +416,6 @@ class IDEComponent extends HTMLElement{
         (val) ? this.setAttribute('active', '') :
             this.removeAttribute('active');
     }
-
-    remove(){
-        if (this.parentElement) this.parentElement.removeChild(this);
-    }
 }
 
 class Toolbar extends HTMLElement{
@@ -464,8 +456,8 @@ class Workspace extends IDEComponent {
         super();
     }
 
-    findViewTab(id){
-        return this._tabs.querySelector('ide-view-tab[data-id="' + id + '"]');
+    findFileViewTab(fileInfo){
+        return UITab.Find(this._tabs, View.CreateId(fileInfo));
     }
 
     addViewTab(viewTab){
