@@ -3,6 +3,11 @@ ide-file-link{
 }
 
 ide-files{
+  --ui-files-font-size: 1em;
+  --ui-files-background: var(--ui-secondary-background);
+  --ui-files-select-background: var(--ui-tertiary-background);
+  --ui-files-select-label: var(--ui-label);
+
   @include unselectable; // TODO test touch and aria with and without
 
   //display: flex;

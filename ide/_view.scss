@@ -20,23 +20,35 @@ ui-tab-closer.ide-view-tab-closer{
   margin-left: .5rem;
 }
 
+
 ui-tab.ide-view-tab{
+  // Tabs
+  --ui-tab-background: var(--ui-background);
+  --ui-tab-foreground: var(--ui-secondary-label);
+  --ui-tab-hover-background: none;
+  --ui-tab-active-background: var(--ui-select-background);
+  --ui-tab-active-foreground: var(--ui-select-foreground);
+  --ui-tab-active-border-bottom: 0rem solid transparent;
+  --ui-tab-active-hover-background: var(--ui-select-background);
+  --ui-tab-separator: var(--ui-separator);
+  --ui-tab-font-size: 1em;
+
   background: var(--ui-tab-background);
   color: var(--ui-tab-foreground);
   cursor: var(--ui-action-pointer);
-  padding: var(--ui-tab-padding);
   display: flex;
   align-items: center;
 
-  padding-left: .75rem;
-  padding-right: .5rem;
-  padding-top: .25rem;
-  padding-bottom: .25rem;
+  height: 2rem;
+  min-height: 2rem;
+  max-height: 2rem;
 
- // border-bottom: var(--ui-tab-border-bottom);
+  padding: .25rem .5rem .25rem .75rem;
+
+  // border-bottom: var(--ui-tab-border-bottom);
   font-size: var(--ui-tab-font-size);
 
-  &:not([active='true']) + ide-view-tab:not(:first-child):not([active='true']){
+  &:not([active='true']) + .ide-view-tab:not(:first-child):not([active='true']){
     border-left: 1px solid var(--ui-tab-separator);
   }
   &:last-child:not([active='true']){

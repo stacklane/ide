@@ -68,7 +68,6 @@ class EditorView extends ViewContentBase{
 }
 window.customElements.define('ide-view-editor', EditorView);
 
-
 class ManifestView extends ViewContentBase{
     constructor(fileInfo) {
         super(fileInfo);

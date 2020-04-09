@@ -3,6 +3,19 @@
 $toolbar-item-spacing: .5rem;
 
 ide-toolbar{
+  --ui-toolbar-background: var(--ui-secondary-background);
+  --ui-toolbar-label: var(--ui-label);
+  --ui-toolbar-hover: var(--ui-tertiary-background);
+  --ui-toolbar-focus: var(--ui-tertiary-background);
+
+  --ui-menu-background: var(--ui-secondary-background);
+  --ui-menu-label: var(--ui-label);
+  --ui-menu-hover-background: var(--ui-link);
+  --ui-menu-hover-label: var(--ui-link-invert);
+  --ui-menu-shadow: var(--ui-secondary-background-shadow);
+  --ui-menu-speed: var(--ui-speed);
+
+
   flex-shrink:0;
 
   align-items: stretch;// center;

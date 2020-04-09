@@ -19,44 +19,6 @@ html{
   --ui-select-background: var(--ui-secondary-background);
   // @deprecated
   --ui-select-foreground: var(--ui-label);
-
-  // Files
-  --ui-files-font-size: 1em;
-  --ui-files-background: var(--ui-secondary-background);
-  --ui-files-select-background: var(--ui-tertiary-background);
-  --ui-files-select-label: var(--ui-label);
-
-  // Toolbar
-  --ui-toolbar-background: var(--ui-secondary-background);
-  --ui-toolbar-label: var(--ui-label);
-  --ui-toolbar-hover: var(--ui-tertiary-background);
-  --ui-toolbar-focus: var(--ui-tertiary-background);
-
-  // Menu
-  --ui-menu-background: var(--ui-secondary-background);
-  --ui-menu-label: var(--ui-label);
-  --ui-menu-hover-background: var(--ui-link);
-  --ui-menu-hover-label: var(--ui-link-invert);
-  --ui-menu-shadow: var(--ui-secondary-background-shadow);
-  --ui-menu-speed: var(--ui-speed);
-
-  // Workspace
-  --ui-workspace-background: var(--ui-background);
-  --ui-workspace-label: var(--ui-label);
-  --ui-workspace-line-num: var(--ui-tertiary-label);
-  --ui-workspace-gutter: var(--ui-background);
-  --ui-workspace-caret-color: var(--ui-blue);
-
-  // Tabs
-  --ui-tab-background: var(--ui-background);
-  --ui-tab-foreground: var(--ui-secondary-label);
-  --ui-tab-hover-background: none; //var(--ui-select-background);
-  --ui-tab-active-background: var(--ui-select-background);
-  --ui-tab-active-foreground: var(--ui-select-foreground);
-  --ui-tab-active-border-bottom: 0rem solid transparent;
-  --ui-tab-active-hover-background: var(--ui-select-background);
-  --ui-tab-separator: var(--ui-separator);
-  --ui-tab-font-size: 1em;
 }
 
 html.light{
