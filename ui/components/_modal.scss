@@ -7,6 +7,8 @@ $modal-content-margin-mobile: 20px !default;
 $modal-content-spacing-mobile: 160px !default;
 $modal-content-spacing-tablet: 40px !default;
 
+
+
 ui-modal {
   @extend %overlay;
 
@@ -28,7 +30,7 @@ ui-modal {
 
   background: black;
   opacity: .5;
-  filter: blur(20px);
+
 }
 
 .ui-modal-content {
@@ -37,7 +39,9 @@ ui-modal {
   overflow: visible;
   position: relative;
   width: 100%;
+  max-width: 100%;
   margin-top: .5rem;
+  max-height: 100%;
 
   // Responsiveness
   @include tablet {

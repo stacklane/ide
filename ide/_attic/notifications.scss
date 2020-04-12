@@ -1,0 +1,15 @@
+&.is-notifications{
+  .action:empty:before{
+    content: $no-notifications;
+    padding: $toolbar-item-spacing;
+  }
+  .action{
+    display: flex;
+    flex-flow: column-reverse;
+    max-height: 10rem;
+
+    > ide-notification{
+      padding: $toolbar-item-spacing;
+    }
+  }
+}

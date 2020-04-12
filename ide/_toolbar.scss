@@ -76,6 +76,37 @@ ide-toolbar{
       pointer-events: none !important;
     }
 
+    &.is-changeset-stats{
+
+      .is-changeset-stats-group{
+        font-weight: $weight-semibold;
+        font-size: .8em;
+        background: var(--ui-tertiary-background);
+        border-radius: $radius-rounded;
+        display: flex;
+        padding: 0em .5em;
+      }
+
+      .is-create, .is-update, .is-delete{
+        display:flex;
+        padding: 0em .5em;
+      }
+
+      .is-create{
+        color: var(--ui-green);
+      }
+      .is-update{
+        color: var(--ui-yellow);
+      }
+      .is-delete{
+        color: var(--ui-red);
+      }
+
+      &:empty{
+        display:none;
+      }
+    }
+
     &.has-action {
       cursor: var(--ui-action-pointer);
       position: relative;
@@ -169,21 +200,7 @@ ide-toolbar{
       }
     }
 
-    &.is-notifications{
-      .action:empty:before{
-        content: $no-notifications;
-        padding: $toolbar-item-spacing;
-      }
-      .action{
-        display: flex;
-        flex-flow: column-reverse;
-        max-height: 10rem;
 
-        > ide-notification{
-          padding: $toolbar-item-spacing;
-        }
-      }
-    }
   }
 
   ide-toolbar-path-item{

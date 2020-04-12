@@ -1,52 +1,101 @@
-const LookupAvailableCreate = (fileInfo)=>{
-    const out = [];
+'use strict';
 
-    out.push(new SupplierCreate(fileInfo));
+const AddAvailableCreators = (selectedFileInfo, source, all, available, unavailable)=>{
+    let didGroup = false;
 
-
-    return out;
+    all.forEach((creator)=>{
+        const instance = new creator(selectedFileInfo, source);
+        if (instance.applicable) {
+            if (!didGroup) {
+                available.push(instance.group);
+                didGroup = true;
+            }
+            available.push(instance);
+        } else {
+            unavailable.push(instance);
+        }
+    });
 };
 
-const CreateDialog = (fileInfo)=>{
-    const list = document.createElement('ul');
+const LookupAvailableCreators = (selectedFileInfo, source)=>{
+    const available = [];
+    const unavailable = [];
 
-    LookupAvailableCreate(fileInfo).forEach((available)=>{
-       const item = document.createElement('li');
-       item.appendChild(available.icon.small());
+    AddAvailableCreators(selectedFileInfo, source, VIEW_CREATORS, available, unavailable);
+    AddAvailableCreators(selectedFileInfo, source, CONTROLLER_CREATORS, available, unavailable);
+    AddAvailableCreators(selectedFileInfo, source, MODEL_CREATORS, available, unavailable);
 
-       const title = document.createElement('span');
-       title.innerText = ' ' + available.name;
-       item.appendChild(title);
+    if (unavailable.length > 0){
+        available.push('Not Applicable')
+        unavailable.forEach((u)=>available.push(u));
+    }
 
-       list.appendChild(item);
+    return available;
+};
+
+const CreateDialog = (selectedFileInfo, source)=>{
+    const panel = document.createElement('div');
+    panel.classList.add('ide-create-dialog-panel');
+
+    const tabs = document.createElement('div');
+    tabs.classList.add('ide-create-dialog-panel-tabs');
+    panel.appendChild(tabs);
+
+    const views = document.createElement('div');
+    views.classList.add('ide-create-dialog-panel-views');
+    panel.appendChild(views);
+
+    LookupAvailableCreators(selectedFileInfo, source).forEach((available)=>{
+        if (typeof available === 'string'){
+            const category = document.createElement('h2');
+            category.innerText = available;
+            tabs.appendChild(category);
+        } else {
+            const title = document.createElement('span');
+            title.innerText = ' ' + available.groupName;
+
+            const tab = UITab.create([available.icon.em(), title], () => {
+                const view = available.createView();
+                view.id = available.constructor.name; // class name
+                views.appendChild(view);
+                return view;
+            }, 'New: ' + available.name);
+
+            tabs.appendChild(tab);
+        }
     });
 
-    const content = document.createElement('div');
-    content.classList.add('ui-dialog-list');
+    const dialog = new UIDialog(panel, 'New');
 
-    content.appendChild(list);
+    dialog.addEventListener(UITab.ChangeEventName, function(event){
+        if (event.detail.tab.plainTextTitle) dialog.title = event.detail.tab.plainTextTitle;
+        event.stopPropagation();
+    });
 
-    // TODO somehow updated for each selection
-    const main = document.createElement('div');
-    main.innerText = 'hi';
-    content.appendChild(main);
-
-    return new UIDialog(content, 'New' /* TODO would be ideal to update this using current selection */);
+    return dialog;
 };
+
 
 
 /**
  * Base class for encapsulating new file creation logic.
  */
-class CreateBase /*extends HTMLElement*/{
-    constructor(contextFileInfo) {
-        //super();
-        this._contextFileInfo = contextFileInfo;
-
+class CreateBase {
+    constructor(selectedFileInfo, source) {
+        this._selectedFileInfo = selectedFileInfo;
+        this._source = source;
     }
 
-    get context(){
-        return this._contextFileInfo;
+    get applicable(){
+        return true;
+    }
+
+    get source(){
+        return this._source;
+    }
+
+    get selected(){
+        return this._selectedFileInfo;
     }
 
     /**
@@ -65,17 +114,61 @@ class CreateBase /*extends HTMLElement*/{
     }
 
     /**
-     * Simple text name / title.
+     * Full name, regardless of #group.
      */
     get name(){
         throw 'Not implemented: #name';
     }
 
-    get view(){
-        throw 'Not implemented: #view';
+    /**
+     * Group title
+     */
+    get group(){
+        return '';
+    }
+
+    /**
+     * The name of this relative to the group.
+     */
+    get groupName(){
+        return this.name;
+    }
+
+    /**
+     * This should include any 'about' / informative text, or links to docs.
+     */
+    createView(){
+        throw 'Not implemented: #createView';
     }
 
     submit(){
         throw 'Not implemented: #submit';
     }
+}
+
+class EmojiCreator extends CreateBase{
+    constructor(selectedFileInfo, source, emojiIcon, name, group, groupName){
+        super(selectedFileInfo, source);
+        this._icon = new UIIcon(emojiIcon);
+        this._name = name;
+        this._group = group;
+        this._groupName = groupName;
+    }
+
+    get icon(){
+        return this._icon;
+    }
+
+    get name(){
+        return this._name;
+    }
+
+    get group(){
+        return this._group;
+    }
+
+    get groupName(){
+        return this._groupName ? this._groupName : this.name;
+    }
+
 }

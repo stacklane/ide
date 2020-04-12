@@ -1,0 +1,109 @@
+/**
+ * View with:
+ *
+ * - h2: title
+ * - div: growing main content area
+ * - blockquote: "about"
+ * - footer: actions e.g. "Create"
+ */
+.ide-create-dialog-standard-view{
+  display: flex;
+  flex-direction:column;
+  flex-grow: 1;
+
+  > * + *{
+    border-top: 1px solid var(--ui-separator);
+  }
+
+  > h2{
+    color: var(--ui-label);
+    flex-shrink: 0;
+    flex-grow: 0;
+    padding: var(--ui-dialog-content-padding);
+  }
+
+  > div{
+    flex-grow: 1;
+    padding: var(--ui-dialog-content-padding);
+  }
+
+  > blockquote{
+    font-size: .8rem;
+    flex-shrink: 0;
+    flex-grow: 0;
+    padding: var(--ui-dialog-content-padding);
+    color: var(--ui-secondary-label);
+  }
+
+  > footer{
+    flex-shrink: 0;
+    flex-grow: 0;
+    padding: var(--ui-dialog-content-padding);
+    //border-top: 1px solid var(--ui-separator);
+    display: flex;
+    //align-items: flex-end;
+    justify-content: flex-end;
+    flex-direction: row;
+  }
+
+  .is-error{
+    color: var(--ui-red);
+  }
+}
+
+.ide-create-dialog-panel{
+  display: flex;
+  flex-direction: row;
+
+  > .ide-create-dialog-panel-tabs{
+    display:flex;
+    flex-direction:column;
+    font-size: .9rem;
+    padding-bottom: calc(var(--ui-dialog-content-padding) / 2);
+
+    > h2{
+      padding: var(--ui-dialog-content-padding);
+      padding-top: var(--ui-dialog-content-padding);
+      padding-bottom: calc(var(--ui-dialog-content-padding) / 2);
+
+      font-size: .7rem;
+      text-transform: uppercase;
+      font-weight: $weight-semibold;
+      color: var(--ui-secondary-label);
+    }
+
+    > ui-tab{
+      padding: var(--ui-dialog-content-padding);
+      padding-top: calc(var(--ui-dialog-content-padding) / 2);
+      padding-bottom: calc(var(--ui-dialog-content-padding) / 2);
+
+      &[active='true']{
+        background: var(--ui-fill);
+      }
+
+      > ui-icon{
+        margin-right: .5rem;
+      }
+    }
+  }
+
+  > .ide-create-dialog-panel-views{
+    background: var(--ui-tertiary-background);
+    border-left: 1px solid var(--ui-separator);
+    flex-grow: 1;
+    display: flex;
+
+    > div{
+      display:none;
+
+      &[data-ui-tab-view-active='true']{
+        display: flex;
+      }
+    }
+
+    &:empty:before{
+      content: 'Choose from available options on the left';
+      display: block;
+    }
+  }
+}

@@ -30,6 +30,9 @@ window.customElements.define('ui-tab-closer', UITabCloser);
  *        }
  */
 class UITab extends HTMLElement{
+    static get ChangeEventName(){
+        return 'UITab#change';
+    }
     static get ViewTabId(){
         return 'data-ui-tab-view-id';
     }
@@ -37,20 +40,31 @@ class UITab extends HTMLElement{
         return 'data-ui-tab-view-active';
     }
 
-    static Find(elementStart, id){
+    static find(elementStart, id){
         return elementStart.querySelector('ui-tab[' + UITab.ViewTabId + '="' + id + '"]');
     }
 
-    constructor(display, view) {
+    static create(display, view, plainTitle){
+        return new UITab(display, view, plainTitle);
+    }
+
+    /**
+     * Use UITab#create
+     */
+    constructor(display, view, plainTitle) {
         super();
 
-        if (!view.id) throw '!view.id';
-
         this.setAttribute('role', 'tab');
+        this.setAttribute('tabindex', '-1');
         this.setAttribute('aria-selected', 'false');
-        this.setAttribute('data-ui-tab-view-id', view.id);
 
-        this._view = view;
+        if (typeof view === 'function'){
+            this._viewSupplier = view;
+        } else if (view instanceof HTMLElement){
+            if (!view.id) throw '!view.id';
+            this.setAttribute(UITab.ViewTabId, view.id);
+            this._view = view;
+        }
 
         if (typeof display === 'string'){
             const displaySpan = document.createElement('span');
@@ -64,7 +78,50 @@ class UITab extends HTMLElement{
             throw '!display';
         }
 
+        this._plainTitle = plainTitle;
         this.addEventListener('click', ()=>this.activate());
+        /*
+        this.addEventListener('keydown', function(event){
+            switch (event.key){
+                case 'Enter':{
+                    this.activate(); break;
+                }
+            }
+        });*/
+    }
+
+    /*
+    useUpDownArrows(){
+        this.addEventListener('keydown', function(event){
+           if (event.key === 'ArrowDown'){
+               let sib = this.nextElementSibling;
+               while (!(sib instanceof UITab)){
+                   sib = sib.nextElementSibling;
+                   if (!sib) break;
+               }
+               if (sib instanceof UITab) sib.activate();
+           } else if (event.key === 'ArrowUp'){
+               let sib = this.previousElementSibling;
+               while (!(sib instanceof UITab)){
+                   sib = sib.previousElementSibling;
+                   if (!sib) break;
+               }
+               if (sib instanceof UITab) sib.activate();
+           }
+        });
+        return this;
+    }
+
+    useTabIndex(){
+        this.setAttribute('tabindex', '0');
+        return this;
+    }*/
+
+    /**
+     * Optional
+     */
+    get plainTextTitle(){
+        return this._plainTitle;
     }
 
     get active(){
@@ -72,11 +129,17 @@ class UITab extends HTMLElement{
     }
 
     get view(){
+        if (this._view) return this._view;
+
+        this._view = this._viewSupplier();
+        if (!this._view.id) throw '!view.id';
+        this.setAttribute(UITab.ViewTabId, this._view.id);
+
         return this._view;
     }
 
     toString(){
-        return 'UITab[' + this._view + ']';
+        return 'UITab[' + this._view ? this._view.id : 'na' + ']';
     }
 
     activate(){
@@ -85,13 +148,28 @@ class UITab extends HTMLElement{
 
         this.setAttribute('active', 'true');
         this.setAttribute('aria-selected', 'true');
-        this._view.setAttribute(UITab.ActivatedAttribute, 'true');
+
+        this.view.setAttribute(UITab.ActivatedAttribute, 'true');
+
+        // This doesn't seem to make sense:
+        // this.view.setAttribute('tabindex', '0');
+        // this.view.focus();
+
+        // Instead:
+        const toFocus = this.view.querySelectorAll('input, textarea, select');
+        if (toFocus.length > 0) toFocus[0].focus();
+
+        this.dispatchEvent(new CustomEvent(UITab.ChangeEventName, {bubbles:true, detail:{tab: this}}));
     }
 
     deactivate(){
         this.setAttribute('active', 'false');
         this.setAttribute('aria-selected', 'false');
-        this._view.setAttribute(UITab.ActivatedAttribute, 'false');
+        if (this._view) {
+            this._view.setAttribute(UITab.ActivatedAttribute, 'false');
+            // see activate()
+            //this._view.setAttribute('tabindex', '-1');
+        }
     }
 
     close(){
@@ -102,7 +180,7 @@ class UITab extends HTMLElement{
             : null;
 
         this.deactivate();
-        this._view.remove();
+        if (this._view) this._view.remove();
         this.remove();
 
         if (nextSelection != null && nextSelection instanceof UITab) {

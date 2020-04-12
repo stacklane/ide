@@ -57,49 +57,38 @@ class Files extends IDEComponent {
         return this._rootDir;
     }
 
+    get source(){
+        return this._source ? this._source : Source.empty();
+    }
+
     deleteFile(fileInfo){
         if (fileInfo.isDir || !fileInfo.isDeletable) {
             alert("Not deletable: " + fileInfo.path);
             return;
         }
 
-        if (confirm('Delete "' + fileInfo.name + '"?')){
-            const action = fetch(
-                this.sessionApiBase + '/files/' + fileInfo.id + '/v/' + fileInfo.version,
-                {method: 'DELETE'}
-                ).then((response) => {
-                    if (response.ok){
-                        const element = this.findPath(fileInfo);
+        if (!confirm('Delete "' + fileInfo.name + '"?')) return;
 
-                        if (element) element.remove();
+        this._changeSet.delete(fileInfo);
 
-                        this.root.closeFile(fileInfo);
+        const element = this.findPath(fileInfo);
 
-                        return true;
-                    } else {
-                        throw 'Deleted failed: ' + response.statusText;
-                    }
-                });
+        if (element) element.remove();
 
-            this.root.notifications.deleteFile(fileInfo, action);
-
-            return action;
-        }
+        this.root.closeFile(fileInfo);
     }
 
     /**
-     * @param FileInfo | string path
-     * @returns FileDir | FileItem | null
+     * @param SourceFile | string path
+     * @returns Element | FileItem | null
      */
     findPath(path){
         if (!path) throw '!path';
-        if (path instanceof FileInfo) path = path.path;
+        if (path instanceof SourceFile) path = path.path;
         return this.querySelector('[data-file-path="' + path + '"]');
     }
 
     refresh(){
-        const thiz = this;
-
         this.loading = true;
 
         return fetch(this.sessionApiBase + '/files')
@@ -107,24 +96,24 @@ class Files extends IDEComponent {
                 return response.json();
             })
             .then((data) => {
-                const json = data.data;
+                const jsonData = data.data;
 
-                for (let i = 0; i < json.length; i++) this._addFileObject(json[i]);
+                const source = Source.fromJsonApi(jsonData).applyChanges(this.root.sourceChangeSet);
 
-                new TreeLinks(thiz).init();
+                source.files.forEach((file)=>this._addFileObject(file));
 
-                thiz.loading = false;
+                new TreeLinks(this).init();
 
-                thiz.root.showPath(new FileInfo('/'));
+                this.loading = false;
 
-                thiz.classList.add('render-fix' /* safari not repainting */);
+                this.root.showPath(new SourceFile('/'));
+
+                this.classList.add('render-fix' /* safari not repainting */);
             });
     }
 
-    _addFileObject(fileObject){
-        const file = new FileInfo(fileObject);
-
-        const dirParts = file.dirParts;
+    _addFileObject(fileInfo){
+        const dirParts = fileInfo.dirParts;
 
         let lastDir = this._rootDir;
 
@@ -132,7 +121,7 @@ class Files extends IDEComponent {
             lastDir = lastDir.addDir(dirParts[i]);
         }
 
-        lastDir.addItem(file);
+        lastDir.addItem(fileInfo);
     }
 }
 
@@ -154,10 +143,10 @@ class FileDir extends IDEComponent{
         super();
 
         if (dirInfo === '/'){
-            this._info = new FileInfo('/');
+            this._info = new SourceFile('/');
             this._name = '';
             this._path = '/';
-        } else if (dirInfo instanceof FileInfo){
+        } else if (dirInfo instanceof SourceFile){
             if (!dirInfo.isDir) throw dirInfo;
             this._info = dirInfo;
             this._name = dirInfo.name;
@@ -227,7 +216,7 @@ class FileDir extends IDEComponent{
         const existing = this.childDirs.find((dir)=>dir.name === name);
         if (existing) return existing;
 
-        const newDirInfo = new FileInfo(this._path + name + '/');
+        const newDirInfo = new SourceFile(this._path + name + '/');
 
         const newDir = new FileDir(newDirInfo, true);
 

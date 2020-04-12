@@ -31,4 +31,16 @@
       width: 1rem;
     }
   }
+
+  &.is-em{
+    font-size: 1em;
+    height: 1em;
+    width: 1em;
+    line-height: 1em;
+
+    > svg{
+      height: 1em;
+      width: 1em;
+    }
+  }
 }

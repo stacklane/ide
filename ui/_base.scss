@@ -29,6 +29,13 @@ textarea {
   font-family: $body-family;
 }
 
+button,
+input,
+select,
+textarea{
+  font-size: 1rem;
+}
+
 code,
 pre {
   //-moz-osx-font-smoothing: auto;

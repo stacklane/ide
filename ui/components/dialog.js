@@ -15,9 +15,21 @@ class UIDialog extends HTMLElement{
 
         const contentHolder = document.createElement('div');
         contentHolder.classList.add('ui-dialog-content');
-        contentHolder.appendChild(content);
+
+        if (content instanceof HTMLElement) {
+            contentHolder.appendChild(content);
+        } else if (content instanceof Array){
+            for (let i = 0; i < content.length; i++)
+                contentHolder.appendChild(content[i]);
+        } else {
+            throw '' + content;
+        }
 
         this.appendChild(contentHolder);
+    }
+
+    set title(title){
+        this.querySelector('.ui-dialog-title h2').innerText = title;
     }
 
     modal(){
@@ -25,18 +37,10 @@ class UIDialog extends HTMLElement{
 
         const closer = document.createElement('div');
         closer.classList.add('ui-dialog-close');
-        //closer.addEventListener('click', ()=>this.dispatchEvent(NEW_UI_MODAL_CLOSE_EVENT()));
         closer.addEventListener('click', ()=>modal.close());
         this._header.appendChild(closer);
 
-        // TODO can't even get this to log...
-        this.addEventListener('keydown', function(event){
-            console.log(event.key);
-            if (event.key === 'Escape') modal.close();
-        });
-
         modal.show();
-        //return modal;
     }
 }
 window.customElements.define('ui-dialog', UIDialog);

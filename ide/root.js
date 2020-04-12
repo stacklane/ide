@@ -1,185 +1,21 @@
+'use strict';
+
 // https://joshtronic.com/2015/04/19/handling-click-and-touch-events-on-the-same-element/
 const TOUCH_DEVICE = 'ontouchstart' in document.documentElement;
 const FILE_NODE_CLICK_EVENT = TOUCH_DEVICE ? 'touchstart' : 'dblclick';
 const DOCUMENT_ORDER_TAB_INDEX = '0';
-
-'use strict';
-
-/**
- * Structure for holding meta information about both concrete files, and directories.
- */
-class FileInfo extends Object{
-    constructor(file) {
-        super();
-
-        if (file instanceof Object) {
-            if (!file.id) throw '!file.id';
-            this._id = file.id;
-            this._extension = file.extension;
-            this._path = file.path;
-            this._name = file.name;
-            this._version = file.version;
-            this._isDir = false;
-        } else if (typeof file === 'string'){
-            this._id = null;
-            this._path = file;
-            this._isDir = file.endsWith('/');
-            this._isRoot = file === '/';
-        } else {
-            throw file + '';
-        }
-
-        const p = this._path.split('/');
-
-        if (this.isDir){
-            this._parts = p.slice(1, p.length - 1); // skip the root slash and ending slash
-            this._name = this._parts[this._parts.length - 1];
-        } else {
-            this._parts = p.slice(1); // skip the root slash
-            if (!this._name) this._name = this._parts[this._parts.length - 1];
-        }
-
-        this._displayParts = this._parts;
-        this._display = this._name;
-
-        if (this._isRoot) {
-            this._partsInfo = [];
-        }
-    }
-
-    toString(){
-        return 'FileInfo[' + this._path + ']';
-    }
-
-    get isManifest(){
-        return this.path === '/🎛.yaml';
-    }
-
-    get isDeletable(){
-        return this.isFile && !this.isManifest && this.isUpdatable;
-    }
-
-    get isUpdatable(){
-        return this.id && this.version;
-    }
-
-    get isDir(){
-        return this._isDir;
-    }
-
-    get isFile(){
-        return !this._isDir;
-    }
-
-    get extension(){
-        return this._extension;
-    }
-
-    get id(){
-        return this._id;
-    }
-
-    get version(){
-        return this._version;
-    }
-
-    get path(){
-        return this._path;
-    }
-
-    get name(){
-        return this._name;
-    }
-
-    get dirParts(){
-        if (this.isDir){
-            return this.parts;
-        } else {
-            return this.parts.slice(0, this.parts.length - 1);
-        }
-    }
-
-    get partsInfo(){
-        if (this._partsInfo) return this._partsInfo;
-        const out = [];
-        const parts = this.parts;
-        let dirPath = '/';
-        for (let i = 0; i < parts.length - 1 /* skip last part, which is THIS object */; i++){
-            dirPath += parts[i] + '/';
-            out.push(new FileInfo(dirPath));
-        }
-        out.push(this);
-        this._partsInfo = out;
-        return out;
-    }
-
-    get parts(){
-        return this._parts;
-    }
-
-    /**
-     * May differ from #parts
-     */
-    get displayParts(){
-        return this._displayParts;
-    }
-
-    /**
-     * May differ from #name
-     */
-    get display(){
-        return this._display;
-    }
-}
-
-class Notifications {
-    constructor(element) {
-        this._element = element;
-    }
-
-    _submit(message, taskPromise){
-        this._element.appendChild(new Notification(message, taskPromise));
-    }
-
-    deleteFile(fileInfo, taskPromise) {
-        this._submit('Delete: "' + fileInfo.path + '"', taskPromise);
-    }
-}
-
-class Notification extends HTMLElement{
-    constructor(message, taskPromise) {
-        super();
-        if (!message) throw '!message';
-        if (!taskPromise) throw '!taskPromise';
-        this.classList.add('is-pending');
-        this._created = new Date();
-        this._message = message;
-        this.innerText = message;
-
-        taskPromise
-            .then(()=>{this.classList.remove('is-pending'); this.classList.add('is-fulfilled')})
-            .catch((e)=>{
-                this._error = e;
-                this.classList.remove('is-pending');
-                this.classList.add('is-rejected');
-                this.innerHTML = this.innerText + '<br>' + e.message;
-                throw e; // Rethrow to keep the taskPromise chain rejected/failed
-            });
-    }
-}
-window.customElements.define('ide-notification', Notification);
 
 class IDERoot extends HTMLElement {
     constructor() {
         super();
     }
 
-    get notifications(){
-        return this._notifications;
-    }
-
     get workspace(){
         return this.querySelector('ide-workspace');
+    }
+
+    get sessionId(){
+        return this._sessionId;
     }
 
     get sessionBase(){
@@ -188,6 +24,10 @@ class IDERoot extends HTMLElement {
 
     get sessionApiBase(){
         return this._sessionApiBase;
+    }
+
+    get sourceChangeSet(){
+        return this._changeSet;
     }
 
     _loadAppMeta(){
@@ -204,7 +44,7 @@ class IDERoot extends HTMLElement {
     }
 
     _addAction(fileInfoContext){
-        CreateDialog(fileInfoContext).modal();
+        CreateDialog(fileInfoContext, this._files.source).modal();
     }
 
     _createAddAction(fileInfo){
@@ -270,7 +110,7 @@ class IDERoot extends HTMLElement {
     }
 
     async showPath(fileInfo, focus){
-        if (!(fileInfo instanceof FileInfo)) throw '!FileInfo:' + fileInfo;
+        if (!(fileInfo instanceof SourceFile)) throw '!SourceFile:' + fileInfo;
 
         const existingPath = this.querySelector('ide-toolbar-path');
 
@@ -334,23 +174,6 @@ class IDERoot extends HTMLElement {
         return this.querySelector('ide-files');
     }
 
-    ready(){
-        this._sessionBase = this.getAttribute("data-session-base-href");
-        this._sessionApiBase = this.getAttribute("data-session-base-api-href");
-
-        {
-            const sel = 'ide-toolbar-item.is-notifications .action';
-            const notifications = this.querySelector(sel);
-            if (!notifications) throw '!' + sel;
-            this._notifications = new Notifications(notifications);
-        }
-
-        this._files.refresh();
-        this._loadAppMeta();
-
-        this.removeAttribute('init');
-    }
-
     closeFile(fileInfo){
         const existing = this.workspace.findFileViewTab(fileInfo);
 
@@ -373,6 +196,32 @@ class IDERoot extends HTMLElement {
 
         work.addViewTab(view.createTab());
     }
+
+    ready(){
+        this._sessionId = this.getAttribute("data-session-id");
+        this._sessionBase = this.getAttribute("data-session-base-href");
+        this._sessionApiBase = this.getAttribute("data-session-base-api-href");
+
+        const that = this;
+        window.addEventListener(SourceChangeSet.SIZE_CHANGE, function(event){
+            if (event.detail.sessionId !== that._sessionId) return;
+            const stats = event.detail.stats;
+            let n = '';
+            if (stats.create) n += '<span class="is-create">' + stats.create + '</span>';
+            if (stats.update) n += '<span class="is-update">' + stats.update + '</span>';
+            if (stats.delete) n += '<span class="is-delete">' + stats.delete + '</span>';
+            if (n.length > 0) n = '<span class="is-changeset-stats-group">' + n + '</span>';
+            that.querySelector('.is-changeset-stats').innerHTML = n;
+        });
+
+        this._files.refresh();
+        this._loadAppMeta();
+
+        this._changeSet = SourceChangeSet.fromLocalStorage(this._sessionId);
+
+        this.removeAttribute('init');
+    }
+
 }
 window.customElements.define('ide-root', IDERoot);
 
@@ -383,6 +232,10 @@ window.customElements.define('ide-root', IDERoot);
 class IDEComponent extends HTMLElement{
     constructor() {
         super();
+    }
+
+    get sessionId(){
+        return this.root.sessionId;
     }
 
     get sessionBase(){
@@ -457,7 +310,7 @@ class Workspace extends IDEComponent {
     }
 
     findFileViewTab(fileInfo){
-        return UITab.Find(this._tabs, View.CreateId(fileInfo));
+        return UITab.find(this._tabs, View.CreateId(fileInfo));
     }
 
     addViewTab(viewTab){

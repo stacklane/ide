@@ -12,6 +12,8 @@
 
 const LINE_HEIGHT_PX = Math.floor(15.6 /* value from line-height in CSS */);
 
+'use strict';
+
 class TextCodeEdit extends HTMLElement{
     constructor(language) {
         super();

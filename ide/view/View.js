@@ -1,22 +1,15 @@
+'use strict';
+
+/*
 function _decodeBase64Unicode(str) {
     // https://attacomsian.com/blog/javascript-base64-encode-decode
     return decodeURIComponent(atob(str).split('').map(function (c) {
         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
-}
-
-class ErrorView extends HTMLElement {
-    constructor(message) {
-        super();
-        let div = document.createElement('div');
-        div.innerText = message;
-        this.appendChild(div);
-    }
-}
-window.customElements.define('ide-view-error', ErrorView);
+}*/
 
 /**
- * Container for "ViewContentBase" implementations.
+ * Container for "ViewContent" implementations.
  */
 class View extends IDEComponent {
 
@@ -28,7 +21,7 @@ class View extends IDEComponent {
 
     constructor(fileInfo) {
         super();
-        if (!(fileInfo instanceof FileInfo)) throw '!FileInfo';
+        if (!(fileInfo instanceof SourceFile)) throw '!SourceFile';
 
         this._fileInfo = fileInfo;
         this._fileId = fileInfo.id;
@@ -54,6 +47,14 @@ class View extends IDEComponent {
         if (this._view) this._view.showFocus();
     }
 
+    remove(){
+        if (this._view instanceof ViewContent){
+            this._view.save();
+        }
+
+        super.remove();
+    }
+
     deactivate(){
         this.active = false;
     }
@@ -69,7 +70,7 @@ class View extends IDEComponent {
         const closer = new UITabCloser();
         closer.classList.add('ide-view-tab-closer');
 
-        const tab = new UITab([title, closer], this);
+        const tab = UITab.create([title, closer], this);
         tab.classList.add('ide-view-tab');
 
         return tab;
@@ -78,26 +79,30 @@ class View extends IDEComponent {
     load(){
         this.loading = true;
 
-        let that = this;
+        const that = this;
 
-        return fetch(this.sessionBase + '/api/files/' + this._fileId + '/data')
+        const changeSetResponse = this.root.sourceChangeSet.readExisting(this._fileInfo);
+
+        const createView = (response)=>{
+            const view = ViewContent.lookup(this._fileInfo, this.root.sourceChangeSet);
+
+            if (!view) throw 'Unable to view: ' + this._fileInfo.path;
+
+            that.appendChild(view);
+            this._view = view;
+            return view.receive(response);
+        };
+
+        if (changeSetResponse.ok) return createView(changeSetResponse);
+
+        return fetch(this.sessionApiBase + '/files/' + this._fileId + '/data')
             .then((response) => {
-                const file = JSON.parse(_decodeBase64Unicode(response.headers.get('X-File')));
-                const fileInfo = new FileInfo(file);
-                const view = LookupView(fileInfo);
-                if (view) {
-                    that.appendChild(view);
-                    this._view = view;
-                    return view.receive(response);
-                } else {
-                    const error = new ErrorView('Unable to view: ' + file.path);
-                    that.appendChild(error);
-                    this._view = error;
-                    return Promise.resolve();
-                }
+                //const file = JSON.parse(_decodeBase64Unicode(response.headers.get('X-File')));
+                //const fileInfo = new SourceFile(file);
+                return createView(response);
             }).catch((e)=>{
                 that.innerHTML = '';
-                const view = new ErrorView('Unable to view: ' + e);
+                const view = new _ErrorView('Unable to view: ' + e);
                 that.appendChild(view);
                 this._view = view;
                 return Promise.resolve();
@@ -106,3 +111,14 @@ class View extends IDEComponent {
 
 }
 window.customElements.define('ide-view', View);
+
+
+class _ErrorView extends HTMLElement {
+    constructor(message) {
+        super();
+        let div = document.createElement('div');
+        div.innerText = message;
+        this.appendChild(div);
+    }
+}
+window.customElements.define('ide-view-error', _ErrorView);

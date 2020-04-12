@@ -17,7 +17,7 @@ ui-modal ui-dialog{
 }
 
 ui-dialog{
-  background: var(--ui-tertiary-background);
+  background: var(--ui-secondary-background);
   color: var(--ui-label);
 
   display: flex;
@@ -25,33 +25,10 @@ ui-dialog{
 
   .ui-dialog-content{
     // Leave fully unstyled for wider implementations
-
-    /**
-     * The following are utilities for common dialog implementations.
-     */
-
-    // TODO this probably doesn't belong here... too specific
-    .ui-dialog-list{
-      display:flex;
-      flex-direction:row;
-
-      //border-bottom-left-radius: $radius;
-
-      > ul{
-        background: var(--ui-secondary-background);
-
-        li{
-          padding: var(--ui-dialog-title-vertical-padding) var(--ui-dialog-title-horizontal-padding);
-        }
-      }
-      > div{
-        border-left: 1px solid var(--ui-separator);
-        padding: var(--ui-dialog-content-padding);
-      }
-    }
   }
 
   .ui-dialog-title{
+    background: var(--ui-tertiary-background);
     padding: var(--ui-dialog-title-vertical-padding) var(--ui-dialog-title-horizontal-padding);
 
     position: relative;
@@ -62,7 +39,7 @@ ui-dialog{
     border-bottom: 1px solid var(--ui-separator);
 
     .ui-dialog-close{
-      @include delete(12px /* must use px */, var(--ui-red), 1px, var(--ui-red));
+      @include delete(14px /* must use px */, var(--ui-red), 1px, var(--ui-red));
 
       position: absolute;
       left: var(--ui-dialog-title-horizontal-padding);

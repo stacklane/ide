@@ -1,3 +1,5 @@
 ui-tab, ui-tab-closer{
   @include unselectable;
+  outline: none;
+  cursor: var(--ui-action-pointer);
 }
