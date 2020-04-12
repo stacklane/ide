@@ -10,7 +10,15 @@
   }
 }
 
-ide-root{
+:root{
+  --ui-workspace-background: var(--ui-background);
+  --ui-workspace-label: var(--ui-label);
+  --ui-workspace-line-num: var(--ui-tertiary-label);
+  --ui-workspace-gutter: var(--ui-background);
+  --ui-workspace-caret-color: var(--ui-blue);
+}
+
+ide-app{
   position: relative;
   display: flex;
   flex-direction: column;
@@ -92,16 +100,19 @@ ide-root{
 
   }
 
+  .ide-workspace{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    flex-grow: 1;
+    overflow: hidden;
+
+    background: var(--ui-workspace-background);
+    color: var(--ui-workspace-label);
+
+    > ide-toolbar{
+      background: var(--ui-workspace-background);
+    }
+  }
 }
 
-ide-notification{
-  &.is-pending:before{
-    content: '⏳ ';
-  }
-  &.is-fulfilled:before{
-    content: '✅ ';
-  }
-  &.is-rejected:before{
-    content: '⚠️ ';
-  }
-}

@@ -47,11 +47,12 @@ class View extends IDEComponent {
         if (this._view) this._view.showFocus();
     }
 
-    remove(){
-        if (this._view instanceof ViewContent){
-            this._view.save();
-        }
+    save(){
+        if (this._view instanceof ViewContent) this._view.save();
+    }
 
+    remove(){
+        this.save();
         super.remove();
     }
 
@@ -97,6 +98,8 @@ class View extends IDEComponent {
 
         return fetch(this.sessionApiBase + '/files/' + this._fileId + '/data')
             .then((response) => {
+                // WARNING: this probably doesn't make sense as-is, because it could lead to file tree source getting out of sync with e.g. current version.
+                //  one possibility however, is that we update the SourceFile's version (at least) when we load the file data.
                 //const file = JSON.parse(_decodeBase64Unicode(response.headers.get('X-File')));
                 //const fileInfo = new SourceFile(file);
                 return createView(response);

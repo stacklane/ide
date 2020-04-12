@@ -37,6 +37,9 @@ class ViewContent extends HTMLElement{
 
     }
 
+    /**
+     * @param {Response}
+     */
     receive(response){
         return Promise.reject(new Error('not implemented: #receive'));
     }

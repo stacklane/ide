@@ -5,13 +5,9 @@ const TOUCH_DEVICE = 'ontouchstart' in document.documentElement;
 const FILE_NODE_CLICK_EVENT = TOUCH_DEVICE ? 'touchstart' : 'dblclick';
 const DOCUMENT_ORDER_TAB_INDEX = '0';
 
-class IDERoot extends HTMLElement {
+class App extends HTMLElement {
     constructor() {
         super();
-    }
-
-    get workspace(){
-        return this.querySelector('ide-workspace');
     }
 
     get sessionId(){
@@ -170,12 +166,18 @@ class IDERoot extends HTMLElement {
         }
     }
 
+    save(){
+        Array.from(this._tabs.children)
+            .filter(e=>e instanceof UITab)
+            .forEach((tab)=>tab.view.save());
+    }
+
     get _files(){
         return this.querySelector('ide-files');
     }
 
     closeFile(fileInfo){
-        const existing = this.workspace.findFileViewTab(fileInfo);
+        const existing = this.findFileViewTab(fileInfo);
 
         if (existing) existing.close();
     }
@@ -184,8 +186,7 @@ class IDERoot extends HTMLElement {
      * @param fileInfo
      */
     openFile(fileInfo){
-        const work = this.workspace;
-        const existing = work.findFileViewTab(fileInfo);
+        const existing = this.findFileViewTab(fileInfo);
 
         if (existing) {
             existing.activate();
@@ -194,13 +195,35 @@ class IDERoot extends HTMLElement {
 
         const view = new View(fileInfo);
 
-        work.addViewTab(view.createTab());
+        this.addViewTab(view.createTab());
+    }
+
+    findFileViewTab(fileInfo){
+        return UITab.find(this._tabs, View.CreateId(fileInfo));
+    }
+
+    addViewTab(viewTab){
+        viewTab.loading = true;
+        viewTab.view.loading = true;
+
+        this._tabs.appendChild(viewTab);
+        this._workspace.appendChild(viewTab.view);
+
+        viewTab.activate();
+
+        viewTab.view.load().then(()=>{
+            viewTab.loading = false;
+            viewTab.view.loading = false;
+        });
     }
 
     ready(){
+        this._workspace = this.querySelector('.ide-workspace');
+        this._tabs = this._workspace.querySelector('ide-toolbar > ide-toolbar-left');
         this._sessionId = this.getAttribute("data-session-id");
         this._sessionBase = this.getAttribute("data-session-base-href");
         this._sessionApiBase = this.getAttribute("data-session-base-api-href");
+        this._autoSave = setTimeout(()=>this.save(), 20000);
 
         const that = this;
         window.addEventListener(SourceChangeSet.SIZE_CHANGE, function(event){
@@ -223,11 +246,10 @@ class IDERoot extends HTMLElement {
     }
 
 }
-window.customElements.define('ide-root', IDERoot);
+window.customElements.define('ide-app', App);
 
 /**
- * Superclass which provides simple implementation specific #loading #active,
- * and other environment related utilities.
+ * Superclass which provides simple environment related utilities.
  */
 class IDEComponent extends HTMLElement{
     constructor() {
@@ -248,7 +270,7 @@ class IDEComponent extends HTMLElement{
 
     get root(){
         if (this._root) return this._root;
-        this._root = this.closest('ide-root');
+        this._root = this.closest('ide-app');
         return this._root;
     }
 
@@ -271,66 +293,4 @@ class IDEComponent extends HTMLElement{
     }
 }
 
-class Toolbar extends HTMLElement{
-    constructor() {
-        super();
-    }
-}
-window.customElements.define('ide-toolbar', Toolbar);
 
-class ToolbarLeft extends HTMLElement{
-    constructor() {
-        super();
-    }
-}
-window.customElements.define('ide-toolbar-left', ToolbarLeft);
-class ToolbarRight extends HTMLElement{
-    constructor() {
-        super();
-    }
-}
-window.customElements.define('ide-toolbar-right', ToolbarRight);
-class ToolbarItem extends HTMLElement{
-    constructor() {
-        super();
-    }
-}
-window.customElements.define('ide-toolbar-item', ToolbarItem);
-
-class Tabs extends HTMLElement{
-    constructor() {
-        super();
-    }
-}
-window.customElements.define('ide-tabs', Tabs);
-
-class Workspace extends IDEComponent {
-    constructor() {
-        super();
-    }
-
-    findFileViewTab(fileInfo){
-        return UITab.find(this._tabs, View.CreateId(fileInfo));
-    }
-
-    addViewTab(viewTab){
-        viewTab.loading = true;
-        viewTab.view.loading = true;
-
-        this._tabs.appendChild(viewTab);
-        this.appendChild(viewTab.view);
-
-        viewTab.activate();
-
-        viewTab.view.load().then(()=>{
-            viewTab.loading = false;
-            viewTab.view.loading = false;
-        });
-    }
-
-    connectedCallback(){
-        this._tabs = this.querySelector('ide-toolbar > ide-toolbar-left');
-        if (!this._tabs) throw '!workspace.tabs';
-    }
-}
-window.customElements.define('ide-workspace', Workspace);

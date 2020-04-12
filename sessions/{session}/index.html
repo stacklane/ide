@@ -40,7 +40,7 @@
 <body>
 
 {{! Init basic structure for startup styling and 'defer' }}
-<ide-root class="ide-stack-column" init
+<ide-app class="ide-stack-column" init
             data-session-id="{{session.id}}"
             data-session-base-href="/sessions/{{session.id}}"
             data-session-base-api-href="/sessions/{{session.id}}/api">
@@ -63,15 +63,15 @@
     </ide-toolbar>
     <main class="ide-stack-row">
         <ide-files></ide-files>
-        <ide-workspace class="ide-stack-column">
+        <div class="ide-workspace ide-stack-column">
             <ide-toolbar>
                 <ide-toolbar-left></ide-toolbar-left>
                 <ide-toolbar-right></ide-toolbar-right>
             </ide-toolbar>
             <div class="ide-init-indicator"><div></div><div></div><div></div><div></div></div>
-        </ide-workspace>
+        </div>
     </main>
-</ide-root>
+</ide-app>
 
 {{! With 'defer', ordering matters }}
 
@@ -82,8 +82,9 @@
 <script defer src="/ide/source/SourceFile.js"></script>
 <script defer src="/ide/source/SourceChangeSet.js"></script>
 
-<script defer src="/ide/root.js"></script>
-<script defer src="/ide/files.js"></script>
+<script defer src="/ide/App.js"></script>
+<script defer src="/ide/Toolbar.js"></script>
+<script defer src="/ide/Files.js"></script>
 
 <script defer src="/ide/view/View.js"></script>
 <script defer src="/ide/view/ViewContent.js"></script>
@@ -96,7 +97,7 @@
 <script defer src="/ide/create/model.js"></script>
 <script defer src="/ide/create/controller.js"></script>
 
-<script defer src="/ide/finish.js"></script>
+<script defer src="/ide/AppFinish.js"></script>
 
 </body>
 </html>
