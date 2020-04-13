@@ -69,7 +69,6 @@ class HTMLViewCreator extends EmojiCreator{
             view.appendChild(error);
         }
 
-
         return view;
     }
 }

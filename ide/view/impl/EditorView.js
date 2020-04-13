@@ -10,8 +10,11 @@ class EditorView extends ViewContent{
     }
 
     save(){
-        // TODO only do this if change/dirty
-        this.sourceChangeSet.update(this.sourceFile, this._content.value);
+        if (this._content.isDirty) {
+            this.sourceChangeSet
+                .update(this.sourceFile, this._content.value)
+                .then(()=>this._content.resetDirty());
+        }
     }
 
     /**

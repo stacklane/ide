@@ -24,6 +24,7 @@ class TextCodeEdit extends HTMLElement{
         gutter.classList.add('text-code-edit-gutter');
         this.appendChild(gutter);
         this._gutter = gutter;
+        this._dirty = false;
 
         this._retainIdentation = true;
 
@@ -44,7 +45,11 @@ class TextCodeEdit extends HTMLElement{
         const that = this;
         this._area.addEventListener('input', function( event ) { that._refreshSize();});
         this._area.addEventListener('keydown', function( event ) { that._keyDownHandler(event);});
-        this._area.addEventListener('keyup', function(event){ that._refreshLineNum()});
+        this._area.addEventListener('keyup', function(event){
+            that._dirty = true;
+            that._refreshLineNum()}
+        );
+        this._area.addEventListener('change', function(){that._dirty = true});
         this._area.addEventListener('mouseup', function(event){ that._refreshLineNum()});
         // needs work: this._area.addEventListener('focus', function(event){ that._refreshLineNum()});
 
@@ -53,6 +58,14 @@ class TextCodeEdit extends HTMLElement{
 
     showFocus(){
         this._area.focus({preventScroll:true});
+    }
+
+    get isDirty(){
+        return this._dirty;
+    }
+
+    resetDirty(){
+        this._dirty = false;
     }
 
     get value(){

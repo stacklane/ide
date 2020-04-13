@@ -223,7 +223,7 @@ class App extends HTMLElement {
         this._sessionId = this.getAttribute("data-session-id");
         this._sessionBase = this.getAttribute("data-session-base-href");
         this._sessionApiBase = this.getAttribute("data-session-base-api-href");
-        this._autoSave = setTimeout(()=>this.save(), 20000);
+        this._autoSave = setInterval(()=>this.save(), 20000);
 
         const that = this;
         window.addEventListener(SourceChangeSet.SIZE_CHANGE, function(event){

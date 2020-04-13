@@ -33,15 +33,9 @@ class Source{
 
     applyChanges(changeSet){
         changeSet.all().forEach((change)=>{
-
-            // TODO for CREATE/UPDATE we are probably going to need to use FileInfo#data
-
             if (change.type === SourceChangeSet.DELETE){
                 this._files = this._files.filter((f)=>f.path !== change.path);
-            } else {
-                throw 'unsupported: ' + change.type;
             }
-
         });
 
         return this;
