@@ -1,10 +1,10 @@
 'use strict';
 
-const AddAvailableCreators = (selectedFileInfo, source, sourceChangeSet, all, available, unavailable)=>{
+const _AddAvailableCreators = (sourceContext, all, available, unavailable)=>{
     let didGroup = false;
 
     all.forEach((creator)=>{
-        const instance = new creator(selectedFileInfo, source, sourceChangeSet);
+        const instance = new creator(sourceContext);
         if (instance.applicable) {
             if (!didGroup) {
                 available.push(instance.group);
@@ -17,13 +17,13 @@ const AddAvailableCreators = (selectedFileInfo, source, sourceChangeSet, all, av
     });
 };
 
-const LookupAvailableCreators = (selectedFileInfo, source, sourceChangeSet)=>{
+const _LookupAvailableCreators = (sourceContext)=>{
     const available = [];
     const unavailable = [];
 
-    AddAvailableCreators(selectedFileInfo, source, sourceChangeSet, VIEW_CREATORS, available, unavailable);
-    AddAvailableCreators(selectedFileInfo, source, sourceChangeSet, CONTROLLER_CREATORS, available, unavailable);
-    AddAvailableCreators(selectedFileInfo, source, sourceChangeSet, MODEL_CREATORS, available, unavailable);
+    _AddAvailableCreators(sourceContext, VIEW_CREATORS, available, unavailable);
+    _AddAvailableCreators(sourceContext, CONTROLLER_CREATORS, available, unavailable);
+    _AddAvailableCreators(sourceContext, MODEL_CREATORS, available, unavailable);
 
     if (unavailable.length > 0){
         available.push('Not Applicable')
@@ -33,7 +33,7 @@ const LookupAvailableCreators = (selectedFileInfo, source, sourceChangeSet)=>{
     return available;
 };
 
-const CreateDialog = (selectedFileInfo, source, sourceChangeSet)=>{
+const CreatorDialog = (sourceContext)=>{
     const panel = document.createElement('div');
     panel.classList.add('ide-create-dialog-panel');
 
@@ -45,7 +45,7 @@ const CreateDialog = (selectedFileInfo, source, sourceChangeSet)=>{
     views.classList.add('ide-create-dialog-panel-views');
     panel.appendChild(views);
 
-    LookupAvailableCreators(selectedFileInfo, source, sourceChangeSet).forEach((available)=>{
+    _LookupAvailableCreators(sourceContext).forEach((available)=>{
         if (typeof available === 'string'){
             const category = document.createElement('h2');
             category.innerText = available;
@@ -80,27 +80,29 @@ const CreateDialog = (selectedFileInfo, source, sourceChangeSet)=>{
 /**
  * Base class for encapsulating new file creation logic.
  */
-class CreateBase {
-    constructor(selectedFileInfo, source, sourceChangeSet) {
-        this._selectedFileInfo = selectedFileInfo;
-        this._source = source;
-        this._sourceChangeSet = sourceChangeSet;
+class Creator {
+    constructor(sourceContext) {
+        this._context = sourceContext;
     }
 
     get applicable(){
         return true;
     }
 
+    get context(){
+        return this._context;
+    }
+
     get sourceChangeSet(){
-        return this._sourceChangeSet;
+        return this._context.changes;
     }
 
     get source(){
-        return this._source;
+        return this._context.source;
     }
 
     get selected(){
-        return this._selectedFileInfo;
+        return this._context.file;
     }
 
     /**
@@ -147,10 +149,10 @@ class CreateBase {
     }
 }
 
-class EmojiCreator extends CreateBase{
-    constructor(selectedFileInfo, source, sourceChangeSet, emojiIcon, name, group, groupName){
-        super(selectedFileInfo, source, sourceChangeSet);
-        this._icon = new UIIcon(emojiIcon);
+class CreatorImpl extends Creator{
+    constructor(sourceContext, icon, name, group, groupName){
+        super(sourceContext);
+        this._icon = icon instanceof UIIcon ? icon : new UIIcon(icon);
         this._name = name;
         this._group = group;
         this._groupName = groupName;
@@ -171,5 +173,4 @@ class EmojiCreator extends CreateBase{
     get groupName(){
         return this._groupName ? this._groupName : this.name;
     }
-
 }

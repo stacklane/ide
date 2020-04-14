@@ -19,22 +19,16 @@ class View extends AppComponent {
 
     static get observedAttributes() { return [UITab.ActivatedAttribute]; }
 
-    constructor(fileInfo) {
+    constructor(sourceContext) {
         super();
-        if (!(fileInfo instanceof SourceFile)) throw '!SourceFile';
 
-        this._fileInfo = fileInfo;
-        this._fileId = fileInfo.id;
-        this._filePath = fileInfo.path;
+        this._context = sourceContext;
 
-        this.id = View.createId(fileInfo);
-
-        const that = this;
-        this.addEventListener('focus' /* TBD, 'focusin' bubbles */, ()=>that.activate);
+        this.id = View.createId(sourceContext.file);
     }
 
     toString(){
-        return 'View[' + this.path + ']';
+        return 'View[' + this._context.file.path + ']';
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -45,19 +39,21 @@ class View extends AppComponent {
         }
     }
 
+    get path(){
+        return this._context.file.path;
+    }
+
     get file(){
-        return this._fileInfo;
+        return this._context.file;
     }
 
     activate(){
-        console.log('activate: ' + this._fileInfo.path);
         this.active = true;
-        this.root.showPath(this._fileInfo);
+        this.root.showPath(this._context.file);
         if (this._view) this._view.showFocus();
     }
 
     deactivate(){
-        console.log('deactivate: ' + this._fileInfo.path);
         this.active = false;
     }
 
@@ -68,10 +64,6 @@ class View extends AppComponent {
     remove(){
         this.save();
         super.remove();
-    }
-
-    get path(){
-        return this._filePath;
     }
 
     createTab(title, closeable){
@@ -93,23 +85,23 @@ class View extends AppComponent {
         this.loading = true;
 
         const createView = (response)=>{
-            const view = ViewContent.lookup(this._fileInfo, this.root.sourceChangeSet);
+            const view = ViewContent.lookup(this._context);
 
-            if (!view) throw 'Unable to view: ' + this._fileInfo.path;
+            if (!view) throw 'Unable to view: ' + this._context.file.path;
 
             this.appendChild(view);
             this._view = view;
             return view.receive(response);
         };
 
-        if (this._fileInfo.isDir){
+        if (this._context.file.isDir){
             return createView(null);
         }
 
-        const changeSetResponse = this.root.sourceChangeSet.readExisting(this._fileInfo);
+        const changeSetResponse = this.root.sourceChangeSet.readExisting(this._context.file);
         if (changeSetResponse.ok) return createView(changeSetResponse);
 
-        return this.root.api.readData(this._fileId)
+        return this.root.api.readData(this._context.file.id)
             .then((response) => {
                 // WARNING: this probably doesn't make sense as-is, because it could lead to file tree source getting out of sync with e.g. current version.
                 //  one possibility however, is that we update the SourceFile's version (at least) when we load the file data.

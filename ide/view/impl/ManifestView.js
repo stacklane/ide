@@ -1,8 +1,8 @@
 'use strict';
 
 class ManifestView extends ViewContent{
-    constructor(sourceFile, sourceChangeSet) {
-        super(sourceFile, sourceChangeSet);
+    constructor(sourceContext) {
+        super(sourceContext);
         const content = document.createElement('div');
         this.appendChild(content);
     }

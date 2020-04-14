@@ -36,8 +36,8 @@ class App extends HTMLElement {
         this._appName = name;
     }
 
-    showCreateDialog(fileInfoContext){
-        CreateDialog(fileInfoContext, this._source, this._changeSet).modal();
+    showCreatorDialog(sourceFile){
+        CreatorDialog(this.newSourceContext(sourceFile)).modal();
     }
 
     async showPath(sourceFile, focus){
@@ -56,9 +56,10 @@ class App extends HTMLElement {
         if (existing) existing.close();
     }
 
-    /**
-     * @param sourceFile
-     */
+    newSourceContext(sourceFile){
+        return new SourceContext(sourceFile, this.source, this.sourceChangeSet);
+    }
+
     showView(sourceFile){
         const existing = this.findFileViewTab(sourceFile);
 
@@ -76,7 +77,7 @@ class App extends HTMLElement {
             title.innerText = sourceFile.display + ' ';
         }
 
-        const view = new View(sourceFile);
+        const view = new View(this.newSourceContext(sourceFile));
         const viewTab = view.createTab(title, !sourceFile.isRoot);
 
         viewTab.loading = true;
@@ -298,7 +299,7 @@ class AppToolbarUtil{
             addActionPathItem.classList.add('has-menu-action', 'is-action-add');
             addActionPathItem.setAttribute('tabindex', '0');
             addActionPathItem.innerText = ' ';
-            addActionPathItem.addEventListener('click', ()=>this._app.showCreateDialog(sourceFile));
+            addActionPathItem.addEventListener('click', ()=>this._app.showCreatorDialog(sourceFile));
             newPath.appendChild(addActionPathItem);
         }
 
@@ -370,7 +371,7 @@ class AppToolbarUtil{
         const add = document.createElement('li');
         add.classList.add('is-action-add');
         add.innerText = 'New...';
-        add.addEventListener('click', ()=>this._app.showCreateDialog(fileInfo));
+        add.addEventListener('click', ()=>this._app.showCreatorDialog(fileInfo));
         return add;
     }
 }

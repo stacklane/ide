@@ -3,32 +3,36 @@
  * Superclass for SourceFile-based views.
  */
 class ViewContent extends HTMLElement{
-    static lookup(sourceFile, sourceChangeSet){
-        if (sourceFile.isRoot){
-            return new RootView(sourceFile, sourceChangeSet);
-        } else if (sourceFile.isManifest){
-            return new ManifestView(sourceFile, sourceChangeSet);
+    static lookup(sourceContext){
+        const file = sourceContext.file;
+        if (file.isRoot){
+            return new RootView(sourceContext);
+        } else if (file.isManifest){
+            return new ManifestView(sourceContext);
         } else {
-            return new EditorView(sourceFile, sourceChangeSet);
+            return new EditorView(sourceContext);
         }
     }
 
-    constructor(sourceFile, sourceChangeSet) {
+    constructor(sourceContext) {
         super();
-        this._fileInfo = sourceFile;
-        this._sourceChangeSet = sourceChangeSet;
+        this._context = sourceContext;
+    }
+
+    get context(){
+        return this._context;
     }
 
     get sourceChangeSet(){
-        return this._sourceChangeSet;
+        return this._context.changes;
     }
 
     get sourceFile(){
-        return this._fileInfo;
+        return this._context.file;
     }
 
     get fileInfo(){
-        return this._fileInfo;
+        return this.sourceFile;
     }
 
     showFocus(){

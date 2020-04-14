@@ -1,7 +1,7 @@
 'use strict';
 class RootView extends ViewContent{
-    constructor(sourceFile, sourceChangeSet) {
-        super(sourceFile, sourceChangeSet);
+    constructor(sourceContext) {
+        super(sourceContext);
     }
 
     receive(){

@@ -15,7 +15,6 @@ ide-toolbar{
   --ui-menu-shadow: var(--ui-secondary-background-shadow);
   --ui-menu-speed: var(--ui-speed);
 
-
   flex-shrink:0;
 
   align-items: stretch;// center;
@@ -84,22 +83,26 @@ ide-toolbar{
         background: var(--ui-tertiary-background);
         border-radius: $radius-rounded;
         display: flex;
-        padding: 0em .5em;
-      }
+        padding: 0em .25em;
 
-      .is-create, .is-update, .is-delete{
-        display:flex;
-        padding: 0em .5em;
-      }
+        > span{
+          display:flex;
+          padding: 0em .5em;
 
-      .is-create{
-        color: var(--ui-green);
-      }
-      .is-update{
-        color: var(--ui-yellow);
-      }
-      .is-delete{
-        color: var(--ui-red);
+          + span{
+            border-left: 1px solid var(--ui-separator);
+          }
+        }
+
+        .is-create{
+          color: var(--ui-green);
+        }
+        .is-update{
+          color: var(--ui-yellow);
+        }
+        .is-delete{
+          color: var(--ui-red);
+        }
       }
 
       &:empty{

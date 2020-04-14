@@ -8,9 +8,9 @@ const CONTROLLER_GROUP = "Logic";
  *
  *      HTML vs JS supplier option
  */
-class SupplierCreator extends EmojiCreator{
-    constructor(selectedFileInfo, source, sourceChangeSet) {
-        super(selectedFileInfo, source, sourceChangeSet, '📤', 'Supplier', CONTROLLER_GROUP);
+class SupplierCreator extends CreatorImpl{
+    constructor(sourceContext) {
+        super(sourceContext, '📤', 'Supplier', CONTROLLER_GROUP);
     }
 
     createView(){
@@ -24,9 +24,9 @@ class SupplierCreator extends EmojiCreator{
 /**
  * TODO 'method' .. and maybe some import option?
  */
-class GETJavaScriptCreator extends EmojiCreator{
-    constructor(selectedFileInfo, source, sourceChangeSet) {
-        super(selectedFileInfo, source, sourceChangeSet, '🖥', 'GET Action', CONTROLLER_GROUP, 'GET');
+class GETJavaScriptCreator extends CreatorImpl{
+    constructor(sourceContext) {
+        super(sourceContext, '🖥', 'GET Action', CONTROLLER_GROUP, 'GET');
     }
 
     createView(){
@@ -36,9 +36,9 @@ class GETJavaScriptCreator extends EmojiCreator{
     }
 }
 
-class POSTJavaScriptCreator extends EmojiCreator{
-    constructor(selectedFileInfo, source, sourceChangeSet) {
-        super(selectedFileInfo, source, sourceChangeSet, '📮', 'POST Action', CONTROLLER_GROUP, 'POST');
+class POSTJavaScriptCreator extends CreatorImpl{
+    constructor(sourceContext) {
+        super(sourceContext, '📮', 'POST Action', CONTROLLER_GROUP, 'POST');
     }
 
     createView(){
@@ -48,9 +48,9 @@ class POSTJavaScriptCreator extends EmojiCreator{
     }
 }
 
-class DELETEJavaScriptCreator extends EmojiCreator{
-    constructor(selectedFileInfo, source, sourceChangeSet) {
-        super(selectedFileInfo, source, sourceChangeSet, '❌', 'DELETE Action', CONTROLLER_GROUP, 'DELETE');
+class DELETEJavaScriptCreator extends CreatorImpl{
+    constructor(sourceContext) {
+        super(sourceContext, '❌', 'DELETE Action', CONTROLLER_GROUP, 'DELETE');
     }
 
     createView(){

@@ -6,7 +6,7 @@ const VIEW_GROUP = "View";
 /**
  * TODO mustache by default.. find a 'super' as an option?
  */
-class HTMLViewCreator extends EmojiCreator{
+class HTMLViewCreator extends CreatorImpl{
     static _template() { return `
 <blockquote>
     An HTML view, using Mustache or plain HTML.
@@ -35,22 +35,21 @@ class HTMLViewCreator extends EmojiCreator{
 </footer>
     `};
 
-    constructor(selectedFileInfo, source, sourceChangeSet) {
-        super(selectedFileInfo, source, sourceChangeSet, 'H', 'HTML View', VIEW_GROUP, 'HTML');
-        this._dirInfo = selectedFileInfo;
+    constructor(sourceContext) {
+        super(sourceContext, 'H', 'HTML View', VIEW_GROUP, 'HTML');
     }
 
     get applicable(){
-        return this._dirInfo.isEndpointAllowed();
+        return this.selected.isEndpointAllowed();
     }
 
     createView(){
         const view = Elements.div().classes('ide-create-dialog-standard-view').create();
 
-        if (this._dirInfo.isEndpointAllowed()){
+        if (this.selected.isEndpointAllowed()){
             view.innerHTML = HTMLViewCreator._template();
 
-            view.querySelector('.current-dir').innerText = 'Directory: ' + this._dirInfo.path;
+            view.querySelector('.current-dir').innerText = 'Directory: ' + this.selected.path;
 
             const error = view.querySelector('.is-error');
             const input = view.querySelector('input[name="name"]');
@@ -78,9 +77,9 @@ class HTMLViewCreator extends EmojiCreator{
     }
 }
 
-class ImageUploadCreator extends EmojiCreator{
-    constructor(selectedFileInfo, source, sourceChangeSet) {
-        super(selectedFileInfo, source, sourceChangeSet, '🌇', 'Image', VIEW_GROUP);
+class ImageUploadCreator extends CreatorImpl{
+    constructor(sourceContext) {
+        super(sourceContext, '🌇', 'Image', VIEW_GROUP);
     }
 
     createView(){
@@ -90,9 +89,9 @@ class ImageUploadCreator extends EmojiCreator{
     }
 }
 
-class SCSSCreator extends EmojiCreator{
-    constructor(selectedFileInfo, source, sourceChangeSet) {
-        super(selectedFileInfo, source, sourceChangeSet, 'S', 'SCSS', VIEW_GROUP);
+class SCSSCreator extends CreatorImpl{
+    constructor(sourceContext) {
+        super(sourceContext, 'S', 'SCSS', VIEW_GROUP);
     }
 
     createView(){
@@ -102,9 +101,9 @@ class SCSSCreator extends EmojiCreator{
     }
 }
 
-class ClientSideJavaScriptCreator extends EmojiCreator{
-    constructor(selectedFileInfo, source, sourceChangeSet) {
-        super(selectedFileInfo, source, sourceChangeSet, 'J', 'JavaScript', VIEW_GROUP);
+class ClientSideJavaScriptCreator extends CreatorImpl{
+    constructor(sourceContext) {
+        super(sourceContext, 'J', 'JavaScript', VIEW_GROUP);
     }
 
     createView(){
@@ -117,9 +116,9 @@ class ClientSideJavaScriptCreator extends EmojiCreator{
 /**
  * TODO name of path param, and the type... model or options (draw from existing models)
  */
-class DynamicPathCreator extends EmojiCreator{
-    constructor(selectedFileInfo, source, sourceChangeSet) {
-        super(selectedFileInfo, source, sourceChangeSet,'🔗', 'Dynamic Path');
+class DynamicPathCreator extends CreatorImpl{
+    constructor(sourceContext) {
+        super(sourceContext,'🔗', 'Dynamic Path');
     }
 
     createView(){

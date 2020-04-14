@@ -4,9 +4,9 @@
  * TBD... see other notes... on where settings should exist.
  */
 
-class UserSettingsCreator extends EmojiCreator{
-    constructor(selectedFileInfo, source, sourceChangeSet) {
-        super(selectedFileInfo, source, sourceChangeSet, '👤', 'User Settings');
+class UserSettingsCreator extends CreatorImpl{
+    constructor(sourceContext) {
+        super(sourceContext, '👤', 'User Settings');
     }
 
     createView(){
@@ -22,9 +22,9 @@ class UserSettingsCreator extends EmojiCreator{
  *       could be hardcoded as a static model, and then fetched... basically somewhat of things to come.
  *       - and it will append to an existing connector config if it exists, or create a new one.
  */
-class ConnectorCreator extends EmojiCreator{
-    constructor(selectedFileInfo, source, sourceChangeSet) {
-        super(selectedFileInfo, source, sourceChangeSet, '🔌', 'Connector');
+class ConnectorCreator extends CreatorImpl{
+    constructor(sourceContext) {
+        super(sourceContext, '🔌', 'Connector');
     }
 
     createView(){
