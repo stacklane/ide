@@ -45,6 +45,10 @@ class View extends AppComponent {
         }
     }
 
+    get file(){
+        return this._fileInfo;
+    }
+
     activate(){
         console.log('activate: ' + this._fileInfo.path);
         this.active = true;

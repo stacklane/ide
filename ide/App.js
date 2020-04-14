@@ -116,6 +116,31 @@ class App extends HTMLElement {
         this._toolbarUtil = new AppToolbarUtil(this);
         this._toolbarUtil.updateChangeStats();
 
+        /**
+         * document.title update based on active View
+         */
+        {
+            const that = this;
+            that.addEventListener(UITab.ChangeEventName, function(event){
+                event.stopPropagation();
+                let title = 'Stacklane IDE';
+                if (that._appName){
+                    title += ' - ' + that._appName;
+                    if (event.detail.tab &&
+                        event.detail.tab.view instanceof View &&
+                        event.detail.tab.view.file) {
+                        const file = event.detail.tab.view.file;
+                        if (file.parts.length <= 2){
+                            title += ' - ' + file.path;
+                        } else {
+                            title += ' - ../' + file.parts.splice(file.parts.length - 2).join('/');
+                        }
+                    }
+                }
+                document.title = title;
+            });
+        }
+
         this.api.readMeta()
             .then((json)=>this.updateAppName(json.name))
             .then(()=>this._api.readSource())
