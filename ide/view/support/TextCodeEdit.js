@@ -80,7 +80,7 @@ class TextCodeEdit extends HTMLElement{
     get _currentLineAndColumn(){
         try {
             const ta = this._area;
-            const lines = ta.value.substr(0, ta.selectionStart).split("\n");
+            const lines = ta.value.substring(0, ta.selectionStart).split("\n");
             const column = lines[lines.length-1].length;
             return [lines.length, column];
         } catch (t){

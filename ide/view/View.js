@@ -48,6 +48,7 @@ class View extends AppComponent {
     }
 
     activate(){
+        // TBD if not done right, this will create kind of double work: window.location.hash = this.file.path;
         this.active = true;
         this.root.showPath(this._context.file);
         if (this._view) this._view.showFocus();

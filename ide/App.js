@@ -124,7 +124,7 @@ class App extends HTMLElement {
             const that = this;
             that.addEventListener(UITab.ChangeEventName, function(event){
                 event.stopPropagation();
-                let title = 'Stacklane IDE';
+                let title = 'Stacklane';
                 if (that._appName){
                     title += ' - ' + that._appName;
                     if (event.detail.tab &&
@@ -150,12 +150,21 @@ class App extends HTMLElement {
                 this._source.watchChanges(this._changeSet);
                 this._source.addListener((command)=>this._listenSourceChange(command));
             })
-            .then(()=>this.showPath(SourceFile.root()))
             .then(()=>this.showView(SourceFile.root()))
-            .then(()=>{
-                this.removeAttribute('init')
-            });
+            .then(()=>this.removeAttribute('init'));
 
+        /*
+        window.addEventListener('hashchange', ()=>{
+            console.log(window.location.hash);
+
+            if (window.location.hash.startsWith('#/')){
+                const path = decodeURIComponent(window.location.hash.substring(1));
+                console.log(path);
+                const found = this.source.find(path);
+                if (found) this.showView(found);
+                console.log('f: ' + found);
+            }
+        });*/
 
         {
             const that = this;
@@ -187,6 +196,10 @@ class AppComponent extends HTMLElement{
 
     get sessionApiBase(){
         return this.root.sessionApiBase;
+    }
+
+    get app(){
+        return this.root;
     }
 
     get root(){

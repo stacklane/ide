@@ -1,0 +1,69 @@
+
+ide-view-root{
+  $grid-item-spacing: 1em;
+  $grid-item-padding: 1em;
+  $margin-bottom: .75rem;
+
+  padding: 2rem;
+
+  overflow: auto; // TODO test
+
+  * + h2{
+    margin-top: 1.5rem;
+  }
+
+  h2{
+    font-size: 1.25rem;
+    font-weight: $weight-semibold;
+    margin-bottom: .75rem;
+  }
+
+  div.is-file-grid{
+    // https://css-tricks.com/auto-sizing-columns-css-grid-auto-fill-vs-auto-fit/
+    display:grid;
+    //grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(20em, 20em));
+    //margin: -$grid-item-spacing 0 0 -$grid-item-spacing;
+    margin: -$grid-item-spacing;
+
+    > div.is-file-item{
+      @include unselectable;
+
+      overflow:hidden;
+
+      cursor: var(--ui-action-pointer);
+
+      margin: $grid-item-spacing;
+      padding: $grid-item-padding;
+      background: var(--ui-secondary-fill);
+      border-radius: $radius;
+
+      &:hover{
+        background: var(--ui-tertiary-fill);
+      }
+      &:active{
+        background: var(--ui-quaternary-fill);
+      }
+    }
+  }
+
+
+  /*
+  .row{
+    display: flex;
+    margin: -1em 0 0 -1em;
+    align-items: center;
+
+    .column{
+      padding: 1em 0 0 1em;
+      flex: 0 0 100%;
+      align-self: center;
+    }
+  }
+
+  @media (min-width: 48em) {
+    .row .column {
+      flex: 1;
+    }
+  }*/
+}

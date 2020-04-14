@@ -2,7 +2,7 @@
 /**
  * Superclass for SourceFile-based views.
  */
-class ViewContent extends HTMLElement{
+class ViewContent extends AppComponent{
     static lookup(sourceContext){
         const file = sourceContext.file;
         if (file.isRoot){

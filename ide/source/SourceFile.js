@@ -50,7 +50,7 @@ class SourceFile {
         } else {
             this._parts = p.slice(1); // skip the root slash
             this._name = this._parts[this._parts.length - 1];
-            this._extension = this._name.substr(this._name.lastIndexOf('.') + 1);
+            this._extension = this._name.substring(this._name.lastIndexOf('.') + 1);
         }
 
         this._displayParts = this._parts;
@@ -86,6 +86,18 @@ class SourceFile {
 
     get isManifest(){
         return this.path === '/🎛.yaml';
+    }
+
+    get isManifestIcon(){
+        return this.path === '/🎛.svg';
+    }
+
+    get isProperties(){
+        return this.path === '/🎨.yaml';
+    }
+
+    get isSettings(){
+        return this.isManifest || this.isManifestIcon || this.isProperties;
     }
 
     get isDeletable(){
@@ -196,7 +208,7 @@ class SourceFile {
 
     isParameter(){
         return this.isDir && this.name.startsWith("{") && this.name.endsWith("}") &&
-            Validation.lowerCaseCamel(this.name.substr(1, this.name.length - 2));
+            Validation.lowerCaseCamel(this.name.substring(1, this.name.length - 2));
     }
 
     isUID(){

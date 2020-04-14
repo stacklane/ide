@@ -36,6 +36,13 @@ class Source{
         return this._files;
     }
 
+    find(path){
+        for (let i = 0; i < this._files.length; i++){
+            if (this._files[i].path === path) return this._files[i];
+        }
+        return null;
+    }
+
     /**
      * Direct children of any type: {SourceFile#isFile} and {SourceFile#isDir}.
      */
