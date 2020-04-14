@@ -35,8 +35,8 @@ class HTMLViewCreator extends EmojiCreator{
 </footer>
     `};
 
-    constructor(selectedFileInfo, source) {
-        super(selectedFileInfo, source, 'H', 'HTML View', VIEW_GROUP, 'HTML');
+    constructor(selectedFileInfo, source, sourceChangeSet) {
+        super(selectedFileInfo, source, sourceChangeSet, 'H', 'HTML View', VIEW_GROUP, 'HTML');
         this._dirInfo = selectedFileInfo;
     }
 
@@ -54,6 +54,7 @@ class HTMLViewCreator extends EmojiCreator{
 
             const error = view.querySelector('.is-error');
             const input = view.querySelector('input[name="name"]');
+            const button = view.querySelector('button');
 
             input.addEventListener('keyup', function(event){
                 if (!Validation.uid(input.value)){
@@ -62,6 +63,10 @@ class HTMLViewCreator extends EmojiCreator{
                 } else {
                     error.innerText = '';
                 }
+            });
+
+            button.addEventListener('click', function(event){
+
             });
         } else {
             const error = Elements.div()
@@ -74,8 +79,8 @@ class HTMLViewCreator extends EmojiCreator{
 }
 
 class ImageUploadCreator extends EmojiCreator{
-    constructor(selectedFileInfo, source) {
-        super(selectedFileInfo, source, '🌇', 'Image', VIEW_GROUP);
+    constructor(selectedFileInfo, source, sourceChangeSet) {
+        super(selectedFileInfo, source, sourceChangeSet, '🌇', 'Image', VIEW_GROUP);
     }
 
     createView(){
@@ -86,8 +91,8 @@ class ImageUploadCreator extends EmojiCreator{
 }
 
 class SCSSCreator extends EmojiCreator{
-    constructor(selectedFileInfo, source) {
-        super(selectedFileInfo, source, 'S', 'SCSS', VIEW_GROUP);
+    constructor(selectedFileInfo, source, sourceChangeSet) {
+        super(selectedFileInfo, source, sourceChangeSet, 'S', 'SCSS', VIEW_GROUP);
     }
 
     createView(){
@@ -98,8 +103,8 @@ class SCSSCreator extends EmojiCreator{
 }
 
 class ClientSideJavaScriptCreator extends EmojiCreator{
-    constructor(selectedFileInfo, source) {
-        super(selectedFileInfo, source, 'J', 'JavaScript', VIEW_GROUP);
+    constructor(selectedFileInfo, source, sourceChangeSet) {
+        super(selectedFileInfo, source, sourceChangeSet, 'J', 'JavaScript', VIEW_GROUP);
     }
 
     createView(){
@@ -113,8 +118,8 @@ class ClientSideJavaScriptCreator extends EmojiCreator{
  * TODO name of path param, and the type... model or options (draw from existing models)
  */
 class DynamicPathCreator extends EmojiCreator{
-    constructor(selectedFileInfo, source) {
-        super(selectedFileInfo, source, '🔗', 'Dynamic Path');
+    constructor(selectedFileInfo, source, sourceChangeSet) {
+        super(selectedFileInfo, source, sourceChangeSet,'🔗', 'Dynamic Path');
     }
 
     createView(){

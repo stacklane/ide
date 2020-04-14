@@ -9,8 +9,8 @@ const CONTROLLER_GROUP = "Logic";
  *      HTML vs JS supplier option
  */
 class SupplierCreator extends EmojiCreator{
-    constructor(selectedFileInfo, source) {
-        super(selectedFileInfo, source, '📤', 'Supplier', CONTROLLER_GROUP);
+    constructor(selectedFileInfo, source, sourceChangeSet) {
+        super(selectedFileInfo, source, sourceChangeSet, '📤', 'Supplier', CONTROLLER_GROUP);
     }
 
     createView(){
@@ -25,8 +25,8 @@ class SupplierCreator extends EmojiCreator{
  * TODO 'method' .. and maybe some import option?
  */
 class GETJavaScriptCreator extends EmojiCreator{
-    constructor(selectedFileInfo, source) {
-        super(selectedFileInfo, source, '🖥', 'GET Action', CONTROLLER_GROUP, 'GET');
+    constructor(selectedFileInfo, source, sourceChangeSet) {
+        super(selectedFileInfo, source, sourceChangeSet, '🖥', 'GET Action', CONTROLLER_GROUP, 'GET');
     }
 
     createView(){
@@ -37,8 +37,8 @@ class GETJavaScriptCreator extends EmojiCreator{
 }
 
 class POSTJavaScriptCreator extends EmojiCreator{
-    constructor(selectedFileInfo, source) {
-        super(selectedFileInfo, source, '📮', 'POST Action', CONTROLLER_GROUP, 'POST');
+    constructor(selectedFileInfo, source, sourceChangeSet) {
+        super(selectedFileInfo, source, sourceChangeSet, '📮', 'POST Action', CONTROLLER_GROUP, 'POST');
     }
 
     createView(){
@@ -49,8 +49,8 @@ class POSTJavaScriptCreator extends EmojiCreator{
 }
 
 class DELETEJavaScriptCreator extends EmojiCreator{
-    constructor(selectedFileInfo, source) {
-        super(selectedFileInfo, source, '❌', 'DELETE Action', CONTROLLER_GROUP, 'DELETE');
+    constructor(selectedFileInfo, source, sourceChangeSet) {
+        super(selectedFileInfo, source, sourceChangeSet, '❌', 'DELETE Action', CONTROLLER_GROUP, 'DELETE');
     }
 
     createView(){

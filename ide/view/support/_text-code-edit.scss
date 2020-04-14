@@ -40,6 +40,10 @@ text-code-edit{
   line-height: $text-code-edit-line-height;
   font-weight: $text-code-edit-font-weight;
 
+  [data-line-num]{
+    padding-left: .5em;
+  }
+
   textarea,
   pre,
   .text-code-edit-gutter{

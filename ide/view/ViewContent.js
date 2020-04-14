@@ -4,7 +4,9 @@
  */
 class ViewContent extends HTMLElement{
     static lookup(sourceFile, sourceChangeSet){
-        if (sourceFile.isManifest){
+        if (sourceFile.isRoot){
+            return new RootView(sourceFile, sourceChangeSet);
+        } else if (sourceFile.isManifest){
             return new ManifestView(sourceFile, sourceChangeSet);
         } else {
             return new EditorView(sourceFile, sourceChangeSet);

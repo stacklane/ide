@@ -1,10 +1,7 @@
 'use strict';
 
-// https://joshtronic.com/2015/04/19/handling-click-and-touch-events-on-the-same-element/
-const TOUCH_DEVICE = 'ontouchstart' in document.documentElement;
-const FILE_NODE_CLICK_EVENT = TOUCH_DEVICE ? 'touchstart' : 'dblclick';
-const DOCUMENT_ORDER_TAB_INDEX = '0';
-
+const _SMALL_HOME_ICON = new UIIcon('<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z"/></svg>')
+                                .small()
 class App extends HTMLElement {
     constructor() {
         super();
@@ -22,158 +19,35 @@ class App extends HTMLElement {
         return this._sessionApiBase;
     }
 
+    get source(){
+        return this._source;
+    }
+
     get sourceChangeSet(){
         return this._changeSet;
     }
 
-    _loadAppMeta(){
-        const that = this;
-        return fetch(this.sessionApiBase + '/')
-            .then((response) => response.json())
-            .then((json) =>that.updateAppName(json.name));
+    get api(){
+        return this._api;
     }
 
     async updateAppName(name){
         if (!name) name = 'Project';
         this._appName = name;
-        this.showPath(this._files.rootDir.info);
     }
 
-    _addAction(fileInfoContext){
-        CreateDialog(fileInfoContext, this._files.source).modal();
+    showCreateDialog(fileInfoContext){
+        CreateDialog(fileInfoContext, this._source, this._changeSet).modal();
     }
 
-    _createAddAction(fileInfo){
-        const add = document.createElement('li');
-        add.classList.add('is-action-add');
-        add.innerText = 'New...';
-        add.addEventListener('click', ()=>this._addAction(fileInfo));
-        return add;
-    }
-
-    async _createToolbarPathAction(fileInfo, pathItem){
-        const action = document.createElement('div');
-        action.classList.add('action');
-
-        if (fileInfo.isDir){
-
-            const fileDir = this._files.findPath(fileInfo.path);
-
-            if (fileDir && fileDir instanceof FileDir){
-                const childInfo = fileDir.childInfo;
-
-                {
-                    const dirs = document.createElement('ul');
-                    const files = document.createElement('ul');
-
-                    childInfo.forEach((ci) => {
-                        const childItem = document.createElement('li');
-                        childItem.innerText = ci.display;
-                        childItem.addEventListener('click', () => this.showPath(ci, true));
-                        (ci.isDir ? dirs : files).appendChild(childItem);
-                    });
-
-                    if (dirs.childElementCount > 0) action.appendChild(dirs);
-                    if (files.childElementCount > 0) action.appendChild(files);
-                }
-
-                const create = document.createElement('ul');
-                create.appendChild(this._createAddAction(fileInfo));
-                if (create.childElementCount > 0) action.appendChild(create);
-
-                pathItem.appendChild(action);
-            }
-
-        } else {
-
-            const actions = document.createElement('ul');
-
-            if (fileInfo.isDeletable) {
-                const deleteFile = document.createElement('li');
-                deleteFile.classList.add('is-action-delete');
-                deleteFile.innerText = 'Delete';
-                deleteFile.addEventListener('click', ()=>this._files.deleteFile(fileInfo));
-                actions.appendChild(deleteFile);
-            }
-
-            if (actions.childElementCount > 0) {
-                action.appendChild(actions);
-
-                pathItem.appendChild(action);
-            }
-
-        }
-    }
-
-    async showPath(fileInfo, focus){
-        if (!(fileInfo instanceof SourceFile)) throw '!SourceFile:' + fileInfo;
-
-        const existingPath = this.querySelector('ide-toolbar-path');
-
-        const newPath = document.createElement('ide-toolbar-path');
-        //newPath.setAttribute('data-file-path', fileInfo.path);
-
-        {
-            const rootItem = document.createElement('ide-toolbar-path-item');
-            rootItem.classList.add('has-action', 'is-app-name');
-            rootItem.setAttribute('tabindex', DOCUMENT_ORDER_TAB_INDEX);
-            rootItem.innerText = this._appName;
-            //rootItem._fileInfo = fileInfo;
-            newPath.appendChild(rootItem);
-
-            this._createToolbarPathAction(this._files.rootDir.info, rootItem);
-        }
-
-        const partsInfo = fileInfo.partsInfo;
-
-        let lastPathItem = null;
-        let lastFileInfo = null;
-
-        partsInfo.forEach((partInfo)=>{
-            const newPathItem = document.createElement('ide-toolbar-path-item');
-
-            newPathItem.classList.add('has-action');
-            newPathItem.setAttribute('tabindex', DOCUMENT_ORDER_TAB_INDEX);
-            newPathItem.innerText = partInfo.display;
-
-            this._createToolbarPathAction(partInfo, newPathItem);
-
-            newPath.appendChild(newPathItem);
-
-            lastPathItem = newPathItem;
-            lastFileInfo = partInfo;
-        });
-
-        if (fileInfo.isDir){
-            // This is a way to make add actions more obvious.
-            // Do not update "lastX" variables in this case.
-            const addActionPathItem = document.createElement('ide-toolbar-path-item');
-            addActionPathItem.classList.add('has-action', 'is-action-add');
-            addActionPathItem.setAttribute('tabindex', DOCUMENT_ORDER_TAB_INDEX);
-            addActionPathItem.innerText = ' ';
-            addActionPathItem.addEventListener('click', ()=>this._addAction(fileInfo));
-            newPath.appendChild(addActionPathItem);
-        }
-
-        existingPath.replaceWith(newPath);
-
-        if (focus && lastFileInfo && lastPathItem){
-            if (lastFileInfo.isDir){
-                lastPathItem.focus();
-            } else{
-                this.openFile(lastFileInfo);
-            }
-        }
+    async showPath(sourceFile, focus){
+        this._toolbarUtil.showPath(sourceFile, focus);
     }
 
     save(){
         Array.from(this._tabs.children)
             .filter(e=>e instanceof UITab)
             .forEach((tab)=>tab.view.save());
-    }
-
-    get _files(){
-        return this.querySelector('ide-files');
     }
 
     closeFile(fileInfo){
@@ -183,26 +57,28 @@ class App extends HTMLElement {
     }
 
     /**
-     * @param fileInfo
+     * @param sourceFile
      */
-    openFile(fileInfo){
-        const existing = this.findFileViewTab(fileInfo);
+    showView(sourceFile){
+        const existing = this.findFileViewTab(sourceFile);
 
         if (existing) {
             existing.activate();
             return;
         }
 
-        const view = new View(fileInfo);
+        let title = null;
 
-        this.addViewTab(view.createTab());
-    }
+        if (sourceFile.isRoot){
+            title = _SMALL_HOME_ICON;
+        } else {
+            title = document.createElement('span');
+            title.innerText = sourceFile.display + ' ';
+        }
 
-    findFileViewTab(fileInfo){
-        return UITab.find(this._tabs, View.CreateId(fileInfo));
-    }
+        const view = new View(sourceFile);
+        const viewTab = view.createTab(title, !sourceFile.isRoot);
 
-    addViewTab(viewTab){
         viewTab.loading = true;
         viewTab.view.loading = true;
 
@@ -217,6 +93,16 @@ class App extends HTMLElement {
         });
     }
 
+    findFileViewTab(fileInfo){
+        return UITab.find(this._tabs, View.createId(fileInfo));
+    }
+
+    _listenSourceChange(sourceChange){
+        if (sourceChange.type === SourceChange.DELETE){
+            this.closeFile(sourceChange.file);
+        }
+    }
+
     ready(){
         this._workspace = this.querySelector('.ide-workspace');
         this._tabs = this._workspace.querySelector('ide-toolbar > ide-toolbar-left');
@@ -224,25 +110,34 @@ class App extends HTMLElement {
         this._sessionBase = this.getAttribute("data-session-base-href");
         this._sessionApiBase = this.getAttribute("data-session-base-api-href");
         this._autoSave = setInterval(()=>this.save(), 20000);
-
-        const that = this;
-        window.addEventListener(SourceChangeSet.SIZE_CHANGE, function(event){
-            if (event.detail.sessionId !== that._sessionId) return;
-            const stats = event.detail.stats;
-            let n = '';
-            if (stats.create) n += '<span class="is-create">' + stats.create + '</span>';
-            if (stats.update) n += '<span class="is-update">' + stats.update + '</span>';
-            if (stats.delete) n += '<span class="is-delete">' + stats.delete + '</span>';
-            if (n.length > 0) n = '<span class="is-changeset-stats-group">' + n + '</span>';
-            that.querySelector('.is-changeset-stats').innerHTML = n;
-        });
-
-        this._files.refresh();
-        this._loadAppMeta();
-
         this._changeSet = SourceChangeSet.fromLocalStorage(this._sessionId);
+        this._api = new AppApi(this._sessionApiBase);
+        this._source = null;
+        this._toolbarUtil = new AppToolbarUtil(this);
+        this._toolbarUtil.updateChangeStats();
 
-        this.removeAttribute('init');
+        this.api.readMeta()
+            .then((json)=>this.updateAppName(json.name))
+            .then(()=>this._api.readSource())
+            .then((source)=>{
+                this._source = source;
+                this._source.watchChanges(this._changeSet);
+                this._source.addListener((command)=>this._listenSourceChange(command));
+            })
+            .then(()=>this.showPath(SourceFile.root()))
+            .then(()=>this.showView(SourceFile.root()))
+            .then(()=>{
+                this.removeAttribute('init')
+            });
+
+
+        {
+            const that = this;
+            window.addEventListener(SourceChangeSet.CHANGE_EVENT, function (event) {
+                if (event.detail.sessionId !== that._sessionId) return;
+                that._toolbarUtil.updateChangeStats();
+            });
+        }
     }
 
 }
@@ -251,7 +146,7 @@ window.customElements.define('ide-app', App);
 /**
  * Superclass which provides simple environment related utilities.
  */
-class IDEComponent extends HTMLElement{
+class AppComponent extends HTMLElement{
     constructor() {
         super();
     }
@@ -291,6 +186,199 @@ class IDEComponent extends HTMLElement{
         (val) ? this.setAttribute('active', '') :
             this.removeAttribute('active');
     }
+}
+
+class Toolbar extends HTMLElement{
+    constructor() {
+        super();
+    }
+}
+window.customElements.define('ide-toolbar', Toolbar);
+
+class ToolbarLeft extends HTMLElement{
+    constructor() {
+        super();
+    }
+}
+window.customElements.define('ide-toolbar-left', ToolbarLeft);
+class ToolbarRight extends HTMLElement{
+    constructor() {
+        super();
+    }
+}
+window.customElements.define('ide-toolbar-right', ToolbarRight);
+class ToolbarItem extends HTMLElement{
+    constructor() {
+        super();
+    }
+}
+window.customElements.define('ide-toolbar-item', ToolbarItem);
+
+
+class AppToolbarUtil{
+    constructor(app) {
+        this._app = app;
+    }
+
+    async updateChangeStats(){
+        const stats = this._app.sourceChangeSet.stats();
+        let n = '';
+        if (stats.create) n += '<span class="is-create">' + stats.create + '</span>';
+        if (stats.update) n += '<span class="is-update">' + stats.update + '</span>';
+        if (stats.delete) n += '<span class="is-delete">' + stats.delete + '</span>';
+        if (n.length > 0) n = '<span class="is-changeset-stats-group">' + n + '</span>';
+        this._app.querySelector('ide-toolbar .is-changeset-stats').innerHTML = n;
+    }
+
+    showPath(sourceFile, focus){
+        if (!(sourceFile instanceof SourceFile)) throw '!SourceFile:' + sourceFile;
+
+        const existingPath = this._app.querySelector('ide-toolbar-path');
+
+        const newPath = document.createElement('ide-toolbar-path');
+
+        {
+            const rootItem = document.createElement('ide-toolbar-path-item');
+            rootItem.classList.add('has-menu-action', 'is-app-name');
+            rootItem.setAttribute('tabindex', '0');
+            rootItem.innerText = this._app._appName;
+            newPath.appendChild(rootItem);
+
+            this._createToolbarPathMenu(SourceFile.root(), rootItem);
+        }
+
+        const partsInfo = sourceFile.partsInfo;
+
+        let lastPathItem = null;
+        let lastFileInfo = null;
+
+        partsInfo.forEach((partInfo)=>{
+            const newPathItem = document.createElement('ide-toolbar-path-item');
+
+            newPathItem.classList.add('has-menu-action');
+            newPathItem.setAttribute('tabindex', '0');
+            newPathItem.innerText = partInfo.display;
+            newPath.appendChild(newPathItem);
+
+            this._createToolbarPathMenu(partInfo, newPathItem);
+
+            lastPathItem = newPathItem;
+            lastFileInfo = partInfo;
+        });
+
+        if (sourceFile.isDir){
+            // This is a way to make add actions more obvious.
+            // Do not update "lastX" variables in this case.
+            const addActionPathItem = document.createElement('ide-toolbar-path-item');
+            addActionPathItem.classList.add('has-menu-action', 'is-action-add');
+            addActionPathItem.setAttribute('tabindex', '0');
+            addActionPathItem.innerText = ' ';
+            addActionPathItem.addEventListener('click', ()=>this._app.showCreateDialog(sourceFile));
+            newPath.appendChild(addActionPathItem);
+        }
+
+        existingPath.replaceWith(newPath);
+
+        if (focus && lastFileInfo && lastPathItem){
+            if (lastFileInfo.isDir){
+                lastPathItem.focus();
+            } else{
+                this._app.showView(lastFileInfo);
+            }
+        }
+    }
+
+    async _createToolbarPathMenu(sourceFile, pathItem){
+        const menu = document.createElement('div');
+        menu.classList.add('menu');
+
+        if (sourceFile.isDir){
+
+            const children = this._app.source.children(sourceFile);
+
+            {
+                const dirs = document.createElement('ul');
+                const files = document.createElement('ul');
+
+                children.forEach((ci) => {
+                    const childItem = document.createElement('li');
+                    childItem.innerText = ci.display;
+                    childItem.addEventListener('click', () => this.showPath(ci, true));
+                    (ci.isDir ? dirs : files).appendChild(childItem);
+                });
+
+                if (dirs.childElementCount > 0) menu.appendChild(dirs);
+                if (files.childElementCount > 0) menu.appendChild(files);
+            }
+
+            const create = document.createElement('ul');
+            create.appendChild(this._createAddAction(sourceFile));
+            if (create.childElementCount > 0) menu.appendChild(create);
+
+            pathItem.appendChild(menu);
+
+        } else {
+
+            const actions = document.createElement('ul');
+
+            if (sourceFile.isDeletable) {
+                const deleteFile = document.createElement('li');
+                deleteFile.classList.add('is-action-delete');
+                deleteFile.innerText = 'Delete';
+                deleteFile.addEventListener('click', ()=>{
+                    if (confirm('Delete file "' + sourceFile.name + '"?')){
+                        this._app.sourceChangeSet.delete(sourceFile);
+                    }
+                });
+                actions.appendChild(deleteFile);
+            }
+
+            if (actions.childElementCount > 0) {
+                menu.appendChild(actions);
+                pathItem.appendChild(menu);
+            }
+
+        }
+    }
+
+    _createAddAction(fileInfo){
+        const add = document.createElement('li');
+        add.classList.add('is-action-add');
+        add.innerText = 'New...';
+        add.addEventListener('click', ()=>this._app.showCreateDialog(fileInfo));
+        return add;
+    }
+}
+
+class AppApi{
+    constructor(apiBase) {
+        this._apiBase = apiBase;
+    }
+
+    readMeta(){
+        return fetch(this._apiBase + '/')
+            .then((response) => response.json());
+    }
+
+    /**
+     * @return {Promise<Source>}
+     */
+    readSource(){
+        return fetch(this._apiBase + '/files')
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => Source.fromJsonApi(data.data));
+    }
+
+    /**
+     * @param fileId
+     * @return {Promise<Response>}
+     */
+    readData(fileId){
+        return fetch(this._apiBase + '/files/' + fileId + '/data');
+    }
+
 }
 
 

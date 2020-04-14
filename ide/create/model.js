@@ -3,8 +3,8 @@
 const MODEL_GROUP = "Model";
 
 class UniversalModelCreator extends EmojiCreator{
-    constructor(selectedFileInfo, source) {
-        super(selectedFileInfo, source, '🌐', 'Universal Model', MODEL_GROUP, 'Universal');
+    constructor(selectedFileInfo, source, sourceChangeSet) {
+        super(selectedFileInfo, source, sourceChangeSet, '🌐', 'Universal Model', MODEL_GROUP, 'Universal');
     }
 
     createView(){
@@ -15,8 +15,8 @@ class UniversalModelCreator extends EmojiCreator{
 }
 
 class ContentModelCreator extends EmojiCreator{
-    constructor(selectedFileInfo, source) {
-        super(selectedFileInfo, source, '📄', 'Content Model', MODEL_GROUP, 'Content');
+    constructor(selectedFileInfo, source, sourceChangeSet) {
+        super(selectedFileInfo, source, sourceChangeSet, '📄', 'Content Model', MODEL_GROUP, 'Content');
     }
 
     createView(){
@@ -27,8 +27,8 @@ class ContentModelCreator extends EmojiCreator{
 }
 
 class EmbeddedModelCreator extends EmojiCreator{
-    constructor(selectedFileInfo, source) {
-        super(selectedFileInfo, source, '📎', 'Embedded Model', MODEL_GROUP, 'Embedded');
+    constructor(selectedFileInfo, source, sourceChangeSet) {
+        super(selectedFileInfo, source, sourceChangeSet, '📎', 'Embedded Model', MODEL_GROUP, 'Embedded');
     }
 
     createView(){
@@ -42,8 +42,8 @@ class EmbeddedModelCreator extends EmojiCreator{
  * TODO similar to supplier, will create supplier directory if not already in it.
  */
 class FormModelCreator extends EmojiCreator{
-    constructor(selectedFileInfo, source) {
-        super(selectedFileInfo, source, '⏳', 'Form', MODEL_GROUP);
+    constructor(selectedFileInfo, source, sourceChangeSet) {
+        super(selectedFileInfo, source, sourceChangeSet, '⏳', 'Form', MODEL_GROUP);
     }
 
     createView(){

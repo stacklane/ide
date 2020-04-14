@@ -1,5 +1,10 @@
 'use strict';
 
+// https://joshtronic.com/2015/04/19/handling-click-and-touch-events-on-the-same-element/
+const TOUCH_DEVICE = 'ontouchstart' in document.documentElement;
+const FILE_NODE_CLICK_EVENT = TOUCH_DEVICE ? 'touchstart' : 'dblclick';
+
+
 const MOUSE_OVER = function(e){
     e.currentTarget.classList.add('hover');
     e.stopPropagation();
@@ -26,7 +31,7 @@ const isPrintableCharacter = (str)=>{
     return str.length === 1 && str.match(/\S/);
 };
 
-class FileLink extends IDEComponent{
+class FileLink extends AppComponent{
     constructor(fileId, fileName, filePath) {
         super();
 
@@ -37,7 +42,7 @@ class FileLink extends IDEComponent{
         this.innerText = this.fileName;
 
         const that = this;
-        this.addEventListener('click', ()=>that.root.openFile({id: that.fileId, name: that.fileName, path: that._path}));
+        this.addEventListener('click', ()=>that.root.showView({id: that.fileId, name: that.fileName, path: that._path}));
     }
 }
 
@@ -45,7 +50,7 @@ class FileLink extends IDEComponent{
 /**
  * https://www.w3.org/TR/2017/NOTE-wai-aria-practices-1.1-20171214/examples/treeview/treeview-2/treeview-2a.html
  */
-class Files extends IDEComponent {
+class Files extends AppComponent {
     constructor() {
         super();
         this.setAttribute('role', 'tree');
@@ -88,28 +93,14 @@ class Files extends IDEComponent {
         return this.querySelector('[data-file-path="' + path + '"]');
     }
 
-    refresh(){
-        this.loading = true;
+    putSource(source){
+        this._source = source;
 
-        return fetch(this.sessionApiBase + '/files')
-            .then((response) => {
-                return response.json();
-            })
-            .then((data) => {
-                const jsonData = data.data;
+        source.files.forEach((file)=>this._addFileObject(file));
 
-                const source = Source.fromJsonApi(jsonData).applyChanges(this.root.sourceChangeSet);
+        new TreeLinks(this).init();
 
-                source.files.forEach((file)=>this._addFileObject(file));
-
-                new TreeLinks(this).init();
-
-                this.loading = false;
-
-                this.root.showPath(new SourceFile('/'));
-
-                this.classList.add('render-fix' /* safari not repainting */);
-            });
+        this.classList.add('render-fix' /* safari not repainting */);
     }
 
     _addFileObject(fileInfo){
@@ -117,9 +108,8 @@ class Files extends IDEComponent {
 
         let lastDir = this._rootDir;
 
-        for (let i = 0; i < dirParts.length; i++){
+        for (let i = 0; i < dirParts.length; i++)
             lastDir = lastDir.addDir(dirParts[i]);
-        }
 
         lastDir.addItem(fileInfo);
     }
@@ -138,12 +128,12 @@ class FileDirToggle extends HTMLElement{
     }
 }
 
-class FileDir extends IDEComponent{
+class FileDir extends AppComponent{
     constructor(dirInfo, expandable) {
         super();
 
         if (dirInfo === '/'){
-            this._info = new SourceFile('/');
+            this._info = SourceFile.of('/');
             this._name = '';
             this._path = '/';
         } else if (dirInfo instanceof SourceFile){
@@ -216,7 +206,7 @@ class FileDir extends IDEComponent{
         const existing = this.childDirs.find((dir)=>dir.name === name);
         if (existing) return existing;
 
-        const newDirInfo = new SourceFile(this._path + name + '/');
+        const newDirInfo = SourceFile.of(this._path + name + '/');
 
         const newDir = new FileDir(newDirInfo, true);
 
@@ -301,7 +291,7 @@ class FileDir extends IDEComponent{
     }
 }
 
-class FileItem extends IDEComponent{
+class FileItem extends AppComponent{
     constructor(fileInfo) {
         super();
 
@@ -361,7 +351,7 @@ class FileItem extends IDEComponent{
     }
 
     open(){
-        this.root.openFile(this._file);
+        this.root.showView(this._file);
     }
 
     compareTo(fileOrDir){

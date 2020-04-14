@@ -5,8 +5,8 @@
  */
 
 class UserSettingsCreator extends EmojiCreator{
-    constructor(selectedFileInfo, source) {
-        super(selectedFileInfo, source, '👤', 'User Settings');
+    constructor(selectedFileInfo, source, sourceChangeSet) {
+        super(selectedFileInfo, source, sourceChangeSet, '👤', 'User Settings');
     }
 
     createView(){
@@ -23,8 +23,8 @@ class UserSettingsCreator extends EmojiCreator{
  *       - and it will append to an existing connector config if it exists, or create a new one.
  */
 class ConnectorCreator extends EmojiCreator{
-    constructor(selectedFileInfo, source) {
-        super(selectedFileInfo, source, '🔌', 'Connector');
+    constructor(selectedFileInfo, source, sourceChangeSet) {
+        super(selectedFileInfo, source, sourceChangeSet, '🔌', 'Connector');
     }
 
     createView(){

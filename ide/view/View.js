@@ -11,10 +11,10 @@ function _decodeBase64Unicode(str) {
 /**
  * Container for "ViewContent" implementations.
  */
-class View extends IDEComponent {
+class View extends AppComponent {
 
-    static CreateId(fileInfo){
-        return 'view-' + fileInfo.id;
+    static createId(sourceFile){
+        return 'view-' + sourceFile.handle;
     }
 
     static get observedAttributes() { return [UITab.ActivatedAttribute]; }
@@ -27,7 +27,7 @@ class View extends IDEComponent {
         this._fileId = fileInfo.id;
         this._filePath = fileInfo.path;
 
-        this.id = View.CreateId(fileInfo);
+        this.id = View.createId(fileInfo);
 
         const that = this;
         this.addEventListener('focus' /* TBD, 'focusin' bubbles */, ()=>that.activate);
@@ -38,13 +38,23 @@ class View extends IDEComponent {
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
-        this.active = (name === UITab.ActivatedAttribute && newValue === 'true');
+        if (name === UITab.ActivatedAttribute && newValue === 'true'){
+            this.activate();
+        } else {
+            this.deactivate();
+        }
     }
 
     activate(){
+        console.log('activate: ' + this._fileInfo.path);
         this.active = true;
         this.root.showPath(this._fileInfo);
         if (this._view) this._view.showFocus();
+    }
+
+    deactivate(){
+        console.log('deactivate: ' + this._fileInfo.path);
+        this.active = false;
     }
 
     save(){
@@ -56,57 +66,56 @@ class View extends IDEComponent {
         super.remove();
     }
 
-    deactivate(){
-        this.active = false;
-    }
-
     get path(){
         return this._filePath;
     }
 
-    createTab(){
-        const title = document.createElement('span');
-        title.innerText = this._fileInfo.display + ' ';
+    createTab(title, closeable){
+        if (closeable) {
+            const closer = new UITabCloser();
+            closer.classList.add('ide-view-tab-closer');
 
-        const closer = new UITabCloser();
-        closer.classList.add('ide-view-tab-closer');
-
-        const tab = UITab.create([title, closer], this);
-        tab.classList.add('ide-view-tab');
-
-        return tab;
+            const tab = UITab.create([title, closer], this);
+            tab.classList.add('ide-view-tab');
+            return tab;
+        } else {
+            const tab = UITab.create([title], this);
+            tab.classList.add('ide-view-tab');
+            return tab;
+        }
     }
 
     load(){
         this.loading = true;
-
-        const that = this;
-
-        const changeSetResponse = this.root.sourceChangeSet.readExisting(this._fileInfo);
 
         const createView = (response)=>{
             const view = ViewContent.lookup(this._fileInfo, this.root.sourceChangeSet);
 
             if (!view) throw 'Unable to view: ' + this._fileInfo.path;
 
-            that.appendChild(view);
+            this.appendChild(view);
             this._view = view;
             return view.receive(response);
         };
 
+        if (this._fileInfo.isDir){
+            return createView(null);
+        }
+
+        const changeSetResponse = this.root.sourceChangeSet.readExisting(this._fileInfo);
         if (changeSetResponse.ok) return createView(changeSetResponse);
 
-        return fetch(this.sessionApiBase + '/files/' + this._fileId + '/data')
+        return this.root.api.readData(this._fileId)
             .then((response) => {
                 // WARNING: this probably doesn't make sense as-is, because it could lead to file tree source getting out of sync with e.g. current version.
                 //  one possibility however, is that we update the SourceFile's version (at least) when we load the file data.
                 //const file = JSON.parse(_decodeBase64Unicode(response.headers.get('X-File')));
-                //const fileInfo = new SourceFile(file);
+                //const fileInfo = SourceFile.of(file);
                 return createView(response);
             }).catch((e)=>{
-                that.innerHTML = '';
+                this.innerHTML = '';
                 const view = new _ErrorView('Unable to view: ' + e);
-                that.appendChild(view);
+                this.appendChild(view);
                 this._view = view;
                 return Promise.resolve();
             });

@@ -80,7 +80,7 @@ ide-toolbar{
 
       .is-changeset-stats-group{
         font-weight: $weight-semibold;
-        font-size: .8em;
+        font-size: .85em;
         background: var(--ui-tertiary-background);
         border-radius: $radius-rounded;
         display: flex;
@@ -107,12 +107,17 @@ ide-toolbar{
       }
     }
 
-    &.has-action {
+    &.has-action{
+      cursor: var(--ui-action-pointer);
+      position: relative;
+    }
+
+    &.has-menu-action {
       cursor: var(--ui-action-pointer);
       position: relative;
 
-      .action{
-        font-size: .8rem; // specify here as well, so that it's consistent for other item title sizes
+      .menu{
+        //font-size: .8rem; // specify here as well, so that it's consistent for other item title sizes
         display: flex;
         flex-direction: row; // for each 'ul'
         position: absolute;
@@ -168,7 +173,7 @@ ide-toolbar{
       &:focus{
         background: var(--ui-toolbar-focus);
 
-        .action{
+        .menu{
           pointer-events: auto;
           opacity: 1;
           transform: translateY(0);
@@ -204,10 +209,10 @@ ide-toolbar{
   }
 
   ide-toolbar-path-item{
-    font-size: .8rem;
+    //font-size: .8rem;
 
     &.is-app-name{
-      font-size: .9rem; // slightly bigger than ide-toolbar-path-item
+      //font-size: .9rem; // slightly bigger than ide-toolbar-path-item
     }
 
     &.is-action-add:after{

@@ -52,17 +52,9 @@
         <ide-toolbar-right>
             <ide-toolbar-item class="is-changeset-stats"></ide-toolbar-item>
             <ide-toolbar-item class="is-run" disabled><div class="icon is-green">{{>image-play-circle-outline}}</div></ide-toolbar-item>
-            {{!<ide-toolbar-item class="is-credentials" disabled></ide-toolbar-item>}}
-            {{!
-            <ide-toolbar-item tabindex="0" class="has-action is-notifications">
-                <div class="icon">>image-notifications</div>
-                <div class="action"></div>
-            </ide-toolbar-item>
-            }}
         </ide-toolbar-right>
     </ide-toolbar>
     <main class="ide-stack-row">
-        <ide-files></ide-files>
         <div class="ide-workspace ide-stack-column">
             <ide-toolbar>
                 <ide-toolbar-left></ide-toolbar-left>
@@ -80,16 +72,16 @@
 <script defer src="/ide/source/SourceUtil.js"></script>
 <script defer src="/ide/source/Source.js"></script>
 <script defer src="/ide/source/SourceFile.js"></script>
+<script defer src="/ide/source/SourceChange.js"></script>
 <script defer src="/ide/source/SourceChangeSet.js"></script>
 
 <script defer src="/ide/App.js"></script>
-<script defer src="/ide/Toolbar.js"></script>
-<script defer src="/ide/Files.js"></script>
 
 <script defer src="/ide/view/View.js"></script>
 <script defer src="/ide/view/ViewContent.js"></script>
 <script defer src="/ide/view/impl/EditorView.js"></script>
 <script defer src="/ide/view/impl/ManifestView.js"></script>
+<script defer src="/ide/view/impl/RootView.js"></script>
 <script defer src="/ide/view/support/TextCodeEdit.js"></script>
 
 <script defer src="/ide/create/base.js"></script>
@@ -97,7 +89,7 @@
 <script defer src="/ide/create/model.js"></script>
 <script defer src="/ide/create/controller.js"></script>
 
-<script defer src="/ide/AppFinish.js"></script>
+<script defer src="/ide/AppReady.js"></script>
 
 </body>
 </html>
