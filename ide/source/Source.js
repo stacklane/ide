@@ -46,7 +46,7 @@ class Source{
     /**
      * Direct children of any type: {SourceFile#isFile} and {SourceFile#isDir}.
      */
-    children(parent){
+    childFiles(parent){
         if (parent.isFile) return [];
 
         const out = [];
@@ -54,6 +54,9 @@ class Source{
 
         this._files.forEach((file)=>{
             if (file.parentDir.path === parent.path){
+                if (parent.isRoot && file.name === '⏳ChangeTaskStatus.yaml'){
+                    console.log(file.path + ': parent:' + file.parentDir.path + ' === ' + parent.path + ', parts: ' + file.parts);
+                }
                 out.push(file);
             } else if (file.path.startsWith(parent.path)){
                 // Materialize child directories

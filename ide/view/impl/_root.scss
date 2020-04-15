@@ -16,6 +16,13 @@ ide-view-root{
     font-size: 1.25rem;
     font-weight: $weight-semibold;
     margin-bottom: .75rem;
+    display:flex;
+    flex-direction:row;
+    align-items: center;
+
+    span + ui-icon{
+      margin-left: .5rem;
+    }
   }
 
   div.is-file-grid{
@@ -29,6 +36,8 @@ ide-view-root{
       @include unselectable;
 
       overflow:hidden;
+
+      font-weight: $weight-medium;
 
       cursor: var(--ui-action-pointer);
 

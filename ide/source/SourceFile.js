@@ -5,11 +5,11 @@
 'use strict';
 const _TEXT_EXT = ["md", "js", "yaml", "css", "scss", "html", "svg"];
 const _KNOWN_SOURCE_FILES = {
-    "/🎛.yaml": {display: "🎛 App"},
-    "/🎛.svg": {display: "🎛 Icon"},
-    "/🎨.scss": {display: "🎨 Properties"},
-    "/📦/": {display: "📦 Models"},
-    "../📤/": {display: "📤 Suppliers"}
+    "/🎛.yaml": {display: "🎛 App", manifest: true},
+    "/🎛.svg": {display: "🎛 Icon", manifestIcon: true},
+    "/🎨.scss": {display: "🎨 Properties", properties: true},
+    "/📦/": {display: "📦 Models", models: true},
+    "../📤/": {display: "📤 Suppliers", suppliers: true}
 };
 class SourceFile {
 
@@ -24,14 +24,14 @@ class SourceFile {
     constructor(file) {
         if (file instanceof Object) {
 
-            this._id = file.id;
             this._path = file.path;
+            this._id = file.id;
             this._version = file.version;
 
         } else if (typeof file === 'string'){
 
-            this._id = null;
             this._path = file;
+            this._id = null;
             this._version = null;
 
         } else {
@@ -51,17 +51,21 @@ class SourceFile {
             this._parts = [];
             this._partsInfo = [];
             this._name = '';
+            this._extension = null;
         } else if (this.isDir){
             this._parts = p.slice(1, p.length - 1); // skip the root slash and ending slash
+            this._partsInfo = null;
             this._name = this._parts[this._parts.length - 1];
+            this._extension = null;
         } else {
             this._parts = p.slice(1); // skip the root slash
+            this._partsInfo = null;
             this._name = this._parts[this._parts.length - 1];
             this._extension = this._name.substring(this._name.lastIndexOf('.') + 1);
         }
 
-        if (_KNOWN_SOURCE_FILES[this._path]){
-            this._display = _KNOWN_SOURCE_FILES[this._path].display;
+        if (_KNOWN_SOURCE_FILES[this.path]){
+            this._display = _KNOWN_SOURCE_FILES[this.path].display;
         }
 
         if (!this._display && this.isDir){
@@ -72,10 +76,24 @@ class SourceFile {
         }
 
         if (!this._display) this._display = this._name;
+
+        if (this._partsInfo === null){
+            const out = [];
+            const parts = this.parts;
+            let dirPath = '/';
+            for (let i = 0; i < parts.length - 1 /* skip last part, which is THIS object */; i++){
+                dirPath += parts[i] + '/';
+                out.push(SourceFile.of(dirPath));
+            }
+            out.push(this);
+            this._partsInfo = out;
+        }
+
+        Object.freeze(this);
     }
 
     /**
-     * Bare minimum needed to recreate.
+     * Bare minimum needed to re-create.
      */
     get simple(){
         if (this.isFile){
@@ -172,8 +190,8 @@ class SourceFile {
     get parentDir(){
         if (this.isRoot) return null;
         const parts = this.parts;
-        if (parts.length == 1) return SourceFile.root();
-        const dirPath = '/' + parts.slice(0, parts.length -1).join('/') + '/';
+        if (parts.length === 1) return SourceFile.root();
+        const dirPath = '/' + parts.slice(0, parts.length - 1).join('/') + '/';
         return SourceFile.of(dirPath);
     }
 
@@ -196,17 +214,7 @@ class SourceFile {
     }
 
     get partsInfo(){
-        if (this._partsInfo) return this._partsInfo;
-        const out = [];
-        const parts = this.parts;
-        let dirPath = '/';
-        for (let i = 0; i < parts.length - 1 /* skip last part, which is THIS object */; i++){
-            dirPath += parts[i] + '/';
-            out.push(SourceFile.of(dirPath));
-        }
-        out.push(this);
-        this._partsInfo = out;
-        return out;
+        return this._partsInfo;
     }
 
     get parts(){

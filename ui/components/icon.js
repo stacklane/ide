@@ -20,5 +20,10 @@ class UIIcon extends HTMLElement{
         this.classList.add('is-em');
         return this;
     }
+
+    classes(classes){
+        this.classList.add(classes);
+        return this;
+    }
 }
 window.customElements.define('ui-icon', UIIcon);

@@ -134,7 +134,7 @@ class App extends HTMLElement {
                         if (file.parts.length <= 2){
                             title += ' - ' + file.path;
                         } else {
-                            title += ' - ../' + file.parts.splice(file.parts.length - 2).join('/');
+                            title += ' - ../' + file.parts.slice().splice(file.parts.length - 2).join('/');
                         }
                     }
                 }
@@ -333,7 +333,7 @@ class AppToolbarUtil{
 
         if (sourceFile.isDir){
 
-            const children = this._app.source.children(sourceFile);
+            const children = this._app.source.childFiles(sourceFile);
 
             {
                 const dirs = document.createElement('ul');

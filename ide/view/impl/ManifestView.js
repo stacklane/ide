@@ -1,5 +1,8 @@
 'use strict';
 
+/**
+ * TODO this would be based on 🎛.yaml , but would also handle 🎛.svg
+ */
 class ManifestView extends ViewContent{
     constructor(sourceContext) {
         super(sourceContext);
