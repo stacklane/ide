@@ -4,6 +4,13 @@
  */
 'use strict';
 const _TEXT_EXT = ["md", "js", "yaml", "css", "scss", "html", "svg"];
+const _KNOWN_SOURCE_FILES = {
+    "/🎛.yaml": {display: "🎛 App"},
+    "/🎛.svg": {display: "🎛 Icon"},
+    "/🎨.scss": {display: "🎨 Properties"},
+    "/📦/": {display: "📦 Models"},
+    "../📤/": {display: "📤 Suppliers"}
+};
 class SourceFile {
 
     static root(){
@@ -53,8 +60,18 @@ class SourceFile {
             this._extension = this._name.substring(this._name.lastIndexOf('.') + 1);
         }
 
-        this._displayParts = this._parts;
-        this._display = this._name;
+        if (_KNOWN_SOURCE_FILES[this._path]){
+            this._display = _KNOWN_SOURCE_FILES[this._path].display;
+        }
+
+        if (!this._display && this.isDir){
+            const nestedDir = '../' + this.name + '/';
+            if (_KNOWN_SOURCE_FILES[nestedDir]){
+                this._display = _KNOWN_SOURCE_FILES[nestedDir].display;
+            }
+        }
+
+        if (!this._display) this._display = this._name;
     }
 
     /**
@@ -93,11 +110,15 @@ class SourceFile {
     }
 
     get isProperties(){
-        return this.path === '/🎨.yaml';
+        return this.path === '/🎨.scss';
+    }
+
+    get isModels(){
+        return this.path === '/📦/';
     }
 
     get isSettings(){
-        return this.isManifest || this.isManifestIcon || this.isProperties;
+        return this.isManifest || this.isManifestIcon || this.isProperties || this.isModels;
     }
 
     get isDeletable(){
@@ -190,13 +211,6 @@ class SourceFile {
 
     get parts(){
         return this._parts;
-    }
-
-    /**
-     * May differ from #parts
-     */
-    get displayParts(){
-        return this._displayParts;
     }
 
     /**

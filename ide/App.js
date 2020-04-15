@@ -339,7 +339,11 @@ class AppToolbarUtil{
                 const dirs = document.createElement('ul');
                 const files = document.createElement('ul');
 
-                children.forEach((ci) => {
+                const includeSettings = !sourceFile.isRoot;  // From #isRoot only, do not include #isSettings
+
+                children
+                    .filter(ci=>!ci.isSettings || includeSettings)
+                    .forEach((ci) => {
                     const childItem = document.createElement('li');
                     childItem.innerText = ci.display;
                     childItem.addEventListener('click', () => this.showPath(ci, true));

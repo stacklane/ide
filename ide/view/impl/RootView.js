@@ -5,15 +5,11 @@ class RootView extends ViewContent{
     }
 
     receive(){
-        // TODO display as e.g "🎛 Manifest"
 
         // TODO if settings aren't defined then, create them on click...
         //     in other words, show ones that aren't actually there
 
         // TODO in fact we should probably order those in a custom way..
-
-        // TODO and to me that implies these "Settings" files don't go in root path bar either.
-        //     make them only accessible from home/root view.
 
         const children = this.context.source.children(this.context.file);
 
