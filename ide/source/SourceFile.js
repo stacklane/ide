@@ -5,7 +5,7 @@
 'use strict';
 const _TEXT_EXT = ["md", "js", "yaml", "css", "scss", "html", "svg"];
 const _KNOWN_SOURCE_FILES = {
-    "/🎛.yaml": {display: "🎛 App", manifest: true},
+    "/🎛.yaml": {display: "🎛 Manifest", manifest: true},
     "/🎛.svg": {display: "🎛 Icon", manifestIcon: true},
     "/🎨.scss": {display: "🎨 Properties", properties: true},
     "/📦/": {display: "📦 Models", models: true},
