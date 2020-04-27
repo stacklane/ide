@@ -1,4 +1,4 @@
-import {SourceBuilder, Source} from '🔌';
+import {SourceBuilder, Source, SourceSession} from '🔌';
 import {standalone} from '🎨';
 import {clone} from 'form';
 
@@ -8,7 +8,7 @@ let builder = SourceBuilder.name('Test').temporary().clone(Source.of(clone));
 
 let source = builder.build();
 
-let session = source.newWriteSession();
+let session = SourceSession.newWriteSession(source);
 
 Redirect.home().dir('sessions').dir(session.id);
 

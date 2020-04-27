@@ -1,4 +1,4 @@
-import {SourceBuilder} from '🔌';
+import {SourceBuilder, SourceSession} from '🔌';
 import {standalone} from '🎨';
 
 if (!standalone) throw '!standalone';
@@ -7,7 +7,7 @@ let builder = SourceBuilder.name('Test').temporary();
 
 let source = builder.build();
 
-let session = source.newWriteSession();
+let session = SourceSession.newWriteSession(source);
 
 Redirect.home().dir('sessions').dir(session.id);
 
