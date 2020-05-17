@@ -100,7 +100,7 @@ class Files extends AppComponent {
 
         new TreeLinks(this).init();
 
-        this.classList.add('render-fix' /* safari not repainting */);
+        this.classList.add('ui-render-fix' /* safari not repainting */);
     }
 
     _addFileObject(fileInfo){

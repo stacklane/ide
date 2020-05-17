@@ -3,15 +3,11 @@
  */
 
 html{
-  --ui-logo: url(/images/dark-logo.svg);
-
   --ui-scroll-width: .5rem;
   --ui-scroll-thumb: var(--ui-fill);
   --ui-scroll-background: inherit;
-
-  --ui-foreground: var(--ui-label);
 }
 
-html.light{
-  --ui-logo: url(/images/light-logo.svg);
+.ui-theme-light{
+
 }

@@ -6,21 +6,23 @@
 //  transition: opacity 0.3s ease-in-out;
 //}
 
-.render-fix{
-  transform: translateZ(0); // for safari
+.ui-render-fix{
+  transform: translateZ(0); // for safari repaint issues
 }
-
 
 /**
  * UGH:
  * https://medium.com/p/46e78d54af0d/responses/show
  * https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
  */
-html.is-full {
+html.ui-full {
   // This doesn't work in iOS:
   //body {
   //   height: 100vh;
   //}
+
+  background: var(--ui-background);
+  color: var(--ui-label);
 
   // From one of the medium comments, and related to this recommendation:
   // https://bugs.chromium.org/p/chromium/issues/detail?id=844848#c4

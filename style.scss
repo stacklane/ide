@@ -11,6 +11,14 @@
   @include unselectable;
 }
 
+html{
+  --ide-logo: url(/images/dark-logo.svg);
+}
+
+.ui-theme-light{
+  --ide-logo: url(/images/light-logo.svg);
+}
+
 @import "/ide/style/all";
 @import "/ide/view/all";
 @import "/ide/create/all";

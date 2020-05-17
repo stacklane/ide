@@ -1,6 +1,6 @@
 <!--TEMPLATE mustache-->
 <!DOCTYPE html>
-<html class="is-full" lang="en">
+<html class="ui-full" lang="en">
 <head>
     <title>{{🎨.name}}</title>
 
@@ -21,7 +21,6 @@
 
     {{% import {session} from '🔗' }}
     {{% svg /images/ as image }}
-    {{% partial /ui/components/all as ui-components }}
 </head>
 
 <body>
@@ -54,7 +53,11 @@
 
 {{! With 'defer', ordering matters }}
 
-{{>ui-components}}
+<script defer src="/ui/components/utils.js"></script>
+<script defer src="/ui/components/icon.js"></script>
+<script defer src="/ui/components/modal.js"></script>
+<script defer src="/ui/components/dialog.js"></script>
+<script defer src="/ui/components/tab.js"></script>
 
 <script defer src="/ide/source/SourceUtil.js"></script>
 <script defer src="/ide/source/Source.js"></script>
