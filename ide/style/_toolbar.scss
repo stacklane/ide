@@ -78,10 +78,10 @@ ide-toolbar{
     &.is-changeset-stats{
 
       .is-changeset-stats-group{
-        font-weight: $weight-semibold;
+        font-weight: var(--ui-weight-semibold);
         font-size: .85em;
         background: var(--ui-tertiary-background);
-        border-radius: $radius-rounded;
+        border-radius: var(--ui-radius-rounded);
         display: flex;
         padding: 0em .25em;
 
@@ -155,16 +155,16 @@ ide-toolbar{
 
             &.is-action-add:before{
               content: '+ ';
-              font-weight: $weight-max;
+              font-weight: var(--ui-weight-max);
             }
             &.is-action-delete:before{
               content: '× ';
-              font-weight: $weight-max;
+              font-weight: var(--ui-weight-max);
             }
           }
 
           + ul{
-            border-left: 1px solid var(--ui-border-color);
+            border-left: 1px solid var(--ui-separator);
           }
         }
       }
@@ -220,7 +220,7 @@ ide-toolbar{
 
     &.is-action-add:after{
       content: '+';
-      font-weight: $weight-max;
+      font-weight: var(--ui-weight-max);
     }
 
     &:not(:first-child):before { // we could exclude for is-action-add too, however it doesn't look as good

@@ -1,13 +1,10 @@
 $family-sans-serif: BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
                     "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif !default;
-
 $family-primary: $family-sans-serif;
-
-$family-monospace: 'Hack', 'Fira Code', monospace !default;
-$family-monospace-vf: 'Hack', 'Fira Code VF', monospace !default;
 
 $tablet: 769px !default;
 
+/*
 $size-1: 3rem !default;
 $size-2: 2.5rem !default;
 $size-3: 2rem !default;
@@ -23,15 +20,10 @@ $weight-semibold: 600 !default;
 $weight-bold: 700 !default;
 $weight-max: 900 !default; // css 2.1
 
-$text-strong: $weight-semibold;
+//$text-strong: $weight-semibold;
 
-// Radius
-//--ui-radius-small: 2px;
-//--ui-radius: 4px;
-//--ui-radius-large: 6px;
-//--ui-radius-rounded: 290486px;
-$radius: 4px;
-$radius-rounded: 290486px;
+ */
+
 
 $body-size: 16px !default;
 $body-min-width: 300px !default;
@@ -41,7 +33,7 @@ $body-overflow-x: hidden !default;
 $body-overflow-y: scroll !default;
 
 $body-font-size: .875em !default; /* 16x.875=14 https://alistapart.com/article/howtosizetextincss/ */
-$body-weight: $weight-normal !default;
+$body-weight: var(--ui-weight-normal) !default;
 $body-line-height: 1.5 !default;
 
 

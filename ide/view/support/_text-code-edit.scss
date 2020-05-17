@@ -3,7 +3,7 @@ $text-code-edit-guide-columns: 120ch; /* ch == width of '0', which works well as
 $text-code-edit-padding: 5px;
 
 $text-code-edit-font-size: 13px;
-$text-code-edit-font-weight: $weight-normal; // 'Hack' doesn't seem to have anything takes effect until 550
+$text-code-edit-font-weight: var(--ui-weight-normal); //$weight-normal; // 'Hack' doesn't seem to have anything takes effect until 550
 $text-code-edit-line-height: 15.6px; // ~ 1.2 of 13px , note this number must be used in auto-height calculations
 
 /**
@@ -22,8 +22,8 @@ text-code-edit {
 }
 
 text-code-edit{
-  background: var(--ui-border-color-image) repeat-y $text-code-edit-gutter-width 0,
-              var(--ui-border-color-image) repeat-y $text-code-edit-guide-columns 0 !important;
+  background: var(--ui-separator-image) repeat-y $text-code-edit-gutter-width 0,
+              var(--ui-separator-image) repeat-y $text-code-edit-guide-columns 0 !important;
 
   display: flex;
 
@@ -35,7 +35,7 @@ text-code-edit{
   overflow: auto;
   overscroll-behavior: none;
 
-  font-family: $family-monospace;
+  font-family: var(--ui-font-monospace);
   font-size: $text-code-edit-font-size;
   line-height: $text-code-edit-line-height;
   font-weight: $text-code-edit-font-weight;
@@ -77,8 +77,8 @@ text-code-edit{
     height: fit-content;
 
     div[data-line-num].active{
-      color:  var(--ui-select-foreground);
-      background: var(--ui-select-background);
+      color:  var(--ui-label);
+      background: var(--ui-secondary-background);
     }
   }
 

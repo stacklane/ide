@@ -14,7 +14,7 @@ ide-view-root{
 
   h2{
     font-size: 1.25rem;
-    font-weight: $weight-semibold;
+    font-weight: var(--ui-weight-semibold);
     margin-bottom: .75rem;
     display:flex;
     flex-direction:row;
@@ -37,14 +37,14 @@ ide-view-root{
 
       overflow:hidden;
 
-      font-weight: $weight-medium;
+      font-weight: var(--ui-weight-medium);
 
       cursor: var(--ui-action-pointer);
 
       margin: $grid-item-spacing;
       padding: $grid-item-padding;
       background: var(--ui-secondary-fill);
-      border-radius: $radius;
+      border-radius: var(--ui-radius);
 
       &:hover{
         background: var(--ui-tertiary-fill);

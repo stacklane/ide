@@ -1,26 +1,17 @@
 /**
  * Derived and case specific settings.
  */
+
 html{
-  --ui-logo: url(/ui/theme/dark-logo.svg);
+  --ui-logo: url(/images/dark-logo.svg);
 
   --ui-scroll-width: .5rem;
   --ui-scroll-thumb: var(--ui-fill);
-  --ui-scroll-background: inherit;//var(--ui-secondary-background);
+  --ui-scroll-background: inherit;
 
   --ui-foreground: var(--ui-label);
-
-  // @deprecated, use separator
-  --ui-border-color: var(--ui-separator);
-  // @deprecated, use separator-image
-  --ui-border-color-image: var(--ui-separator-image);
-
-  // @deprecated
-  --ui-select-background: var(--ui-secondary-background);
-  // @deprecated
-  --ui-select-foreground: var(--ui-label);
 }
 
 html.light{
-  --ui-logo: url(/ui/theme/light-logo.svg);
+  --ui-logo: url(/images/light-logo.svg);
 }

@@ -10,7 +10,7 @@ ide-view-editor{
   overflow: hidden;
 
   > footer{
-    border-top: 1px solid var(--ui-border-color);
+    border-top: 1px solid var(--ui-separator);
     padding: .25rem;
 
     &:empty{

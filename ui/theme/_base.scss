@@ -4,6 +4,8 @@
  */
 
 html{
+  --ui-font-monospace: 'Hack', 'Fira Code', monospace;
+  --ui-font-monospace-vf: 'Hack', 'Fira Code VF', monospace;
 
   // Text labels that contain primary content:
   --ui-label: rgba(255, 255, 255, 0.85);
@@ -38,6 +40,14 @@ html{
   // Fill color for large areas with complex content:
   --ui-quaternary-fill: rgba(118, 118, 128, 0.18);
 
+  // Weight
+  --ui-weight-light: 300;
+  --ui-weight-normal: 400;
+  --ui-weight-medium: 500;
+  --ui-weight-semibold: 600;
+  --ui-weight-bold: 700;
+  --ui-weight-max: 900; // css 2.1
+
   // Colors
   --ui-link: rgba(9, 132, 255, 1.00);
   --ui-link-invert: white;
@@ -59,6 +69,11 @@ html{
    */
   --ui-action-pointer: default;
   --ui-speed: 50ms;
+
+  --ui-radius: 4px;
+  --ui-radius-rounded: 290486px;
+
+
 }
 
 html.light{

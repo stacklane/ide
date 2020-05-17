@@ -1,5 +1,4 @@
 class UIIcon extends HTMLElement{
-
     constructor(string) {
         super();
         if (string.indexOf("<svg") === 0){

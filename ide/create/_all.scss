@@ -68,7 +68,7 @@
 
       font-size: .7rem;
       text-transform: uppercase;
-      font-weight: $weight-semibold;
+      font-weight: var(--ui-weight-semibold);
       color: var(--ui-secondary-label);
     }
 

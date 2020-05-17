@@ -6,7 +6,7 @@ button, input, select, textarea{
 }
 
 input{
-  //border-radius: $radius;
+  //border-radius: var(--ui-radius);
 }
 input[type="text"]{
   background: var(--ui-background);
@@ -22,8 +22,8 @@ button{
   background: var(--ui-link);
   color: var(--ui-link-invert);
   border: 0;
-  border-radius: $radius;
-  font-weight: $weight-medium;
+  border-radius: var(--ui-radius);
+  font-weight: var(--ui-weight-medium);
   padding: .25em .5em;
 
   // TODO subtle shadow

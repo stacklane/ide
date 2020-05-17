@@ -1,5 +1,15 @@
 
-@import "/ui/all";
+@mixin unselectable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+%unselectable {
+  @include unselectable;
+}
 
 @import "/ide/style/all";
 @import "/ide/view/all";

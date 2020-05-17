@@ -3,3 +3,8 @@ ui-tab, ui-tab-closer{
   outline: none;
   cursor: var(--ui-action-pointer);
 }
+
+ui-tab-closer{
+  @include delete(16px, inherit, 1px, var(--ui-gray));
+  margin-left: .5rem;
+}
