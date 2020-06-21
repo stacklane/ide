@@ -2,7 +2,7 @@ $text-code-edit-gutter-width: 3em;
 $text-code-edit-guide-columns: 120ch; /* ch == width of '0', which works well as a "column" concept for monospace */
 $text-code-edit-padding: 5px;
 
-$text-code-edit-font-size: 13px;
+$text-code-edit-font-size: 13px; // TODO this may not be good for mobile, since it is less than 16px
 $text-code-edit-font-weight: var(--ui-weight-normal); //$weight-normal; // 'Hack' doesn't seem to have anything takes effect until 550
 $text-code-edit-line-height: 15.6px; // ~ 1.2 of 13px , note this number must be used in auto-height calculations
 
@@ -35,7 +35,7 @@ text-code-edit{
   overflow: auto;
   overscroll-behavior: none;
 
-  font-family: var(--ui-font-monospace);
+  font-family: var(--ui-font-family-monospace);
   font-size: $text-code-edit-font-size;
   line-height: $text-code-edit-line-height;
   font-weight: $text-code-edit-font-weight;

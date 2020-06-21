@@ -44,7 +44,7 @@ class HTMLViewCreator extends CreatorImpl{
     }
 
     createView(){
-        const view = Elements.div().classes('ide-create-dialog-standard-view').create();
+        const view = Elements.div().classes('ide-create-dialog-standard-view', 'ui-separator-column').create();
 
         if (this.selected.isEndpointAllowed()){
             view.innerHTML = HTMLViewCreator._template();

@@ -15,9 +15,11 @@
     <link rel="icon" type="image/png" href="/fav/32.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="/fav/192.png" sizes="192x192" />
 
+    {{!
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack-subset.css"
           integrity="sha256-4zFMlAMYc7jMvg5XQq6KKUh6LWfQW1Ioc41hMjdy+NQ=" crossorigin="anonymous"
           data-font-src="https://cdn.jsdelivr.net/npm/hack-font@3.3.0/">
+    }}
 
     {{% import {session} from '🔗' }}
     {{% svg /images/ as image }}
@@ -26,34 +28,34 @@
 <body>
 
 {{! Init basic structure for startup styling and 'defer' }}
-<ide-app class="ide-stack-column" init
+<ide-app ui-is-init class="ui-separator-column ui-root"
             data-session-id="{{session.id}}"
             data-session-base-href="/sessions/{{session.id}}"
             data-session-base-api-href="/sessions/{{session.id}}/api">
-    <ide-toolbar>
-        <ide-toolbar-left>
-            <ide-toolbar-item class="is-logo"></ide-toolbar-item>
-            <ide-toolbar-path></ide-toolbar-path>
-        </ide-toolbar-left>
-        <ide-toolbar-right>
-            <ide-toolbar-item class="is-changeset-stats"></ide-toolbar-item>
-            <ide-toolbar-item class="is-run" disabled><div class="icon is-green">{{>image-play-circle-outline}}</div></ide-toolbar-item>
-        </ide-toolbar-right>
-    </ide-toolbar>
-    <main class="ide-stack-row">
-        <div class="ide-workspace ide-stack-column">
-            <ide-toolbar>
-                <ide-toolbar-left></ide-toolbar-left>
-                <ide-toolbar-right></ide-toolbar-right>
-            </ide-toolbar>
-            <div class="ide-init-indicator"><div></div><div></div><div></div><div></div></div>
+    <ui-toolbar>
+        <ui-toolbar-left>
+            <ui-toolbar-item class="is-logo"></ui-toolbar-item>
+            <ui-toolbar-path></ui-toolbar-path>
+        </ui-toolbar-left>
+        <ui-toolbar-right>
+            <ui-toolbar-item class="is-changeset-stats"></ui-toolbar-item>
+            <ui-toolbar-item class="is-run" disabled><div class="icon is-green">{{>image-play-circle-outline}}</div></ui-toolbar-item>
+        </ui-toolbar-right>
+    </ui-toolbar>
+    <main class="ui-separator-row">
+        <div class="ide-workspace ui-separator-column">
+            <ui-toolbar>
+                <ui-toolbar-left></ui-toolbar-left>
+                <ui-toolbar-right></ui-toolbar-right>
+            </ui-toolbar>
+            <div class="ui-init-indicator"><div></div><div></div><div></div><div></div></div>
         </div>
     </main>
 </ide-app>
 
 {{! With 'defer', ordering matters }}
 
-<script defer src="/ui/components/utils.js"></script>
+<script defer src="/ui/components/base.js"></script>
 <script defer src="/ui/components/icon.js"></script>
 <script defer src="/ui/components/modal.js"></script>
 <script defer src="/ui/components/dialog.js"></script>

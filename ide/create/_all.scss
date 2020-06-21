@@ -11,34 +11,30 @@
   flex-direction:column;
   flex-grow: 1;
 
-  > * + *{
-    border-top: 1px solid var(--ui-separator);
-  }
-
   > h2{
     color: var(--ui-label);
     flex-shrink: 0;
     flex-grow: 0;
-    padding: var(--ui-dialog-content-padding);
+    padding: var(--ui-spacing);
   }
 
   > div{
     flex-grow: 1;
-    padding: var(--ui-dialog-content-padding);
+    padding: var(--ui-spacing);
   }
 
   > blockquote{
     font-size: .8rem;
     flex-shrink: 0;
     flex-grow: 0;
-    padding: var(--ui-dialog-content-padding);
+    padding: var(--ui-spacing);
     color: var(--ui-secondary-label);
   }
 
   > footer{
     flex-shrink: 0;
     flex-grow: 0;
-    padding: var(--ui-dialog-content-padding);
+    padding: var(--ui-spacing);
     //border-top: 1px solid var(--ui-separator);
     display: flex;
     //align-items: flex-end;
@@ -59,36 +55,18 @@
     display:flex;
     flex-direction:column;
     font-size: .9rem;
-    padding-bottom: calc(var(--ui-dialog-content-padding) / 2);
+    padding-bottom: var(--ui-s-spacing);
+    padding-top: var(--ui-s-spacing);
 
-    > h2{
-      padding: var(--ui-dialog-content-padding);
-      padding-top: var(--ui-dialog-content-padding);
-      padding-bottom: calc(var(--ui-dialog-content-padding) / 2);
-
-      font-size: .7rem;
-      text-transform: uppercase;
-      font-weight: var(--ui-weight-semibold);
-      color: var(--ui-secondary-label);
-    }
-
-    > ui-tab{
-      padding: var(--ui-dialog-content-padding);
-      padding-top: calc(var(--ui-dialog-content-padding) / 2);
-      padding-bottom: calc(var(--ui-dialog-content-padding) / 2);
-
-      &[active='true']{
-        background: var(--ui-fill);
-      }
-
-      > ui-icon{
-        margin-right: .5rem;
-      }
+    > ui-tab, h5{
+      padding: var(--ui-spacing);
+      padding-top: var(--ui-xs-spacing);
+      padding-bottom: var(--ui-xs-spacing);
     }
   }
 
   > .ide-create-dialog-panel-views{
-    background: var(--ui-tertiary-background);
+    //background: var(--ui-tertiary-background);
     border-left: 1px solid var(--ui-separator);
     flex-grow: 1;
     display: flex;

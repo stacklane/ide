@@ -1,48 +1,25 @@
 
 ide-view-root{
-  $grid-item-spacing: 1em;
-  $grid-item-padding: 1em;
-  $margin-bottom: .75rem;
-
-  padding: 2rem;
-
+  padding: var(--ui-xl-spacing);
   overflow: auto; // TODO test
-
-  * + h2{
-    margin-top: 1.5rem;
-  }
-
-  h2{
-    font-size: 1.25rem;
-    font-weight: var(--ui-weight-semibold);
-    margin-bottom: .75rem;
-    display:flex;
-    flex-direction:row;
-    align-items: center;
-
-    span + ui-icon{
-      margin-left: .5rem;
-    }
-  }
 
   div.is-file-grid{
     // https://css-tricks.com/auto-sizing-columns-css-grid-auto-fill-vs-auto-fit/
-    display:grid;
+    display: grid;
     grid-template-columns: repeat(auto-fit, minmax(20em, 1fr));
-    //grid-template-columns: repeat(auto-fit, minmax(20em, 20em));
-    margin: -$grid-item-spacing;
+    gap: var(--ui-spacing);
 
     > div.is-file-item{
       @include unselectable;
 
       overflow:hidden;
 
+      padding: var(--ui-spacing);
+
       font-weight: var(--ui-weight-medium);
 
       cursor: var(--ui-action-pointer);
 
-      margin: $grid-item-spacing;
-      padding: $grid-item-padding;
       background: var(--ui-secondary-fill);
       border-radius: var(--ui-radius);
 
@@ -54,24 +31,4 @@ ide-view-root{
       }
     }
   }
-
-
-  /*
-  .row{
-    display: flex;
-    margin: -1em 0 0 -1em;
-    align-items: center;
-
-    .column{
-      padding: 1em 0 0 1em;
-      flex: 0 0 100%;
-      align-self: center;
-    }
-  }
-
-  @media (min-width: 48em) {
-    .row .column {
-      flex: 1;
-    }
-  }*/
 }

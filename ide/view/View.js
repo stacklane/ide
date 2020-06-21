@@ -70,14 +70,14 @@ class View extends AppComponent {
     createTab(title, closeable){
         if (closeable) {
             const closer = new UITabCloser();
-            closer.classList.add('ide-view-tab-closer');
+            //closer.classList.add('ide-view-tab-closer');
 
             const tab = UITab.create([title, closer], this);
-            tab.classList.add('ide-view-tab');
+            tab.classList.add('has-separator');
             return tab;
         } else {
             const tab = UITab.create([title], this);
-            tab.classList.add('ide-view-tab');
+            tab.classList.add('has-separator');
             return tab;
         }
     }

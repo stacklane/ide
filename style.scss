@@ -12,11 +12,11 @@
 }
 
 html{
-  --ide-logo: url(/images/dark-logo.svg);
+  --ui-logo: url(/images/dark-logo.svg);
 }
 
 .ui-theme-light{
-  --ide-logo: url(/images/light-logo.svg);
+  --ui-logo: url(/images/light-logo.svg);
 }
 
 @import "/ide/style/all";

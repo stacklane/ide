@@ -38,7 +38,7 @@ const CreatorDialog = (sourceContext)=>{
     panel.classList.add('ide-create-dialog-panel');
 
     const tabs = document.createElement('div');
-    tabs.classList.add('ide-create-dialog-panel-tabs');
+    tabs.classList.add('ide-create-dialog-panel-tabs', 'ui-secondary-dialog-content');
     panel.appendChild(tabs);
 
     const views = document.createElement('div');
@@ -47,8 +47,10 @@ const CreatorDialog = (sourceContext)=>{
 
     _LookupAvailableCreators(sourceContext).forEach((available)=>{
         if (typeof available === 'string'){
-            const category = document.createElement('h2');
-            category.innerText = available;
+            const category = Elements.h5()
+                .text(available)
+                .classes('is-secondary-label', 'is-weight-semibold')
+                .create();
             tabs.appendChild(category);
         } else {
             const title = document.createElement('span');

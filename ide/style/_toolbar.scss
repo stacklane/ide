@@ -1,238 +1,37 @@
-@import '/🎨';
 
-$toolbar-item-spacing: .5rem;
+ui-toolbar-item{
 
-ide-toolbar{
-  --ui-toolbar-background: var(--ui-secondary-background);
-  --ui-toolbar-label: var(--ui-label);
-  --ui-toolbar-hover: var(--ui-tertiary-background);
-  --ui-toolbar-focus: var(--ui-tertiary-background);
+  &.is-changeset-stats{
+    .is-changeset-stats-group{
+      font-weight: var(--ui-weight-semibold);
+      font-size: .85em;
+      background: var(--ui-tertiary-background);
+      border-radius: var(--ui-radius-rounded);
+      display: flex;
+      padding: 0em .25em;
 
-  --ui-menu-background: var(--ui-secondary-background);
-  --ui-menu-label: var(--ui-label);
-  --ui-menu-hover-background: var(--ui-link);
-  --ui-menu-hover-label: var(--ui-link-invert);
-  --ui-menu-shadow: var(--ui-secondary-background-shadow);
-  --ui-menu-speed: var(--ui-speed);
+      > span{
+        display:flex;
+        padding: 0em .5em;
 
-  flex-shrink:0;
+        + span{
+          border-left: 1px solid var(--ui-separator);
+        }
+      }
 
-  align-items: stretch;// center;
-  justify-content: space-between;
-  display: flex;
-
-  background: var(--ui-toolbar-background);
-
- // border-bottom: 1px solid var(--ui-toolbar-border-bottom);
-
-  white-space: nowrap;
-
- // bad for popup menus:
-  // overflow:hidden;
-
-  ide-toolbar-left, ide-toolbar-right, ide-toolbar-path{
-    display: flex;
-
-    flex-basis: auto;
-    flex-grow: 0;
-    flex-shrink: 0;
+      .is-create{
+        color: var(--ui-green);
+      }
+      .is-update{
+        color: var(--ui-yellow);
+      }
+      .is-delete{
+        color: var(--ui-red);
+      }
+    }
 
     &:empty{
-       display:none;
-    }
-  }
-
-  ide-toolbar-left{
-    align-items: stretch; //center;
-    justify-content: flex-start;
-  }
-
-  ide-toolbar-right{
-    align-items: stretch; //center;
-    justify-content: flex-end;
-    margin-right: $toolbar-item-spacing;
-  }
-
-  ide-toolbar-item,
-  ide-toolbar-path-item{
-    @include unselectable;
-
-    background: transparent; //var(--ui-toolbar-background);
-
-    align-items: center;
-    display: flex;
-    flex-basis: auto;
-    flex-grow: 0;
-    flex-shrink: 0;
-    justify-content: center;
-    padding: $toolbar-item-spacing;
-
-    outline:0;
-
-    &[disabled]{
-      cursor: not-allowed !important;
-      opacity: .5 !important;
-      pointer-events: none !important;
-    }
-
-    &.is-changeset-stats{
-
-      .is-changeset-stats-group{
-        font-weight: var(--ui-weight-semibold);
-        font-size: .85em;
-        background: var(--ui-tertiary-background);
-        border-radius: var(--ui-radius-rounded);
-        display: flex;
-        padding: 0em .25em;
-
-        > span{
-          display:flex;
-          padding: 0em .5em;
-
-          + span{
-            border-left: 1px solid var(--ui-separator);
-          }
-        }
-
-        .is-create{
-          color: var(--ui-green);
-        }
-        .is-update{
-          color: var(--ui-yellow);
-        }
-        .is-delete{
-          color: var(--ui-red);
-        }
-      }
-
-      &:empty{
-        display:none;
-      }
-    }
-
-    &.has-action{
-      cursor: var(--ui-action-pointer);
-      position: relative;
-    }
-
-    &.has-menu-action {
-      cursor: var(--ui-action-pointer);
-      position: relative;
-
-      .menu{
-        //font-size: .8rem; // specify here as well, so that it's consistent for other item title sizes
-        display: flex;
-        flex-direction: row; // for each 'ul'
-        position: absolute;
-        background: var(--ui-menu-background);
-        color: var(--ui-menu-label);
-        z-index: 9999;
-        left: 0;
-        top: 100%; // bottom of parent
-        min-width: 100%; // at least as wide as parent
-        //box-shadow: 0 8px 8px var(--ui-menu-shadow), 0 0 0 1px var(--ui-menu-shadow);
-        box-shadow: 0 0.5em 1em -0.125em var(--ui-menu-shadow), 0 0px 0 1px var(--ui-menu-shadow);
-        transition-property: opacity,transform;
-        transition-duration: var(--ui-menu-speed);
-        pointer-events:none;
-        opacity:0;
-        transform: translateY(-5px);
-
-        /**
-         * A series of ul's may be placed within an .action
-         */
-        > ul{
-          flex-grow: 1;
-
-          > li{
-            cursor: var(--ui-action-pointer);
-            padding: #{$toolbar-item-spacing / 2} #{$toolbar-item-spacing * 2};
-
-            &:hover{
-              background: var(--ui-menu-hover-background);
-              color: var(--ui-menu-hover-label);
-            }
-
-            &.is-action-add:before{
-              content: '+ ';
-              font-weight: var(--ui-weight-max);
-            }
-            &.is-action-delete:before{
-              content: '× ';
-              font-weight: var(--ui-weight-max);
-            }
-          }
-
-          + ul{
-            border-left: 1px solid var(--ui-separator);
-          }
-        }
-      }
-
-      &:hover {
-        background: var(--ui-toolbar-hover);
-      }
-
-      &:focus{
-        background: var(--ui-toolbar-focus);
-
-        .menu{
-          pointer-events: auto;
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-    }
-  }
-
-  ide-toolbar-right ide-toolbar-item.has-action .action{
-    right: 0;
-    left: unset;
-  }
-
-  ide-toolbar-item{
-    &.is-logo:before{
-      content: ' ';
-      height: 1.5rem;
-      width: 1.5rem;
-      background-size: 1.5rem 1.5rem;
-      background-image: var(--ide-logo);
-      background-position: center;
-      background-repeat: no-repeat;
-    }
-
-    &.is-app-icon{
-      svg{
-        height: 1rem;
-        width: 1rem;
-      }
-    }
-
-
-  }
-
-  ide-toolbar-path-item{
-    //font-size: .8rem;
-
-    &.is-app-name{
-      //font-size: .9rem; // slightly bigger than ide-toolbar-path-item
-    }
-
-    &.is-action-add:after{
-      content: '+';
-      font-weight: var(--ui-weight-max);
-    }
-
-    &:not(:first-child):before { // we could exclude for is-action-add too, however it doesn't look as good
-      content: "";
-      display: inline-block;
-      border-right: 1px solid var(--ui-separator);
-      border-top: 1px solid var(--ui-separator);
-      transform: rotate(45deg);
-      width: .5rem;
-      height: .5rem;
-      margin-right: $toolbar-item-spacing;
-      padding-left: #{$toolbar-item-spacing / 2};
+      display:none;
     }
   }
 

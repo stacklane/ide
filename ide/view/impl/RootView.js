@@ -11,6 +11,8 @@ class RootView extends ViewContent{
 
         // TODO in fact we should probably order those in a custom way..
 
+        const list = Elements.div().classes('ui-column', 'has-xl-spacing').create();
+
         const children = this.context.source.childFiles(this.context.file);
 
         const dirs = Elements.div().classes('is-file-grid').create();
@@ -32,9 +34,7 @@ class RootView extends ViewContent{
         {
             const settings = Elements.div().classes('is-file-grid').create();
 
-            this.appendChild(Elements.h2().text('Settings').create());
-
-            // TODO these should be opene existing OR create as needed....
+            // TODO these should be opened existing OR create as needed....
 
             const manifest = Elements.div().classes('is-file-item')
                                     .text(SourceFile.of('/🎛.yaml').display)
@@ -52,12 +52,23 @@ class RootView extends ViewContent{
             settings.appendChild(properties);
             settings.appendChild(models);
 
-            this.appendChild(settings);
+            list.appendChild(
+                Elements.section()
+                    .classes('has-spacing')
+                    .child(Elements.h2().text('Settings'))
+                    .child(settings)
+                    .create()
+            );
         }
 
         if (dirs.childElementCount) {
-            this.appendChild(Elements.h2().text('Folders').create());
-            this.appendChild(dirs);
+            list.appendChild(
+                Elements.section()
+                    .classes('has-spacing')
+                    .child(Elements.h2().text('Folders'))
+                    .child(dirs)
+                    .create()
+            );
         }
 
         {
@@ -66,9 +77,16 @@ class RootView extends ViewContent{
                 .em().classes('is-green');
             newIcon.addEventListener('click', ()=>this.app.showCreatorDialog(SourceFile.root()));
             h2.appendChild(newIcon);
-            this.appendChild(h2);
-            this.appendChild(files);
+            list.appendChild(
+                Elements.section()
+                    .classes('has-spacing')
+                    .child(h2)
+                    .child(files)
+                    .create()
+            );
         }
+
+        this.appendChild(list);
 
         return Promise.resolve();
     }

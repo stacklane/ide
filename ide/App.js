@@ -106,7 +106,7 @@ class App extends HTMLElement {
 
     ready(){
         this._workspace = this.querySelector('.ide-workspace');
-        this._tabs = this._workspace.querySelector('ide-toolbar > ide-toolbar-left');
+        this._tabs = this._workspace.querySelector('ui-toolbar > ui-toolbar-left');
         this._sessionId = this.getAttribute("data-session-id");
         this._sessionBase = this.getAttribute("data-session-base-href");
         this._sessionApiBase = this.getAttribute("data-session-base-api-href");
@@ -151,7 +151,7 @@ class App extends HTMLElement {
                 this._source.addListener((command)=>this._listenSourceChange(command));
             })
             .then(()=>this.showView(SourceFile.root()))
-            .then(()=>this.removeAttribute('init'));
+            .then(()=>this.removeAttribute('ui-is-init'));
 
         /*
         window.addEventListener('hashchange', ()=>{
@@ -232,26 +232,26 @@ class Toolbar extends HTMLElement{
         super();
     }
 }
-window.customElements.define('ide-toolbar', Toolbar);
+window.customElements.define('ui-toolbar', Toolbar);
 
 class ToolbarLeft extends HTMLElement{
     constructor() {
         super();
     }
 }
-window.customElements.define('ide-toolbar-left', ToolbarLeft);
+window.customElements.define('ui-toolbar-left', ToolbarLeft);
 class ToolbarRight extends HTMLElement{
     constructor() {
         super();
     }
 }
-window.customElements.define('ide-toolbar-right', ToolbarRight);
+window.customElements.define('ui-toolbar-right', ToolbarRight);
 class ToolbarItem extends HTMLElement{
     constructor() {
         super();
     }
 }
-window.customElements.define('ide-toolbar-item', ToolbarItem);
+window.customElements.define('ui-toolbar-item', ToolbarItem);
 
 
 class AppToolbarUtil{
@@ -266,18 +266,18 @@ class AppToolbarUtil{
         if (stats.update) n += '<span class="is-update">' + stats.update + '</span>';
         if (stats.delete) n += '<span class="is-delete">' + stats.delete + '</span>';
         if (n.length > 0) n = '<span class="is-changeset-stats-group">' + n + '</span>';
-        this._app.querySelector('ide-toolbar .is-changeset-stats').innerHTML = n;
+        this._app.querySelector('ui-toolbar .is-changeset-stats').innerHTML = n;
     }
 
     showPath(sourceFile, focus){
         if (!(sourceFile instanceof SourceFile)) throw '!SourceFile:' + sourceFile;
 
-        const existingPath = this._app.querySelector('ide-toolbar-path');
+        const existingPath = this._app.querySelector('ui-toolbar-path');
 
-        const newPath = document.createElement('ide-toolbar-path');
+        const newPath = document.createElement('ui-toolbar-path');
 
         {
-            const rootItem = document.createElement('ide-toolbar-path-item');
+            const rootItem = document.createElement('ui-toolbar-path-item');
             rootItem.classList.add('has-menu-action', 'is-app-name');
             rootItem.setAttribute('tabindex', '0');
             rootItem.innerText = this._app._appName;
@@ -292,7 +292,7 @@ class AppToolbarUtil{
         let lastFileInfo = null;
 
         partsInfo.forEach((partInfo)=>{
-            const newPathItem = document.createElement('ide-toolbar-path-item');
+            const newPathItem = document.createElement('ui-toolbar-path-item');
 
             newPathItem.classList.add('has-menu-action');
             newPathItem.setAttribute('tabindex', '0');
@@ -308,7 +308,7 @@ class AppToolbarUtil{
         if (sourceFile.isDir){
             // This is a way to make add actions more obvious.
             // Do not update "lastX" variables in this case.
-            const addActionPathItem = document.createElement('ide-toolbar-path-item');
+            const addActionPathItem = document.createElement('ui-toolbar-path-item');
             addActionPathItem.classList.add('has-menu-action', 'is-action-add');
             addActionPathItem.setAttribute('tabindex', '0');
             addActionPathItem.innerText = ' ';
