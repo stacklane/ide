@@ -227,6 +227,7 @@ class AppComponent extends HTMLElement{
     }
 }
 
+/*
 class Toolbar extends HTMLElement{
     constructor() {
         super();
@@ -252,7 +253,7 @@ class ToolbarItem extends HTMLElement{
     }
 }
 window.customElements.define('ui-toolbar-item', ToolbarItem);
-
+*/
 
 class AppToolbarUtil{
     constructor(app) {
@@ -272,55 +273,58 @@ class AppToolbarUtil{
     showPath(sourceFile, focus){
         if (!(sourceFile instanceof SourceFile)) throw '!SourceFile:' + sourceFile;
 
-        const existingPath = this._app.querySelector('ui-toolbar-path');
+        const existingPath = this._app.querySelector('ui-path');
 
-        const newPath = document.createElement('ui-toolbar-path');
+        const newPath = document.createElement('ui-path');
 
         {
-            const rootItem = document.createElement('ui-toolbar-path-item');
-            rootItem.classList.add('has-menu-action', 'is-app-name');
-            rootItem.setAttribute('tabindex', '0');
-            rootItem.innerText = this._app._appName;
-            newPath.appendChild(rootItem);
+            const rootItem = document.createElement('ui-path-item');
+            const rootButton = document.createElement('ui-menu-button');
 
-            this._createToolbarPathMenu(SourceFile.root(), rootItem);
+            rootButton.innerText = this._app._appName;
+            this._createToolbarPathMenu(SourceFile.root(), rootButton);
+
+            rootItem.appendChild(rootButton);
+            newPath.appendChild(rootItem);
         }
 
         const partsInfo = sourceFile.partsInfo;
 
-        let lastPathItem = null;
+        let lastPathFocusable = null;
         let lastFileInfo = null;
 
         partsInfo.forEach((partInfo)=>{
-            const newPathItem = document.createElement('ui-toolbar-path-item');
+            const newPathItem = document.createElement('ui-path-item');
+            const newPathButton = document.createElement('ui-menu-button');
 
-            newPathItem.classList.add('has-menu-action');
-            newPathItem.setAttribute('tabindex', '0');
-            newPathItem.innerText = partInfo.display;
+            newPathButton.innerText = partInfo.display;
+
+            this._createToolbarPathMenu(partInfo, newPathButton);
+
+            newPathItem.appendChild(newPathButton);
             newPath.appendChild(newPathItem);
 
-            this._createToolbarPathMenu(partInfo, newPathItem);
-
-            lastPathItem = newPathItem;
+            lastPathFocusable = newPathButton;
             lastFileInfo = partInfo;
         });
 
         if (sourceFile.isDir){
-            // This is a way to make add actions more obvious.
+            // Make add actions more obvious.
             // Do not update "lastX" variables in this case.
-            const addActionPathItem = document.createElement('ui-toolbar-path-item');
-            addActionPathItem.classList.add('has-menu-action', 'is-action-add');
-            addActionPathItem.setAttribute('tabindex', '0');
-            addActionPathItem.innerText = ' ';
-            addActionPathItem.addEventListener('click', ()=>this._app.showCreatorDialog(sourceFile));
+            const addActionPathItem = document.createElement('ui-path-item');
+            const addActionPathButton = new UIIconButton('+');
+
+            addActionPathButton.addEventListener('click', ()=>this._app.showCreatorDialog(sourceFile));
+
+            addActionPathItem.appendChild(addActionPathButton);
             newPath.appendChild(addActionPathItem);
         }
 
         existingPath.replaceWith(newPath);
 
-        if (focus && lastFileInfo && lastPathItem){
+        if (focus && lastFileInfo && lastPathFocusable){
             if (lastFileInfo.isDir){
-                lastPathItem.focus();
+                lastPathFocusable.focus();
             } else{
                 this._app.showView(lastFileInfo);
             }
@@ -328,8 +332,9 @@ class AppToolbarUtil{
     }
 
     async _createToolbarPathMenu(sourceFile, pathItem){
-        const menu = document.createElement('div');
-        menu.classList.add('menu');
+        const listRow = Elements.div().classes('ui-list-row').create();
+        const menu = new UIMenu();
+        menu.appendChild(listRow);
 
         if (sourceFile.isDir){
 
@@ -344,19 +349,20 @@ class AppToolbarUtil{
                 children
                     .filter(ci=>!ci.isSettings || includeSettings)
                     .forEach((ci) => {
-                    const childItem = document.createElement('li');
-                    childItem.innerText = ci.display;
-                    childItem.addEventListener('click', () => this.showPath(ci, true));
-                    (ci.isDir ? dirs : files).appendChild(childItem);
-                });
+                        const button = new UIButton(ci.display).fullWidth().justifyLeft();
+                        button.addEventListener('click', () => this.showPath(ci, true));
+                        (ci.isDir ? dirs : files).appendChild(
+                            Elements.li().child(button).create()
+                        );
+                    });
 
-                if (dirs.childElementCount > 0) menu.appendChild(dirs);
-                if (files.childElementCount > 0) menu.appendChild(files);
+                if (dirs.childElementCount > 0) listRow.appendChild(dirs);
+                if (files.childElementCount > 0) listRow.appendChild(files);
             }
 
             const create = document.createElement('ul');
             create.appendChild(this._createAddAction(sourceFile));
-            if (create.childElementCount > 0) menu.appendChild(create);
+            if (create.childElementCount > 0) listRow.appendChild(create);
 
             pathItem.appendChild(menu);
 
@@ -365,19 +371,19 @@ class AppToolbarUtil{
             const actions = document.createElement('ul');
 
             if (sourceFile.isDeletable) {
-                const deleteFile = document.createElement('li');
-                deleteFile.classList.add('is-action-delete');
-                deleteFile.innerText = 'Delete';
-                deleteFile.addEventListener('click', ()=>{
+                const button = new UIButton().fullWidth().justifyLeft();
+                button.appendChild(new UIIcon('×'));
+                button.appendChild(Elements.span().text('Delete').create());
+                button.addEventListener('click', ()=>{
                     if (confirm('Delete file "' + sourceFile.name + '"?')){
                         this._app.sourceChangeSet.delete(sourceFile);
                     }
                 });
-                actions.appendChild(deleteFile);
+                actions.appendChild(Elements.li().child(button).create());
             }
 
             if (actions.childElementCount > 0) {
-                menu.appendChild(actions);
+                listRow.appendChild(actions);
                 pathItem.appendChild(menu);
             }
 
@@ -385,11 +391,11 @@ class AppToolbarUtil{
     }
 
     _createAddAction(fileInfo){
-        const add = document.createElement('li');
-        add.classList.add('is-action-add');
-        add.innerText = 'New...';
-        add.addEventListener('click', ()=>this._app.showCreatorDialog(fileInfo));
-        return add;
+        const button = new UIButton().fullWidth().justifyLeft();
+        button.appendChild(new UIIcon('+'));
+        button.appendChild(Elements.span().text('New...').create());
+        button.addEventListener('click', ()=>this._app.showCreatorDialog(fileInfo));
+        return Elements.li().child(button).create();
     }
 }
 

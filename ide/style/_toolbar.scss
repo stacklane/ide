@@ -4,15 +4,15 @@ ui-toolbar-item{
   &.is-changeset-stats{
     .is-changeset-stats-group{
       font-weight: var(--ui-weight-semibold);
-      font-size: .85em;
+      font-size: .85em; // TODO should be same ui "h6" .. "small text"?
       background: var(--ui-tertiary-background);
       border-radius: var(--ui-radius-rounded);
       display: flex;
-      padding: 0em .25em;
+      padding: 0em var(--ui-2xs-spacing);
 
       > span{
         display:flex;
-        padding: 0em .5em;
+        padding: 0em var(--ui-xs-spacing);
 
         + span{
           border-left: 1px solid var(--ui-separator);
