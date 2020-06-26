@@ -69,16 +69,13 @@ class View extends AppComponent {
 
     createTab(title, closeable){
         if (closeable) {
-            const closer = new UITabCloser();
-            //closer.classList.add('ide-view-tab-closer');
+            const closer = new UIIconButton(UIIcon.x()).round();
 
-            const tab = UITab.create([title, closer], this);
-            tab.classList.add('has-separator');
-            return tab;
+            UITab.addCloseEventListener(closer);
+
+            return UITab.create([title, closer], this);
         } else {
-            const tab = UITab.create([title], this);
-            tab.classList.add('has-separator');
-            return tab;
+            return UITab.create([title], this);
         }
     }
 

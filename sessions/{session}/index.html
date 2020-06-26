@@ -32,21 +32,20 @@
             data-session-id="{{session.id}}"
             data-session-base-href="/sessions/{{session.id}}"
             data-session-base-api-href="/sessions/{{session.id}}/api">
-    <ui-toolbar class="has-2xs-spacing has-gutters is-main">
-        <ui-toolbar-left>
-            <ui-toolbar-item><ui-path></ui-path></ui-toolbar-item>
-        </ui-toolbar-left>
-        <ui-toolbar-right>
-            <ui-toolbar-item class="is-changeset-stats"></ui-toolbar-item>
-            <ui-toolbar-item class="is-run"><ui-icon-button><ui-icon>{{>image-play-circle-outline}}</ui-icon></ui-icon-button></ui-toolbar-item>
-        </ui-toolbar-right>
+    <ui-toolbar class="has-s-spacing has-gutters is-main">
+        <ui-bar>
+            <ui-bar id="ide-path" class="is-path"></ui-bar>
+        </ui-bar>
+        <ui-bar class="is-grow is-end">
+            <ui-button class="is-outlined">Medium</ui-button>
+            <ui-button class="is-contained"><ui-icon>{{>image-play-circle-outline}}</ui-icon><span>High</span></ui-button>
+            <ui-icon-button class="is-primary"><ui-icon>{{>image-play-circle-outline}}</ui-icon></ui-icon-button>
+            <ui-icon-button><ui-icon>{{>image-play-circle-outline}}</ui-icon></ui-icon-button>
+        </ui-bar>
     </ui-toolbar>
     <main class="ui-separator-row">
         <div class="ide-workspace ui-separator-column">
-            <ui-toolbar>
-                <ui-toolbar-left></ui-toolbar-left>
-                <ui-toolbar-right></ui-toolbar-right>
-            </ui-toolbar>
+            <ui-bar id="ide-workspace-tabs" class="is-stretch is-grow is-spacing-none"></ui-bar>
             <div class="ui-init-indicator"><div></div><div></div><div></div><div></div></div>
         </div>
     </main>
@@ -60,6 +59,7 @@
 <script defer src="/ui/components/dialog.js"></script>
 <script defer src="/ui/components/tab.js"></script>
 <script defer src="/ui/components/button.js"></script>
+<script defer src="/ui/components/bar.js"></script>
 
 <script defer src="/ide/source/SourceUtil.js"></script>
 <script defer src="/ide/source/Source.js"></script>

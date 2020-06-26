@@ -1,7 +1,7 @@
 'use strict';
 
-const _SMALL_HOME_ICON = new UIIcon('<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z"/></svg>')
-                                .small()
+const _SMALL_HOME_ICON = new UIIcon('<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z"/></svg>');
+
 class App extends HTMLElement {
     constructor() {
         super();
@@ -80,6 +80,7 @@ class App extends HTMLElement {
         const view = new View(this.newSourceContext(sourceFile));
         const viewTab = view.createTab(title, !sourceFile.isRoot);
 
+        if (!sourceFile.isRoot) viewTab.classList.add('is-grow');
         viewTab.loading = true;
         viewTab.view.loading = true;
 
@@ -106,7 +107,7 @@ class App extends HTMLElement {
 
     ready(){
         this._workspace = this.querySelector('.ide-workspace');
-        this._tabs = this._workspace.querySelector('ui-toolbar > ui-toolbar-left');
+        this._tabs = this._workspace.querySelector('#ide-workspace-tabs');
         this._sessionId = this.getAttribute("data-session-id");
         this._sessionBase = this.getAttribute("data-session-base-href");
         this._sessionApiBase = this.getAttribute("data-session-base-api-href");
@@ -227,34 +228,6 @@ class AppComponent extends HTMLElement{
     }
 }
 
-/*
-class Toolbar extends HTMLElement{
-    constructor() {
-        super();
-    }
-}
-window.customElements.define('ui-toolbar', Toolbar);
-
-class ToolbarLeft extends HTMLElement{
-    constructor() {
-        super();
-    }
-}
-window.customElements.define('ui-toolbar-left', ToolbarLeft);
-class ToolbarRight extends HTMLElement{
-    constructor() {
-        super();
-    }
-}
-window.customElements.define('ui-toolbar-right', ToolbarRight);
-class ToolbarItem extends HTMLElement{
-    constructor() {
-        super();
-    }
-}
-window.customElements.define('ui-toolbar-item', ToolbarItem);
-*/
-
 class AppToolbarUtil{
     constructor(app) {
         this._app = app;
@@ -273,19 +246,18 @@ class AppToolbarUtil{
     showPath(sourceFile, focus){
         if (!(sourceFile instanceof SourceFile)) throw '!SourceFile:' + sourceFile;
 
-        const existingPath = this._app.querySelector('ui-path');
+        const existingPath = this._app.querySelector('#ide-path');
 
-        const newPath = document.createElement('ui-path');
+        const newPath = new UIBar().path();
+        newPath.id = existingPath.id = 'ide-path';
 
         {
-            const rootItem = document.createElement('ui-path-item');
             const rootButton = document.createElement('ui-menu-button');
 
             rootButton.innerText = this._app._appName;
             this._createToolbarPathMenu(SourceFile.root(), rootButton);
 
-            rootItem.appendChild(rootButton);
-            newPath.appendChild(rootItem);
+            newPath.appendChild(rootButton);
         }
 
         const partsInfo = sourceFile.partsInfo;
@@ -294,15 +266,13 @@ class AppToolbarUtil{
         let lastFileInfo = null;
 
         partsInfo.forEach((partInfo)=>{
-            const newPathItem = document.createElement('ui-path-item');
             const newPathButton = document.createElement('ui-menu-button');
 
             newPathButton.innerText = partInfo.display;
 
             this._createToolbarPathMenu(partInfo, newPathButton);
 
-            newPathItem.appendChild(newPathButton);
-            newPath.appendChild(newPathItem);
+            newPath.appendChild(newPathButton);
 
             lastPathFocusable = newPathButton;
             lastFileInfo = partInfo;
@@ -311,13 +281,11 @@ class AppToolbarUtil{
         if (sourceFile.isDir){
             // Make add actions more obvious.
             // Do not update "lastX" variables in this case.
-            const addActionPathItem = document.createElement('ui-path-item');
-            const addActionPathButton = new UIIconButton('+');
+            const addActionPathButton = new UIIconButton(UIIcon.plus()).round();
 
             addActionPathButton.addEventListener('click', ()=>this._app.showCreatorDialog(sourceFile));
 
-            addActionPathItem.appendChild(addActionPathButton);
-            newPath.appendChild(addActionPathItem);
+            newPath.appendChild(addActionPathButton);
         }
 
         existingPath.replaceWith(newPath);
@@ -372,7 +340,7 @@ class AppToolbarUtil{
 
             if (sourceFile.isDeletable) {
                 const button = new UIButton().fullWidth().justifyLeft();
-                button.appendChild(new UIIcon('×'));
+                button.appendChild(UIIcon.x());
                 button.appendChild(Elements.span().text('Delete').create());
                 button.addEventListener('click', ()=>{
                     if (confirm('Delete file "' + sourceFile.name + '"?')){
@@ -392,7 +360,7 @@ class AppToolbarUtil{
 
     _createAddAction(fileInfo){
         const button = new UIButton().fullWidth().justifyLeft();
-        button.appendChild(new UIIcon('+'));
+        button.appendChild(UIIcon.plus());
         button.appendChild(Elements.span().text('New...').create());
         button.addEventListener('click', ()=>this._app.showCreatorDialog(fileInfo));
         return Elements.li().child(button).create();

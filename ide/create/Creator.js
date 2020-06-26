@@ -38,7 +38,7 @@ const CreatorDialog = (sourceContext)=>{
     panel.classList.add('ide-create-dialog-panel');
 
     const tabs = document.createElement('div');
-    tabs.classList.add('ide-create-dialog-panel-tabs', 'ui-secondary-dialog-content');
+    tabs.classList.add('ide-create-dialog-panel-tabs', 'ui-secondary-dialog-content', '--ui-tab-justify-left');
     panel.appendChild(tabs);
 
     const views = document.createElement('div');
@@ -56,13 +56,13 @@ const CreatorDialog = (sourceContext)=>{
             const title = document.createElement('span');
             title.innerText = ' ' + available.groupName;
 
-            const tab = UITab.create([available.icon.em(), title], () => {
+            const tab = UITab.create([available.icon, title], () => {
                 const view = available.createView();
                 view.id = available.constructor.name; // class name
                 views.appendChild(view);
                 return view;
             }, 'New: ' + available.name);
-
+            
             tabs.appendChild(tab);
         }
     });
