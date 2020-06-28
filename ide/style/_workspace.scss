@@ -8,6 +8,14 @@
   --ui-workspace-caret-color: var(--ui-blue);
 }
 
+/*
+ide-root ide-main{
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}*/
+
 .ide-workspace{
   display: flex;
   flex-direction: column;

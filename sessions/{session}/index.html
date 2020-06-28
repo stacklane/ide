@@ -8,7 +8,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="/ui/all.scss">
+    <link rel="stylesheet" href="/ui/base.scss">
+    <link rel="stylesheet" href="/ui/components/all.scss">
     <link rel="stylesheet" href="/style.scss">
 
     <link rel="icon" type="image/png" href="/fav/16.png" sizes="16x16" />
@@ -28,38 +29,56 @@
 <body>
 
 {{! Init basic structure for startup styling and 'defer' }}
-<ide-app ui-is-init class="ui-separator-column ui-root"
-            data-session-id="{{session.id}}"
-            data-session-base-href="/sessions/{{session.id}}"
-            data-session-base-api-href="/sessions/{{session.id}}/api">
-    <ui-toolbar class="has-s-spacing has-gutters is-main">
-        <ui-bar>
-            <ui-bar id="ide-path" class="is-path"></ui-bar>
-        </ui-bar>
-        <ui-bar class="is-grow is-end">
-            <ui-button class="is-outlined">Medium</ui-button>
-            <ui-button class="is-contained"><ui-icon>{{>image-play-circle-outline}}</ui-icon><span>High</span></ui-button>
-            <ui-icon-button class="is-primary"><ui-icon>{{>image-play-circle-outline}}</ui-icon></ui-icon-button>
-            <ui-icon-button><ui-icon>{{>image-play-circle-outline}}</ui-icon></ui-icon-button>
-        </ui-bar>
-    </ui-toolbar>
-    <main class="ui-separator-row">
-        <div class="ide-workspace ui-separator-column">
-            <ui-bar id="ide-workspace-tabs" class="is-stretch is-grow is-spacing-none"></ui-bar>
-            <div class="ui-init-indicator"><div></div><div></div><div></div><div></div></div>
-        </div>
-    </main>
+<ide-app ui-is-init class="ui-separator-column ui-app is-full"
+         data-session-id="{{session.id}}"
+         data-session-base-href="/sessions/{{session.id}}"
+         data-session-base-api-href="/sessions/{{session.id}}/api">
+    <ui-drawer-layout>
+        <ui-drawer>
+            <ui-appbar class="has-spacing">
+                <ui-bar>
+                    <ui-icon>S</ui-icon>
+                </ui-bar>
+                <ui-bar class="is-grow is-end">
+                    <ui-icon-button>
+                        <ui-icon data-type="menu-close"></ui-icon>
+                        <ui-drawer-closer></ui-drawer-closer>
+                    </ui-icon-button>
+                </ui-bar>
+            </ui-appbar>
+        </ui-drawer>
+        <ui-drawer-main>
+            <ui-appbar class="has-spacing">
+                <ui-bar>
+                    <ui-icon-button>
+                        <ui-icon data-type="menu"></ui-icon>
+                        <ui-drawer-opener></ui-drawer-opener>
+                    </ui-icon-button>
+                    <ui-bar id="ide-path" class="is-path"></ui-bar>
+                </ui-bar>
+                <ui-bar class="is-grow is-end">
+                    <ui-icon-button><ui-icon>{{>image-play-circle-outline}}</ui-icon></ui-icon-button>
+                </ui-bar>
+            </ui-appbar>
+            <div class="ide-workspace ui-separator-column">
+                <ui-bar id="ide-workspace-tabs" class="is-stretch is-spacing-none"></ui-bar>
+                <ui-spinner class="is-init"></ui-spinner>
+            </div>
+        </ui-drawer-main>
+    </ui-drawer-layout>
 </ide-app>
 
 {{! With 'defer', ordering matters }}
 
-<script defer src="/ui/components/base.js"></script>
-<script defer src="/ui/components/icon.js"></script>
-<script defer src="/ui/components/modal.js"></script>
-<script defer src="/ui/components/dialog.js"></script>
+<script defer src="/ui/base/app.js"></script>
+<script defer src="/ui/base/button.js"></script>
+<script defer src="/ui/base/modal.js"></script>
+<script defer src="/ui/base/dialog.js"></script>
+<script defer src="/ui/base/bar.js"></script>
+<script defer src="/ui/base/spinner.js"></script>
+
+<script defer src="/ui/components/drawer.js"></script>
 <script defer src="/ui/components/tab.js"></script>
-<script defer src="/ui/components/button.js"></script>
-<script defer src="/ui/components/bar.js"></script>
 
 <script defer src="/ide/source/SourceUtil.js"></script>
 <script defer src="/ide/source/Source.js"></script>

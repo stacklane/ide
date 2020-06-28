@@ -252,7 +252,7 @@ class AppToolbarUtil{
         newPath.id = existingPath.id = 'ide-path';
 
         {
-            const rootButton = document.createElement('ui-menu-button');
+            const rootButton = new UIMenuButton();
 
             rootButton.innerText = this._app._appName;
             this._createToolbarPathMenu(SourceFile.root(), rootButton);
@@ -266,7 +266,7 @@ class AppToolbarUtil{
         let lastFileInfo = null;
 
         partsInfo.forEach((partInfo)=>{
-            const newPathButton = document.createElement('ui-menu-button');
+            const newPathButton = new UIMenuButton();
 
             newPathButton.innerText = partInfo.display;
 
@@ -281,9 +281,9 @@ class AppToolbarUtil{
         if (sourceFile.isDir){
             // Make add actions more obvious.
             // Do not update "lastX" variables in this case.
-            const addActionPathButton = new UIIconButton(UIIcon.plus()).round();
-
-            addActionPathButton.addEventListener('click', ()=>this._app.showCreatorDialog(sourceFile));
+            const addActionPathButton = new UIIconButton(UIIcon.plus())
+                .round()
+                .addAction(()=>this._app.showCreatorDialog(sourceFile));
 
             newPath.appendChild(addActionPathButton);
         }
@@ -318,7 +318,7 @@ class AppToolbarUtil{
                     .filter(ci=>!ci.isSettings || includeSettings)
                     .forEach((ci) => {
                         const button = new UIButton(ci.display).fullWidth().justifyLeft();
-                        button.addEventListener('click', () => this.showPath(ci, true));
+                        button.addAction(()=>this.showPath(ci, true));
                         (ci.isDir ? dirs : files).appendChild(
                             Elements.li().child(button).create()
                         );
@@ -342,7 +342,7 @@ class AppToolbarUtil{
                 const button = new UIButton().fullWidth().justifyLeft();
                 button.appendChild(UIIcon.x());
                 button.appendChild(Elements.span().text('Delete').create());
-                button.addEventListener('click', ()=>{
+                button.addAction(()=>{
                     if (confirm('Delete file "' + sourceFile.name + '"?')){
                         this._app.sourceChangeSet.delete(sourceFile);
                     }
@@ -362,7 +362,7 @@ class AppToolbarUtil{
         const button = new UIButton().fullWidth().justifyLeft();
         button.appendChild(UIIcon.plus());
         button.appendChild(Elements.span().text('New...').create());
-        button.addEventListener('click', ()=>this._app.showCreatorDialog(fileInfo));
+        button.addAction(()=>this._app.showCreatorDialog(fileInfo));
         return Elements.li().child(button).create();
     }
 }

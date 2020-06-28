@@ -76,7 +76,7 @@ class RootView extends ViewContent{
             bar.appendChild(Elements.h2().text('Files').create());
 
             const button = new UIIconButton(UIIcon.plus()).outlined().round();
-            button.addEventListener('click', ()=>this.app.showCreatorDialog(SourceFile.root()));
+            button.addAction(()=>this.app.showCreatorDialog(SourceFile.root()));
 
             bar.appendChild(button);
 
