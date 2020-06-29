@@ -14,9 +14,9 @@ const LINE_HEIGHT_PX = Math.floor(15.6 /* value from line-height in CSS */);
 
 'use strict';
 
-class TextCodeEdit extends HTMLElement{
+class TextCodeEdit extends UIScrollable{
     constructor(language) {
-        super();
+        super('xy');
 
         this.classList.add('lang-' + language);
 
@@ -259,8 +259,8 @@ class TextCodeEdit extends HTMLElement{
     }
 
     connectedCallback(){
+        super.connectedCallback();
         this._setTabSize();
-        this.classList.add('ui-scrollable-xy');
     }
 
 }

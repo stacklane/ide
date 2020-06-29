@@ -252,7 +252,7 @@ class AppToolbarUtil{
         newPath.id = existingPath.id = 'ide-path';
 
         {
-            const rootButton = new UIMenuButton();
+            const rootButton = new UIButton();
 
             rootButton.innerText = this._app._appName;
             this._createToolbarPathMenu(SourceFile.root(), rootButton);
@@ -266,7 +266,7 @@ class AppToolbarUtil{
         let lastFileInfo = null;
 
         partsInfo.forEach((partInfo)=>{
-            const newPathButton = new UIMenuButton();
+            const newPathButton = new UIButton();
 
             newPathButton.innerText = partInfo.display;
 
@@ -301,7 +301,7 @@ class AppToolbarUtil{
 
     async _createToolbarPathMenu(sourceFile, pathItem){
         const listRow = Elements.div().classes('ui-list-row').create();
-        const menu = new UIMenu();
+        const menu = new UIButtonMenu();
         menu.appendChild(listRow);
 
         if (sourceFile.isDir){

@@ -116,7 +116,6 @@ class View extends AppComponent {
 }
 window.customElements.define('ide-view', View);
 
-
 class _ErrorView extends HTMLElement {
     constructor(message) {
         super();
