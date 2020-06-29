@@ -30,10 +30,7 @@ text-code-edit{
   flex-direction: row;
   flex-grow: 1;
 
-  position:relative;
-
-  overflow: auto;
-  overscroll-behavior: none;
+  position: relative;
 
   font-family: var(--ui-font-family-monospace);
   font-size: $text-code-edit-font-size;

@@ -260,6 +260,7 @@ class TextCodeEdit extends HTMLElement{
 
     connectedCallback(){
         this._setTabSize();
+        this.classList.add('ui-scrollable-xy');
     }
 
 }
