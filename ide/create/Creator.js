@@ -37,8 +37,8 @@ const CreatorDialog = (sourceContext)=>{
     const panel = document.createElement('div');
     panel.classList.add('ide-create-dialog-panel');
 
-    const tabs = document.createElement('div');
-    tabs.classList.add('ide-create-dialog-panel-tabs', 'ui-secondary-dialog-content', '--ui-tab-justify-left');
+    const tabs = new UIBar().column(); //document.createElement('div');
+    tabs.classList.add('ide-create-dialog-panel-tabs', 'ui-secondary-dialog-content' /*, '--ui-tab-justify-left'*/);
     panel.appendChild(tabs);
 
     const views = document.createElement('div');

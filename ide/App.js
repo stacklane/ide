@@ -80,7 +80,7 @@ class App extends HTMLElement {
         const view = new View(this.newSourceContext(sourceFile));
         const viewTab = view.createTab(title, !sourceFile.isRoot);
 
-        if (!sourceFile.isRoot) viewTab.classList.add('is-grow');
+       // if (!sourceFile.isRoot) viewTab.classList.add('is-grow');
         viewTab.loading = true;
         viewTab.view.loading = true;
 
@@ -317,7 +317,7 @@ class AppToolbarUtil{
                 children
                     .filter(ci=>!ci.isSettings || includeSettings)
                     .forEach((ci) => {
-                        const button = new UIButton(ci.display).fullWidth().justifyLeft();
+                        const button = new UIButton(ci.display).fullWidth();
                         button.addAction(()=>this.showPath(ci, true));
                         (ci.isDir ? dirs : files).appendChild(
                             Elements.li().child(button).create()
@@ -339,7 +339,7 @@ class AppToolbarUtil{
             const actions = document.createElement('ul');
 
             if (sourceFile.isDeletable) {
-                const button = new UIButton().fullWidth().justifyLeft();
+                const button = new UIButton().fullWidth();
                 button.appendChild(UIIcon.x());
                 button.appendChild(Elements.span().text('Delete').create());
                 button.addAction(()=>{
@@ -359,7 +359,7 @@ class AppToolbarUtil{
     }
 
     _createAddAction(fileInfo){
-        const button = new UIButton().fullWidth().justifyLeft();
+        const button = new UIButton().fullWidth();
         button.appendChild(UIIcon.plus());
         button.appendChild(Elements.span().text('New...').create());
         button.addAction(()=>this._app.showCreatorDialog(fileInfo));
@@ -395,7 +395,6 @@ class AppApi{
     readData(fileId){
         return fetch(this._apiBase + '/files/' + fileId + '/data');
     }
-
 }
 
 

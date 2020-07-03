@@ -48,7 +48,7 @@
             </ui-appbar>
         </ui-drawer>
         <ui-drawer-main>
-            <ui-appbar class="has-spacing">
+            <ui-appbar class="has-spacing is-stretch">
                 <ui-bar>
                     <ui-icon-button>
                         <ui-icon data-type="menu"></ui-icon>
@@ -61,7 +61,9 @@
                 </ui-bar>
             </ui-appbar>
             <div class="ide-workspace ui-separator-column">
-                <ui-bar id="ide-workspace-tabs" class="is-stretch is-spacing-none"></ui-bar>
+                <ui-appbar class="has-s-spacing">
+                    <ui-bar id="ide-workspace-tabs" class="is-stretch is-spacing-none"></ui-bar>
+                </ui-appbar>
                 <ui-spinner class="is-init"></ui-spinner>
             </div>
         </ui-drawer-main>
