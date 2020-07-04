@@ -56,7 +56,7 @@ const CreatorDialog = (sourceContext)=>{
             const title = document.createElement('span');
             title.innerText = ' ' + available.groupName;
 
-            const tab = UITab.create([available.icon, title], () => {
+            const tab = new UITab([available.icon, title], () => {
                 const view = available.createView();
                 view.id = available.constructor.name; // class name
                 views.appendChild(view);
