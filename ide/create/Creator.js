@@ -39,7 +39,7 @@ const CreatorDialog = (sourceContext)=>{
 
     const tabs = new UISideBar();
     tabs.classList.add('ide-create-dialog-panel-tabs',
-        'ui-secondary-dialog-content', '--ui-tab-is-pill-item', 'has-xs-spacing');
+        'ui-secondary-dialog-content', '--ui-tab-is-pill-item', 'has-xs-spacing', '--ui-tab-is-wide');
     panel.appendChild(tabs);
 
     const views = document.createElement('div');
