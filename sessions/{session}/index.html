@@ -35,31 +35,35 @@
          data-session-base-api-href="/sessions/{{session.id}}/api">
     <ui-drawer-layout>
         <ui-drawer>
-            <ui-appbar class="has-spacing">
-                <ui-bar>
-                    <ui-icon>S</ui-icon>
-                </ui-bar>
-                <ui-bar class="is-grow is-end">
-                    <ui-icon-button>
-                        <ui-icon data-type="menu-close"></ui-icon>
-                        <ui-drawer-closer></ui-drawer-closer>
-                    </ui-icon-button>
-                </ui-bar>
-            </ui-appbar>
+            <ui-box class="is-gutter">
+                <ui-appbar>
+                    <ui-bar>
+                        <ui-icon>S</ui-icon>
+                    </ui-bar>
+                    <ui-bar class="is-grow is-end">
+                        <ui-icon-button>
+                            <ui-icon data-type="menu-close"></ui-icon>
+                            <ui-drawer-closer></ui-drawer-closer>
+                        </ui-icon-button>
+                    </ui-bar>
+                </ui-appbar>
+            </ui-box>
         </ui-drawer>
         <ui-drawer-main>
-            <ui-appbar class="has-spacing">
-                <ui-bar>
-                    <ui-icon-button>
-                        <ui-icon data-type="menu"></ui-icon>
-                        <ui-drawer-opener></ui-drawer-opener>
-                    </ui-icon-button>
-                    <ui-bar id="ide-path" class="is-path"></ui-bar>
-                </ui-bar>
-                <ui-bar class="is-grow is-end">
-                    <ui-icon-button><ui-icon>{{>image-play-circle-outline}}</ui-icon></ui-icon-button>
-                </ui-bar>
-            </ui-appbar>
+            <ui-box class="is-gutter">
+                <ui-appbar>
+                    <ui-bar>
+                        <ui-icon-button>
+                            <ui-icon data-type="menu"></ui-icon>
+                            <ui-drawer-opener></ui-drawer-opener>
+                        </ui-icon-button>
+                        <ui-bar id="ide-path" class="is-path"></ui-bar>
+                    </ui-bar>
+                    <ui-bar class="is-grow is-end">
+                        <ui-icon-button><ui-icon>{{>image-play-circle-outline}}</ui-icon></ui-icon-button>
+                    </ui-bar>
+                </ui-appbar>
+            </ui-box>
             <div class="ide-workspace ui-separator-column">
                 <ui-appbar class="has-xs-spacing is-stretch has-0-gutters">
                     <ui-bar id="ide-workspace-tabs" class="is-stretch has-0-spacing --ui-tab-is-bordered-l"></ui-bar>
