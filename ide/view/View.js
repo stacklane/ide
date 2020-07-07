@@ -69,7 +69,7 @@ class View extends AppComponent {
 
     createTab(title, closeable){
         if (closeable) {
-            const closer = new UIIconButton(UIIcon.x()).round();
+            const closer = new UIIconButton(UIIcon.x()).round().tiny();
             closer.appendChild(new UITabCloser());
             return new UITab(new UIBar([title, closer]), this);
         } else {

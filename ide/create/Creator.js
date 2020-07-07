@@ -37,8 +37,9 @@ const CreatorDialog = (sourceContext)=>{
     const panel = document.createElement('div');
     panel.classList.add('ide-create-dialog-panel');
 
-    const tabs = new UIBar().column(); //document.createElement('div');
-    tabs.classList.add('ide-create-dialog-panel-tabs', 'ui-secondary-dialog-content' /*, '--ui-tab-justify-left'*/);
+    const tabs = new UISideBar();
+    tabs.classList.add('ide-create-dialog-panel-tabs',
+        'ui-secondary-dialog-content', '--ui-tab-is-pill-item', 'has-xs-spacing');
     panel.appendChild(tabs);
 
     const views = document.createElement('div');
@@ -56,7 +57,7 @@ const CreatorDialog = (sourceContext)=>{
             const title = document.createElement('span');
             title.innerText = ' ' + available.groupName;
 
-            const tab = new UITab([available.icon, title], () => {
+            const tab = new UITab(new UIBar([available.icon, title]), () => {
                 const view = available.createView();
                 view.id = available.constructor.name; // class name
                 views.appendChild(view);
