@@ -152,7 +152,7 @@ class App extends HTMLElement {
                 this._source.addListener((command)=>this._listenSourceChange(command));
             })
             .then(()=>this.showView(SourceFile.root()))
-            .then(()=>this.removeAttribute('ui-is-init'));
+            .then(()=>this.removeAttribute('ui-spinner-is-active'));
 
         /*
         window.addEventListener('hashchange', ()=>{

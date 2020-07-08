@@ -29,7 +29,7 @@
 <body>
 
 {{! Init basic structure for startup styling and 'defer' }}
-<ide-app ui-is-init class="ui-separator-column ui-app is-full"
+<ide-app ui-spinner-is-active="true" class="ui-separator-column ui-app is-full"
          data-session-id="{{session.id}}"
          data-session-base-href="/sessions/{{session.id}}"
          data-session-base-api-href="/sessions/{{session.id}}/api">
@@ -53,7 +53,7 @@
             <ui-box class="is-gutter">
                 <ui-appbar>
                     <ui-bar>
-                        <ui-icon-button>
+                        <ui-icon-button class="is-hidden-when-drawer-opened">
                             <ui-icon data-type="menu"></ui-icon>
                             <ui-drawer-opener></ui-drawer-opener>
                         </ui-icon-button>
@@ -68,7 +68,7 @@
                 <ui-appbar class="has-xs-spacing is-stretch has-0-gutters">
                     <ui-bar id="ide-workspace-tabs" class="is-stretch has-0-spacing --ui-tab-is-bordered-l"></ui-bar>
                 </ui-appbar>
-                <ui-spinner class="is-init"></ui-spinner>
+                <ui-spinner class="is-activated"></ui-spinner>
             </div>
         </ui-drawer-main>
     </ui-drawer-layout>
@@ -81,7 +81,6 @@
 <script defer src="/ui/base/modal.js"></script>
 <script defer src="/ui/base/dialog.js"></script>
 <script defer src="/ui/base/bar.js"></script>
-<script defer src="/ui/base/spinner.js"></script>
 
 <script defer src="/ui/components/drawer.js"></script>
 <script defer src="/ui/components/tab.js"></script>
