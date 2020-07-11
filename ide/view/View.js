@@ -17,7 +17,7 @@ class View extends AppComponent {
         return 'view-' + sourceFile.handle;
     }
 
-    static get observedAttributes() { return [UITab.ActivatedAttribute]; }
+    static get observedAttributes() { return [UITab.ViewActivatedAttribute]; }
 
     constructor(sourceContext) {
         super();
@@ -32,7 +32,7 @@ class View extends AppComponent {
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
-        if (name === UITab.ActivatedAttribute && newValue === 'true'){
+        if (name === UITab.ViewActivatedAttribute && newValue === 'true'){
             this.activate();
         } else {
             this.deactivate();
