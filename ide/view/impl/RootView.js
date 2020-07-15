@@ -1,10 +1,10 @@
 'use strict';
-class RootView extends ViewContent{
+class RootView extends ViewContent {
     constructor(sourceContext) {
         super(sourceContext);
     }
 
-    receive(){
+    receive() {
 
         // TODO if settings aren't defined then, create them on click...
         //     in other words, show ones that aren't actually there
@@ -15,38 +15,33 @@ class RootView extends ViewContent{
 
         const children = this.context.source.childFiles(this.context.file);
 
-        const dirs = Elements.div().classes('is-file-grid').create();
-        const files = Elements.div().classes('is-file-grid').create();
+        const dirs = Elements.div().classes('is-file-grid', '--ui-button-has-even-spacing').create();
+        const files = Elements.div().classes('is-file-grid', '--ui-button-has-even-spacing').create();
 
-        children.forEach((child)=>{
-            const item = Elements.div().classes('is-file-item').text(child.display).create();
-            if (child.isSettings){
+        children.forEach((child) => {
+            const item = new UIButton(child.display).contained();
+
+            if (child.isSettings) {
                 // Handled below
-            } else if (child.isDir){
+            } else if (child.isDir) {
                 dirs.appendChild(item);
-                item.addEventListener('click', ()=>this.app.showPath(child, true));
+                item.addAction(() => this.app.showPath(child, true));
             } else {
                 files.appendChild(item);
-                item.addEventListener('click', ()=>this.app.showView(child));
+                item.addAction(() => this.app.showView(child));
             }
         });
 
         {
-            const settings = Elements.div().classes('is-file-grid').create();
+            const settings = Elements.div().classes('is-file-grid', '--ui-button-has-even-spacing').create();
 
             // TODO these should be opened existing OR create as needed....
 
-            const manifest = Elements.div().classes('is-file-item')
-                                    .text(SourceFile.of('/🎛.yaml').display)
-                                    .create();
+            const manifest = new UIButton(SourceFile.of('/🎛.yaml').display).contained();
 
-            const properties = Elements.div().classes('is-file-item')
-                .text(SourceFile.of('/🎨.scss').display)
-                .create();
+            const properties = new UIButton(SourceFile.of('/🎨.scss').display).contained();
 
-            const models = Elements.div().classes('is-file-item')
-                .text(SourceFile.of('/📦/').display)
-                .create();
+            const models = new UIButton(SourceFile.of('/📦/').display).contained();
 
             settings.appendChild(manifest);
             settings.appendChild(properties);
@@ -76,7 +71,7 @@ class RootView extends ViewContent{
             bar.appendChild(Elements.h2().text('Files').create());
 
             const button = new UIIconButton(UIIcon.plus()).outlined().round();
-            button.addAction(()=>this.app.showCreatorDialog(SourceFile.root()));
+            button.addAction(() => this.app.showCreatorDialog(SourceFile.root()));
 
             bar.appendChild(button);
 
@@ -94,5 +89,8 @@ class RootView extends ViewContent{
         return Promise.resolve();
     }
 
+    connectedCallback() {
+        this.classList.add('ui-scrollable', 'is-y');
+    }
 }
 window.customElements.define('ide-view-root', RootView);

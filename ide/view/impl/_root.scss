@@ -1,34 +1,11 @@
 
 ide-view-root{
   padding: var(--ui-xl-spacing);
-  overflow: auto; // TODO test
 
   div.is-file-grid{
     // https://css-tricks.com/auto-sizing-columns-css-grid-auto-fill-vs-auto-fit/
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(20em, 1fr));
     gap: var(--ui-spacing);
-
-    > div.is-file-item{
-      @include unselectable;
-
-      overflow:hidden;
-
-      padding: var(--ui-spacing);
-
-      font-weight: var(--ui-weight-medium);
-
-      cursor: var(--ui-action-pointer);
-
-      background: var(--ui-secondary-fill);
-      border-radius: var(--ui-radius);
-
-      &:hover{
-        background: var(--ui-tertiary-fill);
-      }
-      &:active{
-        background: var(--ui-quaternary-fill);
-      }
-    }
   }
 }
