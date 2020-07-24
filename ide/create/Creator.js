@@ -38,9 +38,8 @@ const CreatorDialog = (sourceContext)=>{
     panel.classList.add('ide-create-dialog-panel');
 
     const tabs = new UISideBar();
-    tabs.classList.add('ide-create-dialog-panel-tabs',
-        'ui-secondary-dialog-content', '--ui-tab-is-pill-item', 'has-xs-spacing', '--ui-tab-is-wide');
-    panel.appendChild(tabs);
+    tabs.classList.add('ui-secondary-dialog-content', '--ui-tab-is-pill-item', 'has-xs-spacing', '--ui-tab-is-wide');
+    panel.appendChild(new UIBox(tabs).rightSeparator().scrollY());
 
     const views = document.createElement('div');
     views.classList.add('ide-create-dialog-panel-views');
@@ -68,7 +67,7 @@ const CreatorDialog = (sourceContext)=>{
         }
     });
 
-    const dialog = new UIDialog(panel, 'New');
+    const dialog = new UIDialog(panel, 'New', new UIButton('Save').primary().contained());
 
     dialog.addEventListener(UITab.ChangeEventName, function(event){
         if (event.detail.tab.plainTextTitle) dialog.title = event.detail.tab.plainTextTitle;
@@ -77,8 +76,6 @@ const CreatorDialog = (sourceContext)=>{
 
     return dialog;
 };
-
-
 
 /**
  * Base class for encapsulating new file creation logic.

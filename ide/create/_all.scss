@@ -50,14 +50,9 @@
 .ide-create-dialog-panel{
   display: flex;
   flex-direction: row;
-
-  > ui-sidebar.ide-create-dialog-panel-tabs{
-    font-size: .9rem;
-    padding: var(--ui-s-spacing);
-  }
+  height: 100%;
 
   > .ide-create-dialog-panel-views{
-    border-left: 1px solid var(--ui-separator);
     flex-grow: 1;
     display: flex;
 

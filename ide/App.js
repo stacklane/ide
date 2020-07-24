@@ -37,7 +37,7 @@ class App extends HTMLElement {
     }
 
     showCreatorDialog(sourceFile){
-        CreatorDialog(this.newSourceContext(sourceFile)).modal();
+        CreatorDialog(this.newSourceContext(sourceFile)).open();
     }
 
     async showPath(sourceFile, focus){
